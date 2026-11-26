@@ -1,0 +1,699 @@
+source_file = cpc_rental_catalouge.py
+source_modified = 2026-11-22 16:41:32
+function()    first line;  -> what it calls    (where that comes from)    xN = times
+
+attach()    849
+    -> kwargs.pop    (local variable or parameter)
+    -> RentalCatalog    (this file, line 228)
+main()    852
+    -> RentalCatalog    (this file, line 228)
+    -> root.mainloop    (local variable or parameter)
+    -> tk.Tk    (import tkinter as tk)    x2
+    -> tkinterdnd2.TkinterDnD.Tk    (import tkinterdnd2)
+class RentalCatalog    228-847
+    __init__()    229
+        -> bool    (builtin)
+        -> copy.deepcopy    (import copy)
+        -> isinstance    (builtin)    x2
+        -> Path    (from pathlib import Path)
+        -> Path(__file__).resolve    (method or call on an expression)
+        -> queue.Queue    (import queue)
+        -> self._apply_theme    (this class, line 285)
+        -> self._build_ui    (this class, line 296)
+        -> self._load_config    (this class, line 260)
+        -> self.config.get    (attribute of self (inherited or set at run time))
+        -> self.connect_and_refresh    (this class, line 745)
+        -> self.master.after    (attribute of self (inherited or set at run time))
+        -> self.master.protocol    (attribute of self (inherited or set at run time))
+        -> set    (builtin)
+        -> str    (builtin)
+        -> tk.BooleanVar    (import tkinter as tk)    x4
+        -> tk.StringVar    (import tkinter as tk)    x20
+    _apply_ef()    664
+        -> bool    (builtin)    x2
+        -> self._apply_field    (this class, line 668)
+        -> self._int    (this class, line 823)    x2
+        -> self._rebuild_form    (this class, line 369)
+        -> self.ef.get    (attribute of self (inherited or set at run time))
+        -> self.ef.get().strip    (method or call on an expression)
+        -> self.ei.get    (attribute of self (inherited or set at run time))
+        -> self.el.get    (attribute of self (inherited or set at run time))
+        -> self.el.get().strip    (method or call on an expression)
+        -> self.ele.get    (attribute of self (inherited or set at run time))
+        -> self.en.get    (attribute of self (inherited or set at run time))
+        -> self.et.get    (attribute of self (inherited or set at run time))
+        -> self.eu.get    (attribute of self (inherited or set at run time))
+    _apply_field()    668
+        -> len    (builtin)
+        -> list    (builtin)
+        -> next    (builtin)
+        -> r.get    (local variable or parameter)    x2
+        -> r.update    (local variable or parameter)
+        -> rows.append    (local variable or parameter)
+        -> self._refresh_fields    (this class, line 696)
+        -> self._renumber    (this class, line 813)
+        -> self.config.get    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+        -> x.get    (local variable or parameter)
+    _apply_records()    764
+        -> d.get    (local variable or parameter)
+        -> len    (builtin)    x2
+        -> self._clear    (this class, line 810)
+        -> self._display    (this class, line 828)
+        -> self._insert    (this class, line 804)
+        -> self._ordered    (this class, line 812)
+        -> self._refresh_publish    (this class, line 543)
+        -> self.page_var.set    (attribute of self (inherited or set at run time))
+        -> self.status_var.set    (attribute of self (inherited or set at run time))
+        -> str    (builtin)
+    _apply_tf()    661
+        -> bool    (builtin)    x2
+        -> self._apply_field    (this class, line 668)
+        -> self._int    (this class, line 823)
+        -> self._rebuild_list    (this class, line 334)
+        -> self.refresh_records    (this class, line 755)
+        -> self.ta.get    (attribute of self (inherited or set at run time))
+        -> self.tf.get    (attribute of self (inherited or set at run time))
+        -> self.tf.get().strip    (method or call on an expression)
+        -> self.ti.get    (attribute of self (inherited or set at run time))
+        -> self.tl.get    (attribute of self (inherited or set at run time))
+        -> self.tl.get().strip    (method or call on an expression)
+        -> self.tu.get    (attribute of self (inherited or set at run time))
+        -> self.tw.get    (attribute of self (inherited or set at run time))
+    _apply_theme()    285
+        -> dict    (builtin)
+        -> self.host_context.get    (attribute of self (inherited or set at run time))
+        -> self.master.geometry    (attribute of self (inherited or set at run time))
+        -> self.master.title    (attribute of self (inherited or set at run time))
+        -> ui_theme.apply_app_icon    (import cpc_ui_theme as ui_theme)
+        -> ui_theme.apply_theme    (import cpc_ui_theme as ui_theme)
+    _browse_media()    717
+        -> filedialog.askdirectory    (from tkinter import filedialog)
+        -> self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -> self.media_directory_var.get().strip    (method or call on an expression)
+        -> self.media_directory_var.set    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+    _browse_publish()    720
+        -> filedialog.asksaveasfilename    (from tkinter import filedialog)
+        -> self.publish_file_var.set    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+    _build_config()    706
+        -> enumerate    (builtin)
+        -> len    (builtin)    x2
+        -> o.columnconfigure    (local variable or parameter)
+        -> o.pack    (local variable or parameter)
+        -> ttk.Button    (from tkinter import ttk)    x3
+        -> ttk.Button(o, text='Browse', command=cm…    (method or call on an expression)
+        -> ttk.Button(o, text='Connect + Refresh',…    (method or call on an expression)
+        -> ttk.Button(o, text='Save Config', comma…    (method or call on an expression)
+        -> ttk.Entry    (from tkinter import ttk)
+        -> ttk.Entry(o, textvariable=var).grid    (method or call on an expression)
+        -> ttk.Frame    (from tkinter import ttk)
+        -> ttk.Label    (from tkinter import ttk)
+        -> ttk.Label(o, text=lab).grid    (method or call on an expression)
+    _build_editor()    351
+        -> c.columnconfigure    (local variable or parameter)
+        -> c.grid    (local variable or parameter)
+        -> e.bind    (local variable or parameter)
+        -> e.grid    (local variable or parameter)
+        -> m.columnconfigure    (local variable or parameter)
+        -> m.grid    (local variable or parameter)
+        -> m.rowconfigure    (local variable or parameter)
+        -> self._editor_search    (this class, line 436)
+        -> self._enable_drop    (this class, line 519)
+        -> self._rebuild_form    (this class, line 369)
+        -> self.form.columnconfigure    (attribute of self (inherited or set at run time))
+        -> self.form.grid    (attribute of self (inherited or set at run time))
+        -> self.preview.grid    (attribute of self (inherited or set at run time))
+        -> t.columnconfigure    (local variable or parameter)    x2
+        -> t.rowconfigure    (local variable or parameter)
+        -> ttk.Button    (from tkinter import ttk)    x7
+        -> ttk.Button(c, text='Add', command=self.…    (method or call on an expression)
+        -> ttk.Button(c, text='New', command=self.…    (method or call on an expression)
+        -> ttk.Button(c, text='Search', command=se…    (method or call on an expression)
+        -> ttk.Button(c, text='Update', command=se…    (method or call on an expression)
+        -> ttk.Button(m, text='Paste Image', comma…    (method or call on an expression)
+        -> ttk.Button(m, text='Pick Document', com…    (method or call on an expression)
+        -> ttk.Button(m, text='Pick Image', comman…    (method or call on an expression)
+        -> ttk.Entry    (from tkinter import ttk)
+        -> ttk.Frame    (from tkinter import ttk)    x2
+        -> ttk.Label    (from tkinter import ttk)    x3
+        -> ttk.Label(c, text='Search').grid    (method or call on an expression)
+        -> ttk.Label(m, text='Drop an image here, …    (method or call on an expression)
+        -> ttk.LabelFrame    (from tkinter import ttk)
+    _build_fields()    621
+        -> self._field_panel    (this class, line 627)    x2
+        -> self._select_tab    (this class, line 309)
+        -> self.config.get    (attribute of self (inherited or set at run time))
+        -> self.fields_notebook.add    (attribute of self (inherited or set at run time))    x2
+        -> self.fields_notebook.bind    (attribute of self (inherited or set at run time))
+        -> self.fields_notebook.pack    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+        -> ttk.Frame    (from tkinter import ttk)    x2
+        -> ttk.Notebook    (from tkinter import ttk)
+    _build_gateway()    735
+        -> cls    (local variable or parameter)    x3
+        -> fn    (local variable or parameter)
+        -> getattr    (builtin)
+        -> h.pack    (local variable or parameter)
+        -> ttk.Frame    (from tkinter import ttk)
+        -> ttk.Label    (from tkinter import ttk)
+        -> ttk.Label(h, text='Gateway controller i…    (method or call on an expression)
+    _build_list()    316
+        -> b.columnconfigure    (local variable or parameter)
+        -> b.grid    (local variable or parameter)
+        -> c.columnconfigure    (local variable or parameter)
+        -> c.grid    (local variable or parameter)
+        -> e.bind    (local variable or parameter)
+        -> e.grid    (local variable or parameter)
+        -> self._rebuild_list    (this class, line 334)
+        -> self.list_holder.grid    (attribute of self (inherited or set at run time))
+        -> t.columnconfigure    (local variable or parameter)
+        -> t.rowconfigure    (local variable or parameter)
+        -> ttk.Button    (from tkinter import ttk)    x2
+        -> ttk.Button(c, text='New', command=self.…    (method or call on an expression)
+        -> ttk.Button(c, text='Refresh', command=s…    (method or call on an expression)
+        -> ttk.Entry    (from tkinter import ttk)
+        -> ttk.Frame    (from tkinter import ttk)    x3
+        -> ttk.Label    (from tkinter import ttk)    x3
+        -> ttk.Label(b, textvariable=self.page_var…    (method or call on an expression)
+        -> ttk.Label(b, textvariable=self.status_v…    (method or call on an expression)
+        -> ttk.Label(c, text='Search').grid    (method or call on an expression)
+    _build_publish()    532
+        -> c.grid    (local variable or parameter)
+        -> h.grid    (local variable or parameter)
+        -> self._tree    (this class, line 796)
+        -> self.publish    (this class, line 565)    x2
+        -> self.publish_tree.bind    (attribute of self (inherited or set at run time))
+        -> self.publish_tree.configure    (attribute of self (inherited or set at run time))
+        -> t.columnconfigure    (local variable or parameter)
+        -> t.rowconfigure    (local variable or parameter)
+        -> ttk.Button    (from tkinter import ttk)    x3
+        -> ttk.Button(c, text='Publish All', comma…    (method or call on an expression)
+        -> ttk.Button(c, text='Publish Selection',…    (method or call on an expression)
+        -> ttk.Button(c, text=text, command=cmd).p…    (method or call on an expression)
+        -> ttk.Frame    (from tkinter import ttk)    x2
+        -> ttk.Label    (from tkinter import ttk)
+        -> ttk.Label(t, text="Double-click to togg…    (method or call on an expression)
+    _build_ui()    296
+        -> self._build_config    (this class, line 706)
+        -> self._build_editor    (this class, line 351)
+        -> self._build_fields    (this class, line 621)
+        -> self._build_gateway    (this class, line 735)
+        -> self._build_list    (this class, line 316)
+        -> self._build_publish    (this class, line 532)
+        -> self._build_ui_choices    (this class, line 724)
+        -> self._select_tab    (this class, line 309)
+        -> self.config.get    (attribute of self (inherited or set at run time))
+        -> self.notebook.add    (attribute of self (inherited or set at run time))
+        -> self.notebook.bind    (attribute of self (inherited or set at run time))
+        -> self.notebook.pack    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+        -> ttk.Frame    (from tkinter import ttk)    x7
+        -> ttk.Notebook    (from tkinter import ttk)
+    _build_ui_choices()    724
+        -> callable    (builtin)
+        -> getattr    (builtin)
+        -> self.master.winfo_toplevel    (attribute of self (inherited or set at run time))
+        -> ttk.Label    (from tkinter import ttk)
+        -> ttk.Label(self.ui_choices_tab, text='Sh…    (method or call on an expression)
+        -> ui_choices.attach    (import cpc_ui_choices as ui_choices)
+    _clear()    810
+        -> tr.delete    (local variable or parameter)
+        -> tr.get_children    (local variable or parameter)
+    _connect()    749
+        -> c.admin.command    (local variable or parameter)
+        -> MongoClient    (from pymongo import MongoClient)
+        -> x.create_index    (local variable or parameter)
+    _display()    828
+        -> isinstance    (builtin)    x2
+        -> json.dumps    (import json)
+        -> str    (builtin)
+    _doc()    391
+        -> bool    (builtin)
+        -> d.get    (local variable or parameter)
+        -> Decimal    (from decimal import Decimal)
+        -> float    (builtin)
+        -> images.insert    (local variable or parameter)
+        -> int    (builtin)
+        -> isinstance    (builtin)    x2
+        -> list    (builtin)
+        -> self.current_record.get    (attribute of self (inherited or set at run time))    x2
+        -> self.editor_widgets.items    (attribute of self (inherited or set at run time))
+        -> str    (builtin)    x2
+        -> str(v or '0').replace    (method or call on an expression)
+        -> w._v.get    (local variable or parameter)
+        -> w.get    (local variable or parameter)
+    _drop()    524
+        -> p.is_file    (local variable or parameter)
+        -> p.suffix.lower    (local variable or parameter)
+        -> Path    (from pathlib import Path)
+        -> self._import_image    (this class, line 476)
+        -> self.master.tk.splitlist    (attribute of self (inherited or set at run time))
+        -> str    (builtin)
+        -> str(e.data).strip    (method or call on an expression)
+    _editor_search()    436
+        -> self._select_tab    (this class, line 309)
+        -> self.editor_search_var.get    (attribute of self (inherited or set at run time))
+        -> self.editor_search_var.get().strip    (method or call on an expression)
+        -> self.list_search_var.set    (attribute of self (inherited or set at run time))
+        -> self.refresh_records    (this class, line 755)
+    _ef_selected()    656
+        -> bool    (builtin)    x2
+        -> self.edit_fields_tree.item    (attribute of self (inherited or set at run time))
+        -> self.edit_fields_tree.selection    (attribute of self (inherited or set at run time))
+        -> self.ef.set    (attribute of self (inherited or set at run time))
+        -> self.ei.set    (attribute of self (inherited or set at run time))
+        -> self.el.set    (attribute of self (inherited or set at run time))
+        -> self.ele.set    (attribute of self (inherited or set at run time))
+        -> self.en.set    (attribute of self (inherited or set at run time))
+        -> self.et.set    (attribute of self (inherited or set at run time))
+        -> self.eu.set    (attribute of self (inherited or set at run time))
+    _enable_drop()    519
+        -> w.dnd_bind    (local variable or parameter)
+        -> w.drop_target_register    (local variable or parameter)
+    _field_panel()    627
+        -> e.grid    (local variable or parameter)
+        -> h.grid    (local variable or parameter)
+        -> self._move_field    (this class, line 686)    x2
+        -> self._refresh_fields    (this class, line 696)
+        -> self._remove_field    (this class, line 678)
+        -> self._tree    (this class, line 796)
+        -> t.columnconfigure    (local variable or parameter)
+        -> t.rowconfigure    (local variable or parameter)
+        -> ttk.Button    (from tkinter import ttk)    x4
+        -> ttk.Button(e, text='Add / Apply', comma…    (method or call on an expression)
+        -> ttk.Button(e, text='Down', command=lamb…    (method or call on an expression)
+        -> ttk.Button(e, text='Remove', command=la…    (method or call on an expression)
+        -> ttk.Button(e, text='Up', command=lambda…    (method or call on an expression)
+        -> ttk.Checkbutton    (from tkinter import ttk)    x4
+        -> ttk.Checkbutton(e, text='Index', variab…    (method or call on an expression)    x2
+        -> ttk.Checkbutton(e, text='Unique', varia…    (method or call on an expression)    x2
+        -> ttk.Combobox    (from tkinter import ttk)    x2
+        -> ttk.Combobox(e, textvariable=self.et, v…    (method or call on an expression)
+        -> ttk.Combobox(e, textvariable=self.ta, v…    (method or call on an expression)
+        -> ttk.Entry    (from tkinter import ttk)    x5
+        -> ttk.Entry(e, textvariable=fv, width=17)…    (method or call on an expression)
+        -> ttk.Entry(e, textvariable=lv, width=17)…    (method or call on an expression)
+        -> ttk.Entry(e, textvariable=self.ele, wid…    (method or call on an expression)
+        -> ttk.Entry(e, textvariable=self.en, widt…    (method or call on an expression)
+        -> ttk.Entry(e, textvariable=self.tw, widt…    (method or call on an expression)
+        -> ttk.Frame    (from tkinter import ttk)    x2
+        -> ttk.Label    (from tkinter import ttk)    x7
+        -> ttk.Label(e, text='Align').grid    (method or call on an expression)
+        -> ttk.Label(e, text='Field').grid    (method or call on an expression)
+        -> ttk.Label(e, text='Label').grid    (method or call on an expression)
+        -> ttk.Label(e, text='Length').grid    (method or call on an expression)
+        -> ttk.Label(e, text='Lines').grid    (method or call on an expression)
+        -> ttk.Label(e, text='Type').grid    (method or call on an expression)
+        -> ttk.Label(e, text='Width').grid    (method or call on an expression)
+        -> tuple    (builtin)
+    _generate_part()    817
+        -> ''.join    (method or call on an expression)    x2
+        -> random.choices    (import random)    x2
+        -> range    (builtin)
+        -> RuntimeError    (builtin)
+        -> self.collection.find_one    (attribute of self (inherited or set at run time))
+    _get()    445
+        -> self.editor_types.get    (attribute of self (inherited or set at run time))
+        -> self.editor_widgets.get    (attribute of self (inherited or set at run time))
+        -> w._v.get    (local variable or parameter)
+        -> w.get    (local variable or parameter)
+    _html()    590
+        -> json.dumps    (import json)    x2
+        -> json.dumps(rows, ensure_ascii=False).re…    (method or call on an expression)
+        -> self.currency_symbol_var.get    (attribute of self (inherited or set at run time))
+        -> template.replace    (local variable or parameter)
+        -> template.replace('__DATA__', data).repl…    (method or call on an expression)
+    _id()    832
+        -> ObjectId    (from bson import ObjectId)
+        -> str    (builtin)
+    _import_image()    476
+        -> self._media_dir    (this class, line 451)
+        -> self._next_media    (this class, line 461)
+        -> self._register_image    (this class, line 481)
+        -> shutil.copy2    (import shutil)
+    _insert()    804
+        -> insert_row    (from cpc_treeviews import insert_row)
+        -> tr.insert    (local variable or parameter)
+    _int()    823
+        -> int    (builtin)
+        -> max    (builtin)
+        -> min    (builtin)
+    _load_config()    260
+        -> isinstance    (builtin)
+        -> json.loads    (import json)
+        -> self.config.update    (attribute of self (inherited or set at run time))
+        -> self.config_path.is_file    (attribute of self (inherited or set at run time))
+        -> self.config_path.read_text    (attribute of self (inherited or set at run time))
+    _load_editor()    432
+        -> d.get    (local variable or parameter)    x2
+        -> self._preview    (this class, line 511)
+        -> self._refresh_publish    (this class, line 543)
+        -> self._set    (this class, line 439)
+        -> str    (builtin)
+    _media_dir()    451
+        -> messagebox.showinfo    (from tkinter import messagebox)
+        -> p.mkdir    (local variable or parameter)
+        -> Path    (from pathlib import Path)
+        -> self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -> self.media_directory_var.get().strip    (method or call on an expression)
+    _move_field()    686
+        -> enumerate    (builtin)
+        -> len    (builtin)
+        -> next    (builtin)
+        -> self._ordered    (this class, line 812)
+        -> self._rebuild_form    (this class, line 369)
+        -> self._rebuild_list    (this class, line 334)
+        -> self._refresh_fields    (this class, line 696)
+        -> self._renumber    (this class, line 813)
+        -> self.refresh_records    (this class, line 755)
+        -> self.save_config    (this class, line 267)
+        -> tr.item    (local variable or parameter)
+        -> tr.selection    (local variable or parameter)
+    _next_media()    461
+        -> p.exists    (local variable or parameter)    x2
+        -> self._part    (this class, line 456)
+        -> suffix.startswith    (local variable or parameter)
+    _ordered()    812
+        -> isinstance    (builtin)
+        -> self._int    (this class, line 823)
+        -> self.config.get    (attribute of self (inherited or set at run time))
+        -> sorted    (builtin)
+        -> x.get    (local variable or parameter)    x2
+    _part()    456
+        -> re.fullmatch    (import re)
+        -> self._generate_part    (this class, line 817)
+        -> self._get    (this class, line 445)
+        -> self._set    (this class, line 439)
+        -> str    (builtin)
+        -> str(self._get('part_number') or '').upp…    (method or call on an expression)
+    _poll()    776
+        -> messagebox.showerror    (from tkinter import messagebox)
+        -> messagebox.showinfo    (from tkinter import messagebox)
+        -> old.close    (local variable or parameter)
+        -> self._apply_records    (this class, line 764)
+        -> self.master.after    (attribute of self (inherited or set at run time))
+        -> self.refresh_records    (this class, line 755)    x3
+        -> self.status_var.set    (attribute of self (inherited or set at run time))    x4
+        -> self.ui_queue.get_nowait    (attribute of self (inherited or set at run time))
+        -> str    (builtin)
+    _preview()    511
+        -> im.thumbnail    (local variable or parameter)
+        -> Image.open    (from PIL import Image)
+        -> ImageTk.PhotoImage    (from PIL import ImageTk)
+        -> p.is_file    (local variable or parameter)
+        -> Path    (from pathlib import Path)
+        -> self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -> self.media_directory_var.get().strip    (method or call on an expression)
+        -> self.preview.configure    (attribute of self (inherited or set at run time))    x3
+    _pub_all()    562
+        -> self._refresh_publish    (this class, line 543)
+        -> self.publish_item_to_id.values    (attribute of self (inherited or set at run time))
+        -> set    (builtin)
+    _pub_clear()    563
+        -> self._refresh_publish    (this class, line 543)
+        -> self.publish_selected_ids.clear    (attribute of self (inherited or set at run time))
+    _pub_highlighted()    557
+        -> self._refresh_publish    (this class, line 543)
+        -> self.publish_item_to_id.get    (attribute of self (inherited or set at run time))
+        -> self.publish_selected_ids.add    (attribute of self (inherited or set at run time))
+        -> self.publish_tree.selection    (attribute of self (inherited or set at run time))
+    _pub_toggle()    550
+        -> self._refresh_publish    (this class, line 543)
+        -> self.publish_item_to_id.get    (attribute of self (inherited or set at run time))
+        -> self.publish_selected_ids.add    (attribute of self (inherited or set at run time))
+        -> self.publish_selected_ids.remove    (attribute of self (inherited or set at run time))
+        -> self.publish_tree.selection    (attribute of self (inherited or set at run time))
+    _publish_worker()    575
+        -> (src / image).is_file    (method or call on an expression)
+        -> assets.mkdir    (local variable or parameter)
+        -> d.get    (local variable or parameter)    x4
+        -> len    (builtin)
+        -> list    (builtin)
+        -> Path    (from pathlib import Path)
+        -> rows.append    (local variable or parameter)
+        -> self._html    (this class, line 590)
+        -> self._id    (this class, line 832)
+        -> self.collection.find    (attribute of self (inherited or set at run time))
+        -> self.collection.find(q).sort    (method or call on an expression)
+        -> self.media_directory_var.get    (attribute of self (inherited or set at run time))    x2
+        -> self.media_directory_var.get().strip    (method or call on an expression)    x2
+        -> shutil.copy2    (import shutil)
+        -> str    (builtin)    x3
+        -> target.parent.mkdir    (local variable or parameter)
+        -> target.with_name    (local variable or parameter)
+        -> target.write_text    (local variable or parameter)
+        -> {'daily': 'daily_price', 'three_day': '…    (method or call on an expression)
+    _rebuild_form()    369
+        -> d.get    (local variable or parameter)    x3
+        -> enumerate    (builtin)
+        -> self._int    (this class, line 823)
+        -> self._ordered    (this class, line 812)
+        -> self.form.winfo_children    (attribute of self (inherited or set at run time))
+        -> str    (builtin)
+        -> tk.BooleanVar    (import tkinter as tk)
+        -> tk.StringVar    (import tkinter as tk)    x2
+        -> tk.Text    (import tkinter as tk)
+        -> ttk.Checkbutton    (from tkinter import ttk)
+        -> ttk.Combobox    (from tkinter import ttk)
+        -> ttk.Entry    (from tkinter import ttk)
+        -> ttk.Label    (from tkinter import ttk)
+        -> ttk.Label(self.form, text=d.get('label'…    (method or call on an expression)
+        -> w.grid    (local variable or parameter)    x4
+        -> x.destroy    (local variable or parameter)
+    _rebuild_list()    334
+        -> self._tree    (this class, line 796)
+        -> self._tree_def    (this class, line 327)
+        -> self.list_holder.winfo_children    (attribute of self (inherited or set at run time))
+        -> x.destroy    (local variable or parameter)
+    _records()    758
+        -> list    (builtin)
+        -> re.escape    (import re)
+        -> self.collection.count_documents    (attribute of self (inherited or set at run time))
+        -> self.collection.find    (attribute of self (inherited or set at run time))
+        -> self.collection.find(q).sort    (method or call on an expression)
+        -> self.collection.find(q).sort('part_numb…    (method or call on an expression)
+    _refresh_fields()    696
+        -> getattr    (builtin)    x2
+        -> self._clear    (this class, line 810)
+        -> self._insert    (this class, line 804)
+        -> self._ordered    (this class, line 812)
+        -> x.get    (local variable or parameter)    x11
+    _refresh_publish()    543
+        -> d.get    (local variable or parameter)    x3
+        -> hasattr    (builtin)
+        -> self._clear    (this class, line 810)
+        -> self._insert    (this class, line 804)
+        -> self.page_records.values    (attribute of self (inherited or set at run time))
+        -> sorted    (builtin)
+        -> str    (builtin)    x2
+        -> x.get    (unknown, not imported or defined here)
+    _register_image()    481
+        -> images.append    (local variable or parameter)    x2
+        -> isinstance    (builtin)    x3
+        -> list    (builtin)
+        -> self._get    (this class, line 445)    x2
+        -> self._preview    (this class, line 511)
+        -> self._set    (this class, line 439)
+        -> self.current_record.get    (attribute of self (inherited or set at run time))    x2
+        -> self.status_var.set    (attribute of self (inherited or set at run time))
+        -> str    (builtin)    x2
+    _remove_field()    678
+        -> self._rebuild_form    (this class, line 369)
+        -> self._rebuild_list    (this class, line 334)
+        -> self._refresh_fields    (this class, line 696)
+        -> self._renumber    (this class, line 813)
+        -> self.refresh_records    (this class, line 755)
+        -> self.save_config    (this class, line 267)
+        -> tr.item    (local variable or parameter)
+        -> tr.selection    (local variable or parameter)
+        -> x.get    (local variable or parameter)
+    _renumber()    813
+        -> enumerate    (builtin)
+        -> self._ordered    (this class, line 812)
+    _search_changed()    338
+        -> self.master.after    (attribute of self (inherited or set at run time))
+        -> self.master.after_cancel    (attribute of self (inherited or set at run time))
+    _select_tab()    309
+        -> nb.select    (local variable or parameter)
+        -> nb.tab    (local variable or parameter)
+        -> nb.tabs    (local variable or parameter)
+        -> ui_state.select_tab_by_text    (import cpc_ui_state as ui_state)
+    _selected()    344
+        -> copy.deepcopy    (import copy)
+        -> self._load_editor    (this class, line 432)
+        -> self.page_records.get    (attribute of self (inherited or set at run time))
+        -> self.record_tree.selection    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+        -> self.tree_item_to_id.get    (attribute of self (inherited or set at run time))
+    _set()    439
+        -> self.editor_types.get    (attribute of self (inherited or set at run time))
+        -> self.editor_widgets.get    (attribute of self (inherited or set at run time))
+        -> str    (builtin)
+        -> w._v.set    (local variable or parameter)
+        -> w.delete    (local variable or parameter)
+        -> w.insert    (local variable or parameter)
+    _status()    837
+        -> self.status_var.set    (attribute of self (inherited or set at run time))
+        -> str    (builtin)
+    _tf_selected()    652
+        -> bool    (builtin)    x2
+        -> self.ta.set    (attribute of self (inherited or set at run time))
+        -> self.tf.set    (attribute of self (inherited or set at run time))
+        -> self.ti.set    (attribute of self (inherited or set at run time))
+        -> self.tl.set    (attribute of self (inherited or set at run time))
+        -> self.tree_fields_tree.item    (attribute of self (inherited or set at run time))
+        -> self.tree_fields_tree.selection    (attribute of self (inherited or set at run time))
+        -> self.tu.set    (attribute of self (inherited or set at run time))
+        -> self.tw.set    (attribute of self (inherited or set at run time))
+    _tree()    796
+        -> build_treeview    (from cpc_treeviews import build_treeview)
+        -> enumerate    (builtin)
+        -> tr.bind    (local variable or parameter)
+        -> tr.column    (local variable or parameter)
+        -> tr.configure    (local variable or parameter)
+        -> tr.heading    (local variable or parameter)
+        -> tr.pack    (local variable or parameter)
+        -> ttk.Scrollbar    (from tkinter import ttk)    x2
+        -> ttk.Treeview    (from tkinter import ttk)
+        -> x.pack    (local variable or parameter)
+        -> y.pack    (local variable or parameter)
+    _tree_def()    327
+        -> len    (builtin)    x2
+        -> self._int    (this class, line 823)
+        -> self._ordered    (this class, line 812)
+        -> tuple    (builtin)
+        -> x.get    (local variable or parameter)    x3
+    _ui_applied()    730
+        -> self.save_config    (this class, line 267)
+    _validate()    409
+        -> d.get    (local variable or parameter)
+        -> re.fullmatch    (import re)
+        -> self._id    (this class, line 832)
+        -> self.collection.find_one    (attribute of self (inherited or set at run time))
+        -> str    (builtin)
+        -> str(d.get('part_number') or '').upper    (method or call on an expression)
+    _worker()    770
+        -> threading.Thread    (import threading)
+        -> threading.Thread(target=run, daemon=Tru…    (method or call on an expression)
+        run()    771
+            -> fn    (unknown, not imported or defined here)
+            -> self.ui_queue.put    (attribute of self (inherited or set at run time))    x2
+            -> str    (builtin)
+    add_record()    418
+        -> d.get    (local variable or parameter)
+        -> messagebox.showerror    (from tkinter import messagebox)
+        -> self._doc    (this class, line 391)
+        -> self._generate_part    (this class, line 817)
+        -> self._set    (this class, line 439)
+        -> self._validate    (this class, line 409)
+        -> self._worker    (this class, line 770)
+        -> self.collection.insert_one    (attribute of self (inherited or set at run time))
+    close()    841
+        -> self.master.destroy    (attribute of self (inherited or set at run time))
+        -> self.mongo_client.close    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+    connect_and_refresh()    745
+        -> messagebox.showerror    (from tkinter import messagebox)
+        -> self._worker    (this class, line 770)
+        -> self.mongo_collection_var.get    (attribute of self (inherited or set at run time))
+        -> self.mongo_database_var.get    (attribute of self (inherited or set at run time))
+        -> self.mongo_uri_var.get    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+    LogAtt()    839
+        -> self._status    (this class, line 837)
+    LogErr()    840
+        -> self._status    (this class, line 837)
+    LogOk()    838
+        -> self._status    (this class, line 837)
+    new_record()    385
+        -> self._generate_part    (this class, line 817)
+        -> self._preview    (this class, line 511)
+        -> self._select_tab    (this class, line 309)
+        -> self._set    (this class, line 439)    x4
+        -> self.status_var.set    (attribute of self (inherited or set at run time))
+    paste_image()    490
+        -> g.convert    (local variable or parameter)
+        -> g.convert('RGB').save    (method or call on an expression)
+        -> ImageGrab.grabclipboard    (from PIL import ImageGrab)
+        -> isinstance    (builtin)
+        -> messagebox.showerror    (from tkinter import messagebox)    x2
+        -> messagebox.showinfo    (from tkinter import messagebox)
+        -> p.suffix.lower    (local variable or parameter)
+        -> Path    (from pathlib import Path)
+        -> self._import_image    (this class, line 476)
+        -> self._media_dir    (this class, line 451)
+        -> self._next_media    (this class, line 461)
+        -> self._register_image    (this class, line 481)
+        -> str    (builtin)
+    pick_document()    504
+        -> filedialog.askopenfilename    (from tkinter import filedialog)
+        -> Path    (from pathlib import Path)
+        -> self._media_dir    (this class, line 451)
+        -> self._next_media    (this class, line 461)
+        -> self._set    (this class, line 439)
+        -> self.status_var.set    (attribute of self (inherited or set at run time))
+        -> shutil.copy2    (import shutil)
+    pick_image()    472
+        -> filedialog.askopenfilename    (from tkinter import filedialog)
+        -> Path    (from pathlib import Path)
+        -> self._import_image    (this class, line 476)
+    publish()    565
+        -> filedialog.asksaveasfilename    (from tkinter import filedialog)
+        -> list    (builtin)
+        -> messagebox.showinfo    (from tkinter import messagebox)
+        -> Path    (from pathlib import Path)
+        -> self._worker    (this class, line 770)
+        -> self.publish_file_var.get    (attribute of self (inherited or set at run time))
+        -> self.publish_file_var.get().strip    (method or call on an expression)
+        -> self.publish_file_var.set    (attribute of self (inherited or set at run time))
+        -> self.save_config    (this class, line 267)
+    refresh_records()    755
+        -> self._int    (this class, line 823)
+        -> self._worker    (this class, line 770)
+        -> self.list_search_var.get    (attribute of self (inherited or set at run time))
+        -> self.list_search_var.get().strip    (method or call on an expression)
+        -> self.page_size_var.get    (attribute of self (inherited or set at run time))
+    save_config()    267
+        -> int    (builtin)
+        -> json.dumps    (import json)
+        -> max    (builtin)    x3
+        -> self.config.update    (attribute of self (inherited or set at run time))    x2
+        -> self.config_path.write_text    (attribute of self (inherited or set at run time))
+        -> self.currency_symbol_var.get    (attribute of self (inherited or set at run time))
+        -> self.fields_notebook.select    (attribute of self (inherited or set at run time))
+        -> self.fields_notebook.tab    (attribute of self (inherited or set at run time))
+        -> self.master.winfo_height    (attribute of self (inherited or set at run time))
+        -> self.master.winfo_width    (attribute of self (inherited or set at run time))
+        -> self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -> self.media_directory_var.get().strip    (method or call on an expression)
+        -> self.mongo_collection_var.get    (attribute of self (inherited or set at run time))
+        -> self.mongo_collection_var.get().strip    (method or call on an expression)
+        -> self.mongo_database_var.get    (attribute of self (inherited or set at run time))
+        -> self.mongo_database_var.get().strip    (method or call on an expression)
+        -> self.mongo_uri_var.get    (attribute of self (inherited or set at run time))
+        -> self.mongo_uri_var.get().strip    (method or call on an expression)
+        -> self.notebook.select    (attribute of self (inherited or set at run time))
+        -> self.notebook.tab    (attribute of self (inherited or set at run time))
+        -> self.page_size_var.get    (attribute of self (inherited or set at run time))
+        -> self.publish_file_var.get    (attribute of self (inherited or set at run time))
+        -> self.publish_file_var.get().strip    (method or call on an expression)
+        -> str    (builtin)
+    update_record()    425
+        -> messagebox.showerror    (from tkinter import messagebox)
+        -> messagebox.showinfo    (from tkinter import messagebox)
+        -> self._doc    (this class, line 391)
+        -> self._id    (this class, line 832)
+        -> self._validate    (this class, line 409)
+        -> self._worker    (this class, line 770)
+        -> self.collection.update_one    (attribute of self (inherited or set at run time))
+(module level)
+    -> copy.deepcopy    (import copy)    x2
+    -> main    (this file, line 852)
+    -> Path    (from pathlib import Path)    x2
+    -> Path(__file__).resolve    (method or call on an expression)
+    -> str    (builtin)    x4
+    -> sys.path.append    (import sys)
+    -> sys.path.insert    (import sys)    x2
+    -> x_path.is_dir    (unknown, not imported or defined here)

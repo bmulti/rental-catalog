@@ -1,0 +1,319 @@
+source_file = cpc_rental_catalouge.py
+source_modified = 2026-11-22 16:41:32
+name: annotation = value    line numbers   (functions: name() with their variables indented; classes: first-last)
+
+APP_TITLE = 'Rental Catalog'    173
+ASCENDING = (None, 1)    143
+build_treeview = None    171
+CONFIG_FILE = 'rental_catalog.json'    175
+DEFAULT_CONFIG = {'ui_theme_name': 'Graphite', 'ui_density': 'Norm…    209
+DEFAULT_EDIT_FIELDS = [{'order': 1, 'field': 'part_number', 'label': 'P…    193
+DEFAULT_TREE_FIELDS = [{'order': 1, 'field': 'part_number', 'label': 'P…    183
+description = 'Mongo DB based equipment rental catalogue'    122
+EDIT_TYPES = {'1': 'Short', '2': 'Long', '3': 'Text', '4': 'In…    178
+gateway_controller = None    167
+Image = None    147
+ImageGrab = None    147
+ImageTk = None    147
+insert_row = None    171
+MongoClient = (None, 1)    143
+named = 'Rental Catalog'    124
+ObjectId = None    139
+p    133
+PRICE_TYPES = (('three_day', '3 Day'), ('daily', 'Daily'), ('we…    177
+project = 'App'    123
+shared_path = Path(__file__).resolve().parent.parent    111
+tkinterdnd2 = None    151
+TV_EDIT_FIELDS = {'title': 'edit_fields', 'columns': ('order', 'fi…    220
+TV_PUBLISH = {'title': 'publish', 'columns': ('selected', 'par…    224
+TV_TREE_FIELDS = {'title': 'tree_fields', 'columns': ('order', 'fi…    216
+ui_choices = None    163
+ui_state = None    159
+ui_theme = None    155
+version = '12'    125
+VERSION = '1.0.0'    174
+x_path = Path('X:\\cc_lib')    107
+main()
+    root
+class RentalCatalog    228-847
+    self._poll_after = None    240, 256, 793
+    self._search_after = None    240, 342
+    self.collection = None    236, 782
+    self.colors = dict(self.host_context.get('colors') or {})    290, 292, 293, 294
+    self.config = copy.deepcopy(DEFAULT_CONFIG)    235
+    self.config_path = self.script_dir / CONFIG_FILE    234
+    self.config_tab = ttk.Frame(self.notebook)    299
+    self.currency_symbol_var = tk.StringVar(master=master, value=self.config.get…    250
+    self.current_record = None    237, 349, 386
+    self.current_record_id = None    237, 349, 386, 788
+    self.edit_fields_tree = tree    631
+    self.editor_search_var = tk.StringVar(master=master)    242
+    self.editor_tab = ttk.Frame(self.notebook)    298
+    self.editor_types = {}    239, 371
+    self.editor_widgets = {}    239, 371
+    self.ef = tk.StringVar(master=master)    253
+    self.ei = tk.BooleanVar(master=master)    255
+    self.el = tk.StringVar(master=master)    253
+    self.ele = tk.StringVar(master=master, value='80')    254
+    self.embedded = bool(embedded or not isinstance(master, (tk.Tk, t…    231
+    self.en = tk.StringVar(master=master, value='1')    254
+    self.et = tk.StringVar(master=master, value='1')    253
+    self.eu = tk.BooleanVar(master=master)    255
+    self.fields_notebook = ttk.Notebook(self.fields_tab)    622
+    self.fields_tab = ttk.Frame(self.notebook)    299
+    self.form = ttk.Frame(t, padding=(8, 0, 4, 8))    360
+    self.gateway_controller = None    736, 740
+    self.gateway_tab = ttk.Frame(self.notebook)    300
+    self.host_context = host_context if isinstance(host_context, dict) el…    232
+    self.list_holder = ttk.Frame(t)    323
+    self.list_search_var = tk.StringVar(master=master)    242
+    self.list_tab = ttk.Frame(self.notebook)    298
+    self.master = master    230
+    self.media_directory_var = tk.StringVar(master=master, value=self.config['me…    248
+    self.mongo_client = None    236, 782
+    self.mongo_collection_var = tk.StringVar(master=master, value=self.config['mo…    246
+    self.mongo_database_var = tk.StringVar(master=master, value=self.config['mo…    245
+    self.mongo_uri_var = tk.StringVar(master=master, value=self.config['mo…    244
+    self.notebook = ttk.Notebook(self.master)    297
+    self.page_records = {}    238, 765
+    self.page_size_var = tk.StringVar(master=master, value=str(self.config…    247
+    self.page_var = tk.StringVar(master=master)    243
+    self.preview = ttk.Label(m, text='No image', anchor='center')    362
+    self.preview_photo = None    239, 512, 516
+    self.publish_file_var = tk.StringVar(master=master, value=self.config['pu…    249
+    self.publish_item_to_id = {}    238, 545
+    self.publish_selected_ids = set()    238, 562
+    self.publish_tab = ttk.Frame(self.notebook)    298
+    self.publish_tree = self._tree(h, TV_PUBLISH, 'Publishing')    540
+    self.record_tree = self._tree(self.list_holder, self._tree_def(), 'R…    336
+    self.script_dir = Path(__file__).resolve().parent    233
+    self.status_var = tk.StringVar(master=master, value='Not connected')    241
+    self.ta = tk.StringVar(master=master, value='w')    252
+    self.tf = tk.StringVar(master=master)    251
+    self.ti = tk.BooleanVar(master=master)    252
+    self.tl = tk.StringVar(master=master)    251
+    self.tree_fields_tree = tree    630
+    self.tree_item_to_id = {}    238, 765
+    self.tu = tk.BooleanVar(master=master)    252
+    self.tw = tk.StringVar(master=master, value='160')    251
+    self.ui_choices_controller = ui_choices.attach(self.ui_choices_tab, window=sel…    727
+    self.ui_choices_tab = ttk.Frame(self.notebook)    300
+    self.ui_queue = queue.Queue()    240
+    _apply_field()
+        r
+        rows
+        x
+    _apply_records()
+        d
+        docs
+        fields
+        item
+        rid
+        total
+    _browse_media()
+        x
+    _browse_publish()
+        x
+    _build_config()
+        cmd
+        lab
+        n
+        o
+        vals
+        var
+    _build_editor()
+        c
+        e
+        m
+        t
+    _build_fields()
+        a
+        b
+    _build_gateway()
+        cls
+        fn
+        h
+    _build_list()
+        b
+        c
+        e
+        t
+    _build_publish()
+        c
+        cmd
+        h
+        t
+        text
+    _build_ui()
+        t
+        w
+    _clear()
+        x
+    _connect()
+        c
+        x
+    _doc()
+        d
+        f
+        images
+        p
+        typ
+        v
+        w
+    _drop()
+        p
+        paths
+        x
+    _ef_selected()
+        s
+        v
+    _field_panel()
+        e
+        fv
+        h
+        key
+        lv
+        tree
+    _generate_part()
+        _
+        x
+    _get()
+        w
+    _html()
+        curr
+        data
+        template
+    _import_image()
+        root
+        target
+    _int()
+        n
+    _load_config()
+        d
+    _load_editor()
+        f
+    _media_dir()
+        p
+        s
+    _move_field()
+        f
+        i
+        j
+        r
+        s
+        tr
+    _next_media()
+        n
+        p
+        part
+        stem
+        suffix
+    _part()
+        p
+    _poll()
+        count
+        k
+        old
+        p
+        s
+        target
+    _preview()
+        im
+        p
+    _pub_highlighted()
+        item
+        rid
+    _pub_toggle()
+        item
+        rid
+    _publish_worker()
+        assets
+        d
+        docs
+        image
+        pf
+        q
+        rows
+        src
+        typ
+        webimg
+    _rebuild_form()
+        d
+        f
+        n
+        typ
+        v
+        w
+        x
+    _rebuild_list()
+        x
+    _records()
+        q
+        rx
+    _refresh_fields()
+        tr
+        v
+        x
+    _refresh_publish()
+        d
+        item
+        rid
+    _register_image()
+        images
+        old
+    _remove_field()
+        f
+        s
+        tr
+    _renumber()
+        i
+        r
+        x
+    _select_tab()
+        x
+    _selected()
+        doc
+        rid
+        s
+    _set()
+        w
+    _tf_selected()
+        s
+        v
+    _tree()
+        c
+        i
+        tr
+        x
+        y
+    _tree_def()
+        r
+    _validate()
+        part
+        q
+    add_record()
+        d
+        err
+    new_record()
+        f
+    paste_image()
+        _import
+        g
+        p
+        root
+        target
+        x
+    pick_document()
+        p
+        root
+        s
+        target
+    pick_image()
+        s
+    publish()
+        ids
+        target
+    update_record()
+        d
+        err
+        rid

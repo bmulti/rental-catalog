@@ -1,0 +1,1331 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rental Catalog</title>
+<link rel="icon" href="images/favicon-icon.png">
+<style>
+/* Shared portfolio header and footer */
+:root{color-scheme:light dark;--bg:#f4f7fa;--ink:#17212f;--muted:#566779;--card:#fff;--line:#d6dfe8;--a1:#146c77;--on:#fff;--soft:#e6f2f4;--shadow:0 3px 10px #1e3a5a1a;--hh:64px}
+@media (prefers-color-scheme:dark){:root{--bg:#0e141c;--ink:#e8eef6;--muted:#9fb0c4;--card:#18212d;--line:#2a374a;--a1:#7cc8d0;--on:#0b1b1f;--soft:#1c2c38;--shadow:0 3px 12px #0009}}
+*{box-sizing:border-box}[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--hh) + 56px)}
+body{margin:0;font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg);overflow-wrap:break-word}
+a{color:var(--a1)}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #df8f40;outline-offset:2px}
+
+/* top bar: brand, funding badge, language (wide screens), hamburger (narrow screens) */
+.topbar{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--card) 96%,transparent);border-bottom:1px solid var(--line);backdrop-filter:blur(14px);box-shadow:0 4px 22px #28444c10}
+.top-inner{max-width:1280px;margin:auto;padding:8px 14px;display:flex;align-items:center;gap:12px}
+.brand{display:flex;align-items:center;gap:11px;flex:1;min-width:0;font-weight:850;color:var(--ink);text-decoration:none;line-height:1.15;letter-spacing:-.02em}
+.brand span{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brand small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650;font-size:11px;letter-spacing:0;color:var(--muted);margin-top:3px}
+.brand-logo{display:block;width:40px;height:40px;object-fit:contain;border-radius:10px;border:1px solid var(--line);box-shadow:0 4px 13px #17394615;flex:none;background:#fff}
+.funding-alert{display:flex;align-items:center;gap:8px;text-decoration:none;flex:none}
+.funding-flash{background:#c81729;color:#fff;border:1px solid #9c1023;box-shadow:0 0 0 2px #ffffffa1;letter-spacing:.07em;border-radius:7px;padding:6px 9px;font:900 11px/1.1 system-ui,sans-serif;animation:fund-flash 1.6s ease-in-out infinite}
+.funding-status{display:none;color:#b3202d;font:740 11px/1.25 system-ui,sans-serif;max-width:190px}
+@media (prefers-color-scheme:dark){.funding-status{color:#ff9aa6}}
+@keyframes fund-flash{0%,100%{background:#bb1126;box-shadow:0 0 0 2px #ffffffa1}50%{background:#ff304b;box-shadow:0 0 0 3px #ffb0bb}}
+.lang{display:none;align-items:center;gap:6px;font-size:13px}
+.lang select,.dr-lang select{font:inherit;padding:7px 9px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px}
+.burger{flex:none;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);cursor:pointer;display:grid;place-content:center;gap:5px;padding:0}
+.burger span{display:block;width:20px;height:2px;border-radius:2px;background:var(--ink);transition:transform .2s,opacity .2s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+/* step tracker: sits under the top bar on narrow screens while the tour is on screen */
+.tourbar{position:absolute;left:0;right:0;top:100%;background:var(--card);border-bottom:1px solid var(--line);box-shadow:0 6px 14px #0000001a}
+.tb-row{display:flex;align-items:center;gap:8px;padding:5px 10px;max-width:1280px;margin:auto}
+.tb-row button{flex:none;width:38px;height:34px;border:1px solid var(--line);border-radius:9px;background:var(--bg);color:var(--ink);font:700 18px/1 system-ui,sans-serif;cursor:pointer}
+.tb-row button:disabled{opacity:.35;cursor:default}
+.tb-txt{flex:1;min-width:0;line-height:1.25;font-size:13px}
+.tb-txt b{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--a1)}
+.tb-txt span{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:650}
+.tb-prog{height:3px;background:var(--line)}.tb-prog i{display:block;height:100%;width:0;background:var(--a1);transition:width .25s}
+
+/* hamburger drawer */
+.scrim{position:fixed;inset:0;z-index:60;background:#0008;opacity:0;pointer-events:none;transition:opacity .25s}
+.scrim.open{opacity:1;pointer-events:auto}
+.drawer{position:fixed;z-index:70;top:0;right:0;bottom:0;width:min(88vw,360px);background:var(--card);border-left:1px solid var(--line);box-shadow:-10px 0 30px #0004;display:flex;flex-direction:column;transform:translateX(104%);visibility:hidden;transition:transform .25s,visibility 0s .25s}
+.drawer.open{transform:none;visibility:visible;transition:transform .25s}
+.dr-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--line)}
+.dr-head strong{font-size:16px}
+.dr-head button{width:40px;height:40px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:700 16px/1 system-ui,sans-serif;cursor:pointer}
+.dr-body{flex:1;overflow:auto;padding:12px 14px 24px;overscroll-behavior:contain}
+.dr-body h2,.side h2{font:800 11px/1.2 system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+.dr-lang{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:650}.dr-lang select{font-size:16px;width:100%;padding:10px}
+.dr-fund{display:flex;align-items:center;gap:10px;margin:14px 0 2px;padding:10px;border:1px solid #c8162933;border-radius:10px;text-decoration:none;color:#b3202d;font:740 12px/1.3 system-ui,sans-serif}
+@media (prefers-color-scheme:dark){.dr-fund{color:#ff9aa6}}
+.dr-body>.btn{margin-top:18px}
+
+/* page index (sidebar on wide screens, drawer on narrow screens) */
+.toc{display:flex;flex-direction:column;gap:2px}
+.toc a{display:flex;align-items:baseline;gap:8px;padding:7px 9px;border-radius:8px;border-left:3px solid transparent;text-decoration:none;color:var(--ink);font-size:13.5px;line-height:1.35}
+.toc a.lv2{margin-left:10px;color:var(--muted)}
+.toc a:hover{background:var(--soft)}
+.toc a.on{background:var(--soft);border-left-color:var(--a1);color:var(--ink);font-weight:700}
+.toc .n{flex:none;min-width:20px;height:20px;border-radius:10px;background:var(--a1);color:var(--on);font:800 11px/20px system-ui,sans-serif;text-align:center}
+.side{display:none}
+
+/* page layout */
+.layout{max-width:1280px;margin:auto;padding:14px 14px 24px;display:block}
+.hero,.panel{display:flow-root;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 14px;box-shadow:var(--shadow)}
+.hero{border-top:4px solid var(--a1)}
+.hero h1{font-size:1.5rem;line-height:1.2;margin:0 0 4px;letter-spacing:-.02em}.pill{display:inline-block;font-size:12px;color:var(--muted);background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:1px 10px}
+.hero h2,.panel>h2{font-size:1.1rem;margin:12px 0 6px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.panel>h2{margin-top:0}
+.hero p,.panel p{margin:6px 0}.panel ul,.panel ol{margin:6px 0;padding-left:22px}.panel pre{overflow:auto;background:var(--bg);padding:8px;border-radius:8px}.panel table{max-width:100%;display:block;overflow:auto}
+.splash{float:right;width:30%;max-width:190px;margin:0 0 8px 14px}.splash img{width:100%;max-height:110px;object-fit:contain;border-radius:8px}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0!important}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border:1px solid var(--a1);border-radius:999px;text-decoration:none;font-weight:700;font-size:13.5px;color:var(--a1);background:transparent}
+.btn.pri{background:var(--a1);color:var(--on)}
+.btn:hover{background:var(--soft)}.btn.pri:hover{filter:brightness(1.1);background:var(--a1)}
+
+/* guided tour: numbered steps, screenshot between the text blocks */
+.tour-meta{margin:2px 0 14px!important;font-size:12.5px;color:var(--muted)}
+.langtext{display:flow-root}
+.langtext img{max-width:100%;height:auto}
+.lead{margin:0 0 16px}
+.step{display:grid;grid-template-columns:36px minmax(0,1fr);column-gap:14px;position:relative;scroll-margin-top:calc(var(--hh) + 56px)}
+.step-n{position:relative;z-index:1;width:36px;height:36px;border-radius:50%;background:var(--a1);color:var(--on);font:800 15px/36px system-ui,sans-serif;text-align:center;margin-top:1px;transition:box-shadow .2s}
+.step::before{content:"";position:absolute;left:17px;top:40px;bottom:-4px;width:2px;background:var(--line)}
+.step:last-child::before{display:none}
+.step.cur .step-n{box-shadow:0 0 0 5px color-mix(in srgb,var(--a1) 28%,transparent)}
+.step-body{min-width:0;padding-bottom:26px}
+.step-body>h2,.step-body>h3,.step-body>h4{margin:5px 0 6px;font-size:1.15rem;line-height:1.3;border:0;padding:0}
+.step-body>p:first-of-type{margin-top:4px}
+.shot{margin:12px 0 8px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg);box-shadow:var(--shadow);max-width:880px}
+.shot .bar{display:flex;align-items:center;gap:5px;padding:7px 10px;background:color-mix(in srgb,var(--ink) 7%,var(--card));font-size:12px;color:var(--muted)}
+.shot .bar i{display:block;width:9px;height:9px;border-radius:50%;background:var(--line);border:1px solid color-mix(in srgb,var(--muted) 40%,transparent)}
+.shot .bar span{margin-left:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.langtext .shot img,.shot img{display:block;width:100%;height:auto;max-height:78vh;object-fit:contain;background:#fff;cursor:zoom-in}
+.shot figcaption{padding:6px 10px;font-size:12px;line-height:1.4;color:var(--muted)}
+.next{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:7px 13px;border:1px solid var(--line);border-radius:999px;font-size:13px;font-weight:650;text-decoration:none;max-width:100%}
+.next:hover{background:var(--soft)}.next span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* gallery, posters, files */
+.gallery,.posters{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.gallery figure,.posters a{margin:0;border:1px solid var(--line);border-radius:8px;padding:5px;min-width:0;background:var(--bg)}
+.gallery img,.posters img{display:block;width:100%;height:100px;object-fit:contain;cursor:zoom-in}.posters img{height:150px}
+figcaption{font-size:11px;line-height:1.35;color:var(--muted)}
+#features-body:empty{display:none}
+#repository-files ul{columns:2 250px;column-gap:28px;list-style:none;padding-left:0}#repository-files li{break-inside:avoid;padding:2px 0}
+#repository-files a{overflow-wrap:anywhere;font-family:ui-monospace,Consolas,monospace;font-size:13px}
+
+@media (min-width:700px){.funding-status{display:block}}
+@media (min-width:1000px){
+  .burger,.tourbar{display:none!important}.lang{display:flex}.side{display:block}
+  .layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:22px;padding-top:18px}
+  .side{position:sticky;top:calc(var(--hh) + 14px);align-self:start;max-height:calc(100vh - var(--hh) - 28px);overflow:auto;padding:2px 4px 14px 0}
+  .side h2:first-child{margin-top:0}
+  .hero,.panel{padding:20px 26px}
+  .hero h1{font-size:1.8rem}
+}
+@media (max-width:560px){
+  .layout{padding:10px 10px 18px}.hero,.panel{padding:13px 13px;border-radius:12px}
+  .splash{float:none;width:100%;max-width:none;margin:0 0 10px}.splash img{max-height:130px}
+  .step{grid-template-columns:28px minmax(0,1fr);column-gap:10px}
+  .step-n{width:28px;height:28px;font-size:13px;line-height:28px}.step::before{left:13px;top:32px}
+  .brand small{display:none}.brand-logo{width:36px;height:36px}
+}
+@media (max-width:360px){.funding-flash{padding:5px 6px;font-size:10px}}
+/* bottom: funding and links */
+.footer{background:#16434d;color:#fff5e8;padding:46px 0 34px;border-top:6px solid #efb75f;margin-top:10px}
+.footer .wrap{padding-top:0;padding-bottom:0}
+.footer-top{display:grid;grid-template-columns:1fr 1.2fr;gap:44px;align-items:start}
+.footer .kicker{font-size:12px;letter-spacing:.17em;text-transform:uppercase;font-weight:850;margin:0 0 7px;color:#e9bb7d}
+.footer h2{font:650 clamp(26px,3.2vw,40px)/1.14 Georgia,serif;letter-spacing:-.03em;color:#fff6e7;margin:0 0 13px}
+.footer p{color:#d4e4e1;max-width:500px;font-size:15px}
+.footer-brand-logo{display:block;width:78px;height:78px;object-fit:contain;border-radius:15px;border:1px solid #8cb6b2;margin-bottom:18px;background:#fff}
+.footer .funding-note{margin-top:20px;padding:16px 18px;border-left:4px solid #efb75f;background:#ffffff12;border-radius:0 9px 9px 0;color:#f3e5cc;max-width:520px}
+.footer .funding-note strong{color:#fff8e7}
+.support-art{display:flex;align-items:center;gap:12px;max-width:450px;font-size:13px;color:#e2ead9;margin-top:16px}
+.support-art img{width:65px;flex:0 0 65px;height:65px;border-radius:9px;object-fit:cover}
+.support-art span{line-height:1.55}
+.footer-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.footer-links a{display:block;border:1px solid #668d90;padding:14px;border-radius:10px;text-decoration:none;background:#ffffff0c;color:#ebf7f3;font-weight:720;font-size:13px;overflow-wrap:anywhere}
+.footer-links a:hover{background:#ffffff1e}
+.footer-links a span{display:block;font-size:11px;color:#b3ccca;font-weight:500;margin-top:3px}
+.footer-links a.support-link{border-color:#e5b874;background:#ecb75a15}.footer-links a.support-link:hover{background:#ecb75a30}
+.footer-bottom{border-top:1px solid #5b8183;margin-top:34px;padding-top:20px;display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;font-size:12px;color:#c1d4d0}
+.footer-bottom a{color:#ffdc9b}
+
+@media (max-width:760px){.footer-top{grid-template-columns:1fr;gap:30px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.funding-flash{animation:none}.drawer,.scrim,.burger span,.tb-prog i{transition:none}}
+@media print{.funding-flash{animation:none}.topbar{position:static}.burger,.drawer,.scrim,.tourbar,.side{display:none!important}.layout{display:block}}
+.footer .wrap{max-width:1280px;margin:auto;padding:0 16px}.footer{text-align:left;padding:20px 0 16px}.footer-top{gap:20px}.footer h2{font-size:24px}.footer p{font-size:13px}.footer-brand-logo{width:44px;height:44px;margin-bottom:8px}.footer-links a{padding:7px}.footer-bottom{margin-top:14px;padding-top:10px}
+/* poster overlay: 95% of the screen, zoomable, easy to leave */
+dialog#viewer{width:95vw;height:95vh;max-width:95vw;max-height:95vh;margin:auto;padding:0;border:0;border-radius:12px;background:#0a1418;color:#fff;overflow:hidden}
+dialog#viewer::backdrop{background:#000b}
+dialog#viewer[open]{display:flex;flex-direction:column}
+.v-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#000a;flex:none}
+.v-bar strong{flex:1;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v-bar button{cursor:pointer;color:#fff;font:700 14px/1 system-ui,sans-serif;background:#fff2;border:1px solid #fff7;border-radius:18px;padding:8px 13px}
+.v-bar button:hover{background:#fff4}.v-bar .close{background:#b91c1c;border-color:#fff9}
+.v-stage{flex:1;overflow:auto;display:flex;padding:10px}
+.v-stage a{display:block;margin:auto;flex:none;cursor:pointer}
+.v-stage img{display:block;max-width:calc(95vw - 20px);max-height:calc(95vh - 76px);width:auto;height:auto;object-fit:contain}
+.v-hint{flex:none;text-align:center;font-size:12px;color:#c3d4d8;padding:4px 8px 7px}
+
+
+</style>
+</head><body id="top">
+<header class="topbar" id="topbar"><div class="top-inner">
+  <a class="brand" href="https://bmulti.github.io/" aria-label="Return to portfolio">
+    <img class="brand-logo" src="images/logo-logo.webp" alt="" width="40" height="40">
+    <span>Rental Catalog<small id="header-description">App</small></span>
+  </a>
+  <a class="funding-alert" href="#connect" aria-label="Funding request and support links"><strong class="funding-flash">FUNDING</strong><span class="funding-status">Nov 2026 sites and links will work with funding</span></a>
+  <div class="lang"><label for="doclang" data-i="lang">Language</label><select id="doclang"><option value="en" selected>EN</option><option value="ar">AR</option><option value="ceb">CEB</option><option value="de">DE</option><option value="es">ES</option><option value="es-mx">ES-MX</option><option value="fr">FR</option><option value="id">ID</option><option value="it">IT</option><option value="ja">JA</option><option value="ko">KO</option><option value="ms">MS</option><option value="nl">NL</option><option value="pt">PT</option><option value="ru">RU</option><option value="zh">ZH</option></select></div>
+  <button type="button" class="burger" id="burger" aria-label="Menu" data-ia="menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+</div>
+<div class="tourbar" id="tourbar" hidden><div class="tb-row"><button type="button" id="tb-prev" aria-label="Previous" data-ia="prev">‹</button><div class="tb-txt"><b id="tb-step"></b><span id="tb-title"></span></div><button type="button" id="tb-next" aria-label="Next" data-ia="next">›</button></div><div class="tb-prog"><i id="tb-fill"></i></div></div>
+</header>
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Menu" data-ia="menu" aria-hidden="true">
+  <div class="dr-head"><strong data-i="menu">Menu</strong><button type="button" id="dr-close" aria-label="Close" data-ia="close">✕</button></div>
+  <div class="dr-body">
+    <div class="dr-lang"><label for="doclang2" data-i="lang">Language</label><span id="dr-sel"></span></div>
+    <a class="dr-fund" href="#connect"><strong class="funding-flash">FUNDING</strong><span>Nov 2026 sites and links will work with funding</span></a>
+    <h2 data-i="onpage">On this page</h2><div class="toc" id="toc-m"></div>
+    <div id="extra-m" hidden><h2 data-i="more">More pages</h2><div class="toc" id="extra-links-m"></div></div>
+    <a class="btn" href="https://bmulti.github.io/">Portfolio</a>
+  </div>
+</aside>
+<div class="layout">
+<nav class="side" id="page-index" aria-label="Page index"><h2 data-i="onpage">On this page</h2><div class="toc" id="toc"></div><div id="extra-pages" hidden><h2 data-i="more">More pages</h2><div class="toc" id="extra-links"></div></div></nav>
+<main id="application">
+  <section class="hero" id="description">
+    <a class="splash" href="https://bmulti.github.io/"><img src="images/splash-cpc-rental-catalouge-spash.webp" alt="Application title image"></a>
+    <h1>Rental Catalog</h1><span class="pill">App · v1.0.0</span>
+    <h2>Description</h2><div id="description-text"><p>Mongo DB based equipment rental catalogue</p></div>
+    <p class="actions"><a class="btn pri" href="#about" data-i="start">Start the tour</a><a class="btn" href="https://github.com/bmulti/rental-catalog">Repository</a><a class="btn" href="https://bmulti.github.io/">Portfolio</a></p>
+  </section>
+  
+  <section class="panel tour" id="about"><h2>About this application (16 languages)</h2>
+    <p class="tour-meta" id="tour-meta"></p>
+    <div id="langtexts"><div class="langtext" data-lang="en"><p style="white-space:pre-wrap">[intro]
+# Rental Catalog — what this application does
+Rental Catalog maintains a MongoDB catalogue of equipment offered for rent or
+sale. Each equipment record has a unique part number, a name, descriptions,
+quantity, rental prices for different periods, booking and publication flags,
+and references to images or documents. The List and Editor fields can be
+configured without changing the Python source. Publishing produces a
+responsive, searchable HTML catalogue with images and rental prices.
+
+Begin with Config to set the MongoDB connection, the folder for media files,
+and the published HTML destination. Use List to browse or search existing
+records, Editor to create or update equipment details, and Publishing to
+produce the catalogue. Fields controls which columns and inputs appear in
+the List and Editor. Important database records and media files should be
+backed up separately before large edits or publication updates.
+
+[tab:list]
+# List
+List shows equipment records from the configured MongoDB database and
+collection. The Search box matches part number, short name, long description
+and detailed description without regard to letter case. New opens a new
+record in Editor, while Refresh reloads the current results. Selecting a
+record in the list loads its details into Editor.
+
+By default, the columns show Part, Name, Qty, 3 Day, Weekly, Monthly, Book
+and Don&#x27;t Publish. The Fields tab defines column names, widths, alignment
+and order. Page Size in Config limits the maximum number of matching records
+shown; the footer reports the loaded count and the total match count.
+
+[tab:editor]
+# Editor
+Editor creates and updates equipment records. Search passes the entered
+text to List. New clears the form, generates a candidate part number, sets
+quantity to 1 and selects the three-day price as the default. Add inserts
+a new MongoDB record. Update changes the selected record; select an item
+from List before using Update.
+
+Each part number must contain exactly two letters followed by two digits,
+such as AB12, and must be unique. The default form contains Part Number,
+Short Name, Long Description, Detailed Description, Quantity, Daily Price,
+3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish,
+Book, Primary Image and Document. Money values are stored numerically,
+quantity is stored as an integer, and the two flags are Boolean fields.
+Default Price chooses among daily, three-day, weekly and monthly periods.
+The Fields tab controls which editor inputs are displayed.
+
+The Media area previews the primary image. Pick Image copies an image from
+the file system into the configured Media Directory. Paste Image imports an
+image from the clipboard when Pillow support is available. Dragging an image
+into the preview is supported when tkinterdnd2 is installed. Pick Document
+copies a selected file into the Media Directory and places its filename in
+the Document field. Imported files use the part number in their filenames;
+a numbered suffix avoids overwriting an existing file. Images are stored as
+files and referenced by name in the MongoDB record. Use Add or Update to
+save changed record details and media references.
+
+[tab:publishing]
+# Publishing
+Publishing generates a responsive single-page HTML rental catalogue. The
+list shows equipment records loaded by the current List search and page
+limit. Refresh reloads the available entries. Select Highlighted marks
+highlighted records; Select All marks all currently displayed records;
+Clear Selection removes the marks. Double-clicking selected rows toggles
+their publication selection.
+
+Publish Selection writes marked records, whereas Publish All queries the
+full collection. In both cases, records with Don&#x27;t Publish enabled are
+excluded. The published items are ordered by part number. The output is
+written to the configured Publish HTML File, or a destination is requested
+when none has been set. Current images are copied into a companion media
+folder beside the HTML file, when the referenced files are available.
+
+The published page provides equipment cards, images, names, descriptions,
+booking status and price information. Visitors can search by part number or
+description, choose a price period, and sort by part number, name,
+description, or ascending or descending price. Price periods are Daily,
+3 Day, Weekly and Monthly. The displayed currency symbol comes from Config.
+When a selected period has no nonzero price, the page displays Ask for price.
+
+Publishing writes to the selected HTML output path and may replace an
+existing HTML file. Confirm that the destination and intended catalogue
+selection are correct before publishing. Keep the companion media folder
+with the HTML file when moving the published site.
+
+[tab:fields]
+# Fields
+Fields has two subtabs: Tree View Fields and Editor Fields. Tree View
+Fields controls the List columns and their display order. For each column,
+enter its field name, label, width and alignment, and set Index or Unique
+metadata if required. Add / Apply creates or updates the field definition;
+Remove deletes it from the configured list; Up and Down change its order.
+Changing the list definition rebuilds the displayed List.
+
+Editor Fields controls the record input form. A field definition includes
+its name, label, type, line count, length, Index and Unique metadata. The
+supported editor type codes are 1 Short, 2 Long, 3 Text, 4 Integer,
+5 Money, 6 Boolean, 7 Price Type and 8 Media. Multiline text, checkboxes
+and the price-period selector are displayed according to field type. Use
+Add / Apply, Remove, Up and Down to manage the form order and definitions.
+
+Definitions are saved in rental_catalog.json. Changing or removing a field
+from the interface does not by itself delete that field from existing
+MongoDB documents. The application also attempts to create a unique index
+on part_number when connecting to the collection. Review existing data
+before changing key fields or their definitions.
+
+[tab:config]
+# Config
+Mongo URI, Database and Collection define the MongoDB data source.
+The defaults are localhost, rental and catalog. Page Size controls the
+maximum number of records loaded in List. Media Directory is the folder
+used for imported images and documents; use Browse to select it. Publish
+HTML File specifies the generated catalogue destination, and Currency
+Symbol sets the prefix shown with published prices.
+
+Connect + Refresh reconnects to the specified MongoDB database and reloads
+records. Save Config writes settings to rental_catalog.json beside the
+application source. The application also saves the selected main tab,
+selected Fields subtab, most recently selected record, appearance settings
+and window dimensions. MongoDB document content and physical media files
+are separate from this configuration file.
+
+The media directory must be set before importing images or documents.
+Publishing copies referenced images from that directory when they exist;
+it does not embed original image content in MongoDB. Ensure the database,
+media directory and HTML output paths are backed up as appropriate.
+
+[tab:ui-choices]
+# UI Choices
+UI Choices uses the shared interface component to select appearance options,
+including theme and display density. Changes are saved to application
+configuration. The initial theme is Graphite and density is Normal. If the
+shared component is unavailable, the tab displays an explanatory message.
+
+[tab:gateway]
+# Gateway
+Gateway integrates the shared application controller when
+GatewayController is available. It provides access to the common application
+launcher independently of the rental catalogue records. If the controller
+cannot be loaded, the tab displays an unavailable message.
+</p></div><div class="langtext" data-lang="ar" hidden><p style="white-space:pre-wrap">[intro]
+# كتالوج التأجير — وظيفة هذا التطبيق
+يدير Rental Catalog كتالوج المعدات المعروضة للتأجير أو البيع داخل MongoDB. يحتوي كل سجل على رقم قطعة فريد واسم وأوصاف وكمية وأسعار تأجير لفترات مختلفة وعلامات للحجز والنشر ومراجع للصور أو المستندات. يمكن تهيئة حقول List وEditor دون تعديل الشيفرة المصدرية بلغة Python. تنشئ Publishing كتالوج HTML متجاوباً وقابلاً للبحث يحتوي على الصور وأسعار التأجير.
+
+ابدأ من Config لتحديد اتصال MongoDB ومجلد ملفات الوسائط ووجهة ملف HTML المنشور. استخدم List لاستعراض السجلات الحالية أو البحث فيها، وEditor لإنشاء تفاصيل المعدات أو تحديثها، وPublishing لإنشاء الكتالوج. تتحكم Fields في الأعمدة وحقول الإدخال التي تظهر في List وEditor. احفظ نسخاً احتياطية منفصلة من سجلات قاعدة البيانات المهمة وملفات الوسائط قبل إجراء تعديلات كبيرة أو تحديثات للنشر.
+
+[tab:list]
+# القائمة
+تعرض List سجلات المعدات من قاعدة بيانات MongoDB والمجموعة المحددتين في الإعدادات. يبحث مربع Search في رقم القطعة والاسم المختصر والوصف الطويل والوصف التفصيلي دون التمييز بين الأحرف الكبيرة والصغيرة. يفتح New سجلاً جديداً في Editor، بينما يعيد Refresh تحميل النتائج الحالية. يؤدي تحديد سجل في القائمة إلى تحميل تفاصيله في Editor.
+
+الأعمدة الافتراضية هي Part وName وQty و3 Day وWeekly وMonthly وBook وDon&#x27;t Publish. تحدد علامة التبويب Fields أسماء الأعمدة وعرضها ومحاذاتها وترتيبها. يحدد Page Size في Config الحد الأقصى لعدد السجلات المطابقة المعروضة، ويعرض التذييل عدد السجلات المحملة وإجمالي النتائج المطابقة.
+
+[tab:editor]
+# المحرر
+يُنشئ Editor سجلات المعدات ويحدّثها. يمرر Search النص المدخل إلى List. يمسح New النموذج وينشئ اقتراحاً لرقم القطعة ويضبط الكمية على 1 ويختار سعر ثلاثة أيام افتراضياً. يضيف Add سجلاً جديداً إلى MongoDB. يغيّر Update السجل المحدد؛ اختر عنصراً من List أولاً.
+
+يجب أن يتكون كل رقم قطعة من حرفين بالضبط يتبعهما رقمان، مثل AB12، وأن يكون فريداً. يضم النموذج الافتراضي Part Number وShort Name وLong Description وDetailed Description وQuantity وDaily Price و3 Day Price وWeekly Price وMonthly Price وDefault Price وDon&#x27;t Publish وBook وPrimary Image وDocument. تُخزن المبالغ كقيم رقمية والكمية كعدد صحيح والعلامتان كقيم منطقية Boolean. يختار Default Price فترة يومية أو ثلاثة أيام أو أسبوعية أو شهرية. تحدد Fields مدخلات Editor التي تظهر للمستخدم.
+
+تعرض منطقة Media معاينة للصورة الرئيسية. ينسخ Pick Image صورة من نظام الملفات إلى Media Directory. يستورد Paste Image صورة من الحافظة عند توفر Pillow. يمكن سحب صورة إلى المعاينة إذا كانت مكتبة tkinterdnd2 مثبتة. ينسخ Pick Document الملف المحدد إلى Media Directory ويضع اسمه في حقل Document. تتضمن أسماء الملفات المستوردة رقم القطعة، وتمنع لاحقة مرقمة الكتابة فوق ملف موجود. تُحفظ الصور كملفات منفصلة ويُشار إليها بالاسم داخل سجل MongoDB. استخدم Add أو Update لحفظ التغييرات ومراجع الوسائط.
+
+[tab:publishing]
+# النشر
+تنشئ Publishing كتالوج تأجير HTML متجاوباً في صفحة واحدة. تعرض القائمة السجلات المحملة وفق البحث الحالي في List وحد الصفحات. يعيد Refresh تحميل العناصر. يضع Select Highlighted علامة على السجلات المظللة، ويحدد Select All جميع السجلات الظاهرة، بينما يزيل Clear Selection العلامات. يؤدي النقر المزدوج على الصفوف المحددة إلى تبديل اختيارها للنشر.
+
+يكتب Publish Selection السجلات المحددة، بينما يستعلم Publish All عن المجموعة بأكملها. تُستبعد في الحالتين السجلات التي فُعّل فيها Don&#x27;t Publish. تُرتب العناصر المنشورة حسب رقم القطعة. يُحفظ الناتج في Publish HTML File المحدد، أو يُطلب اختيار وجهة إذا لم تُحدد. تُنسخ الصور المرجعية المتوفرة إلى مجلد وسائط مرافق بجانب ملف HTML.
+
+تعرض الصفحة المنشورة بطاقات المعدات وصورها وأسماءها وأوصافها وحالة الحجز والأسعار. يستطيع الزائر البحث برقم القطعة أو الوصف، واختيار فترة السعر، والفرز برقم القطعة أو الاسم أو الوصف أو السعر تصاعدياً أو تنازلياً. الفترات هي Daily و3 Day وWeekly وMonthly. يُؤخذ رمز العملة من Config. إذا لم يكن هناك سعر غير صفري للفترة المختارة، تظهر عبارة Ask for price.
+
+تكتب Publishing إلى مسار HTML المختار وقد تستبدل ملف HTML موجوداً. تحقق من الوجهة والعناصر المطلوبة قبل النشر. عند نقل الموقع المنشور، احتفظ بمجلد الوسائط المرافق مع ملف HTML.
+
+[tab:fields]
+# الحقول
+تحتوي Fields على علامتي تبويب فرعيتين: Tree View Fields وEditor Fields. تتحكم Tree View Fields في أعمدة List وترتيب عرضها. أدخل اسم الحقل وتسميته وعرضه ومحاذاته لكل عمود، واضبط بيانات Index أو Unique عند الحاجة. ينشئ Add / Apply التعريف أو يحدّثه، ويزيله Remove من القائمة المضبوطة، ويغير Up وDown ترتيبه. يؤدي تعديل التعريفات إلى إعادة بناء List المعروضة.
+
+تتحكم Editor Fields في نموذج إدخال السجلات. يشمل تعريف الحقل اسمه وتسميته ونوعه وعدد الأسطر وطوله وبيانات Index وUnique. رموز الأنواع المدعومة هي 1 Short و2 Long و3 Text و4 Integer و5 Money و6 Boolean و7 Price Type و8 Media. تظهر النصوص متعددة الأسطر ومربعات الاختيار ومحدد فترة السعر وفق نوع الحقل. استخدم Add / Apply وRemove وUp وDown لإدارة التعريفات وترتيبها.
+
+تُحفظ التعريفات في rental_catalog.json. لا يؤدي تعديل حقل أو حذفه من الواجهة إلى حذفه تلقائياً من مستندات MongoDB الموجودة. يحاول التطبيق أيضاً إنشاء فهرس فريد على part_number عند الاتصال بالمجموعة. راجع البيانات الحالية قبل تعديل الحقول الأساسية أو تعريفاتها.
+
+[tab:config]
+# الإعدادات
+تحدد Mongo URI وDatabase وCollection مصدر بيانات MongoDB. القيم الافتراضية هي localhost وrental وcatalog. يتحكم Page Size في الحد الأقصى للسجلات التي تُحمّل في List. يشير Media Directory إلى مجلد الصور والمستندات المستوردة؛ استخدم Browse لاختياره. يحدد Publish HTML File وجهة الكتالوج الناتج، ويضبط Currency Symbol رمز العملة الذي يسبق الأسعار المنشورة.
+
+يعيد Connect + Refresh الاتصال بقاعدة بيانات MongoDB المحددة ويحمل السجلات من جديد. يكتب Save Config الإعدادات إلى rental_catalog.json بجانب مصدر التطبيق. يحفظ التطبيق أيضاً علامة التبويب الرئيسية المختارة وعلامة Fields الفرعية وآخر سجل محدد وتفضيلات المظهر وأبعاد النافذة. تبقى مستندات MongoDB وملفات الوسائط الفعلية منفصلة عن ملف الإعدادات هذا.
+
+يجب تحديد Media Directory قبل استيراد الصور أو المستندات. تنسخ Publishing الصور المشار إليها من المجلد عند وجودها، ولا تدمج محتوى الصور الأصلي داخل MongoDB. احتفظ بنسخ احتياطية مناسبة من قاعدة البيانات ومجلد الوسائط ومسارات إخراج HTML.
+
+[tab:ui-choices]
+# خيارات الواجهة
+تستخدم UI Choices مكون الواجهة المشترك لاختيار المظهر، بما في ذلك السمة وكثافة العرض. تُحفظ التغييرات في إعدادات التطبيق. السمة الأولية هي Graphite والكثافة Normal. إذا لم يتوفر المكون المشترك، تعرض علامة التبويب رسالة توضيحية.
+
+[tab:gateway]
+# Gateway
+يدمج Gateway وحدة التحكم المشتركة بالتطبيقات عندما يكون GatewayController متوفراً. يوفر الوصول إلى مشغل التطبيقات العام بصورة مستقلة عن سجلات كتالوج التأجير. إذا تعذر تحميل وحدة التحكم، تظهر رسالة تفيد بعدم توفرها.
+</p></div><div class="langtext" data-lang="ceb" hidden><p style="white-space:pre-wrap">[intro]
+# Katalogo sa pag-abang — unsay gibuhat sa aplikasyon
+Ang Rental Catalog nagdumala sa katalogo sa mga kagamitan nga paabangan o ibaligya gamit ang MongoDB. Ang matag rekord adunay talagsaong numero sa piyesa, ngalan, mga paghulagway, gidaghanon, presyo sa abang alang sa lain-laing panahon, mga timaan sa pagpareserba ug pagmantala, ug mga reperensiya sa hulagway o dokumento. Mahimong i-configure ang mga field sa List ug Editor nga dili usbon ang Python source code. Ang Publishing nagmugna og HTML nga katalogo nga mohaom sa screen, mapangita ug adunay mga hulagway ug presyo.
+
+Sugdi sa Config aron itakda ang koneksiyon sa MongoDB, folder sa media file ug destinasyon sa gipublikang HTML. Gamita ang List sa pagtan-aw o pagpangita sa daang rekord, Editor sa paghimo o pag-usab sa detalye sa kagamitan ug Publishing sa pagmugna sa katalogo. Ang Fields nagbuot kon unsang mga kolum ug input ang makita sa List ug Editor. Paghimo og lahi nga backup sa importante nga rekord sa database ug sa media file sa dili pa maghimo og dagkong kausaban o mag-update sa publikasyon.
+
+[tab:list]
+# Lista
+Ang List nagpakita sa mga rekord sa kagamitan gikan sa gi-configure nga MongoDB database ug collection. Ang Search nangita sa numero sa piyesa, mubo nga ngalan, taas nga paghulagway ug detalyadong paghulagway nga walay paglain sa dagko ug gagmay nga letra. Ang New moabli og bag-ong rekord sa Editor ug ang Refresh mokarga pag-usab sa kasamtangang resulta. Kon mopili og rekord sa lista, ang mga detalye niini makita sa Editor.
+
+Ang kasagarang mga kolum mao ang Part, Name, Qty, 3 Day, Weekly, Monthly, Book ug Don&#x27;t Publish. Ang Fields nagtino sa ngalan, gilapdon, paghan-ay ug pagkasunod sa mga kolum. Ang Page Size sa Config naglimit sa pinakadaghan nga katumbas nga rekord nga ipakita; ang bahin sa ubos nagpakita sa gidaghanon nga nakarga ug sa kinatibuk-ang katumbas.
+
+[tab:editor]
+# Editor
+Ang Editor naghimo ug nag-update sa mga rekord sa kagamitan. Ang Search mopasa sa gisulat ngadto sa List. Ang New molimpyo sa form, mohimo og gisugyot nga numero sa piyesa, motakda sa gidaghanon nga 1 ug mopili sa presyo sa tulo ka adlaw isip default. Ang Add mosulod og bag-ong rekord sa MongoDB. Ang Update mousab sa napiling rekord; pagpili una og item sa List.
+
+Ang matag numero sa piyesa kinahanglan adunay eksaktong duha ka letra nga gisundan og duha ka numero, sama sa AB12, ug dili mahimong magkapareho sa lain. Ang default nga form adunay Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image ug Document. Ang kantidad sa kwarta gitipigan isip numero, ang gidaghanon isip integer ug ang duha ka timaan isip Boolean. Ang Default Price mopili tali sa inadlaw, tulo ka adlaw, sinemana ug binulan nga panahon. Ang Fields nagkontrol sa mga input nga makita sa Editor.
+
+Ang Media nagpakita og preview sa pangunang hulagway. Ang Pick Image mokopya og hulagway gikan sa file system ngadto sa Media Directory. Ang Paste Image modala og hulagway gikan sa clipboard kon anaa ang Pillow. Mahimong i-drag ang hulagway sa preview kon naka-install ang tkinterdnd2. Ang Pick Document mokopya sa napiling file ngadto sa Media Directory ug mobutang sa ngalan niini sa Document. Ang gi-import nga mga file naggamit sa numero sa piyesa sa ilang ngalan; gidugangan og numero aron dili mapulihan ang kasamtangang file. Ang mga hulagway gitipigan isip mga file ug gitumong pinaagi sa ngalan sa MongoDB rekord. Gamita ang Add o Update aron itipig ang giusab nga detalye ug media reference.
+
+[tab:publishing]
+# Pagmantala
+Ang Publishing naghimo og responsive nga usa-ka-panid nga HTML katalogo sa abang. Ang lista nagpakita sa rekord nga gikarga sa kasamtangang pagpangita sa List ug limitasyon sa panid. Ang Refresh mokarga pag-usab. Ang Select Highlighted momarka sa gi-highlight nga rekord; ang Select All momarka sa tanang gipakita; ang Clear Selection motangtang sa marka. Ang doble nga pag-klik sa napiling mga laray mobalhin sa ilang kahimtang sa pagpili alang sa pagmantala.
+
+Ang Publish Selection mosulat sa mga gimarkahang rekord, samtang ang Publish All mangutana sa tibuok collection. Sa duha ka paagi, dili iapil ang mga rekord nga naka-on ang Don&#x27;t Publish. Ang gipublikang mga item gihan-ay sumala sa numero sa piyesa. Ang resulta gisulat sa gi-configure nga Publish HTML File, o mangayo og destinasyon kon wala pa kini itakda. Ang mga hulagway nga adunay file mokopya ngadto sa kauban nga media folder tapad sa HTML file.
+
+Ang gipublikang panid adunay mga kard sa kagamitan, hulagway, ngalan, paghulagway, kahimtang sa pagpareserba ug presyo. Mahimong mangita ang bisita pinaagi sa numero sa piyesa o paghulagway, mopili sa panahon sa presyo ug mohan-ay pinaagi sa numero sa piyesa, ngalan, paghulagway o presyo nga mosaka o moubos. Ang mga panahon mao ang Daily, 3 Day, Weekly ug Monthly. Ang simbolo sa salapi gikan sa Config. Kon walay presyo nga dili sero alang sa napiling panahon, makita ang Ask for price.
+
+Ang Publishing mosulat sa napiling HTML nga dalan ug posibleng mopuli sa kasamtangang HTML file. Susiha ang destinasyon ug napiling mga item sa dili pa magmantala. Kon ibalhin ang gipublikang site, ibalhin usab ang kauban nga media folder uban sa HTML file.
+
+[tab:fields]
+# Mga field
+Ang Fields adunay duha ka subtab: Tree View Fields ug Editor Fields. Ang Tree View Fields nagkontrol sa mga kolum ug pagkasunod sa List. Sa matag kolum, isulod ang ngalan sa field, label, gilapdon ug alignment; itakda ang Index o Unique kon gikinahanglan. Ang Add / Apply mohimo o mo-update sa kahulogan sa field; Remove motangtang niini sa gi-configure nga lista; Up ug Down mousab sa pagkasunod. Kon mausab ang kahulogan sa lista, tukoron pag-usab ang gipakitang List.
+
+Ang Editor Fields nagkontrol sa form sa pagsulod. Ang kahulogan sa field naglakip sa ngalan, label, tipo, gidaghanon sa linya, gitas-on ug Index ug Unique nga metadata. Ang gisuportahang mga code mao ang 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type ug 8 Media. Ang daghang linya nga teksto, mga checkbox ug tigpili sa panahon sa presyo ipakita sumala sa tipo. Gamita ang Add / Apply, Remove, Up ug Down sa pagdumala sa pagkasunod ug mga kahulogan.
+
+Ang mga kahulogan gitipigan sa rental_catalog.json. Ang pag-usab o pagtangtang sa field sa interface dili awtomatikong motangtang niini sa daang MongoDB documents. Mosulay usab ang aplikasyon sa paghimo og unique index sa part_number inig konektar sa collection. Susiha ang kasamtangang datos sa dili pa usbon ang importanteng field o kahulogan niini.
+
+[tab:config]
+# Config
+Ang Mongo URI, Database ug Collection nagtino sa tinubdan sa MongoDB data. Ang default mao ang localhost, rental ug catalog. Ang Page Size nagkontrol sa kinadaghanang rekord nga ikarga sa List. Ang Media Directory mao ang folder sa gi-import nga hulagway ug dokumento; pilia kini gamit ang Browse. Ang Publish HTML File nagtino sa destinasyon sa katalogo ug ang Currency Symbol sa simbolo sa kwarta sa gipublikang presyo.
+
+Ang Connect + Refresh mokonek pag-usab sa gitakdang MongoDB database ug mokarga pag-usab sa mga rekord. Ang Save Config mosulat sa mga setting ngadto sa rental_catalog.json tapad sa source sa aplikasyon. Gitipigan usab ang napiling main tab, Fields subtab, labing bag-o nga napiling rekord, mga setting sa hitsura ug gidak-on sa bintana. Ang MongoDB documents ug tinuod nga media files lahi sa maong config file.
+
+Kinahanglan itakda ang Media Directory sa dili pa mag-import og hulagway o dokumento. Ang Publishing mokopya sa naglungtad nga mga hulagway gikan sa maong folder; dili niini i-embed ang orihinal nga hulagway sa MongoDB. Siguroha ang backup sa database, media folder ug HTML output paths kon gikinahanglan.
+
+[tab:ui-choices]
+# Mga kapilian sa interface
+Ang UI Choices naggamit sa gipaambit nga interface component aron mopili sa theme ug display density. Ang mga kausaban gitipigan sa config. Ang sinugdanang theme mao ang Graphite ug density mao ang Normal. Kon wala ang shared component, magpakita ang tab og mensahe nga nagpatin-aw niini.
+
+[tab:gateway]
+# Gateway
+Ang Gateway nag-integrate sa gipaambit nga controller kon anaa ang GatewayController. Naghatag kini og access sa komon nga launcher sa mga aplikasyon nga bulag sa mga rekord sa katalogo sa abang. Kon dili makarga ang controller, magpakita ang tab og mensahe nga dili kini magamit.
+</p></div><div class="langtext" data-lang="de" hidden><p style="white-space:pre-wrap">[intro]
+# Mietkatalog — Zweck dieser Anwendung
+Rental Catalog verwaltet in MongoDB einen Katalog von Geräten, die vermietet oder verkauft werden. Jeder Datensatz enthält eine eindeutige Teilenummer, einen Namen, Beschreibungen, eine Menge, Mietpreise für unterschiedliche Zeiträume, Kennzeichen für Buchung und Veröffentlichung sowie Verweise auf Bilder oder Dokumente. Die Felder in List und Editor lassen sich ohne Änderung des Python-Quellcodes konfigurieren. Publishing erzeugt einen responsiven, durchsuchbaren HTML-Katalog mit Bildern und Mietpreisen.
+
+Richten Sie zunächst in Config die MongoDB-Verbindung, den Ordner für Mediendateien und das Ziel für die HTML-Veröffentlichung ein. Mit List durchsuchen Sie vorhandene Einträge, mit Editor erstellen oder bearbeiten Sie Gerätedaten, und mit Publishing erzeugen Sie den Katalog. Fields steuert, welche Spalten und Eingabefelder in List und Editor erscheinen. Wichtige Datenbankeinträge und Mediendateien sollten vor größeren Änderungen oder Veröffentlichungen getrennt gesichert werden.
+
+[tab:list]
+# Liste
+List zeigt Geräte aus der eingestellten MongoDB-Datenbank und -Sammlung. Das Feld Search durchsucht Teilenummer, Kurzname, lange Beschreibung und Detailbeschreibung ohne Beachtung der Groß- und Kleinschreibung. New öffnet einen neuen Datensatz in Editor; Refresh lädt die aktuellen Ergebnisse erneut. Die Auswahl eines Listeneintrags lädt seine Angaben in Editor.
+
+Standardmäßig werden die Spalten Part, Name, Qty, 3 Day, Weekly, Monthly, Book und Don&#x27;t Publish angezeigt. Im Tab Fields werden Spaltennamen, Breite, Ausrichtung und Reihenfolge festgelegt. Page Size in Config begrenzt die Zahl angezeigter Treffer. Die Fußzeile zeigt die Anzahl geladener und insgesamt passender Einträge.
+
+[tab:editor]
+# Editor
+Editor erstellt und ändert Geräteeinträge. Search übergibt den eingegebenen Text an List. New leert das Formular, erzeugt einen Vorschlag für die Teilenummer, setzt die Menge auf 1 und wählt den Dreitagestarif als Standard. Add fügt einen neuen MongoDB-Eintrag hinzu. Update ändert den ausgewählten Eintrag; wählen Sie zuvor einen Datensatz in List.
+
+Jede Teilenummer muss aus genau zwei Buchstaben gefolgt von zwei Ziffern bestehen, etwa AB12, und eindeutig sein. Das Standardformular enthält Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image und Document. Geldbeträge werden als Zahlen, Mengen als Ganzzahlen und die beiden Kennzeichen als boolesche Werte gespeichert. Default Price bestimmt den Tages-, Dreitages-, Wochen- oder Monatstarif. Fields legt die sichtbaren Editor-Eingaben fest.
+
+Der Bereich Media zeigt eine Vorschau des Hauptbildes. Pick Image kopiert ein Bild aus dem Dateisystem in Media Directory. Paste Image importiert ein Bild aus der Zwischenablage, sofern Pillow verfügbar ist. Bilder lassen sich bei installiertem tkinterdnd2 in die Vorschau ziehen. Pick Document kopiert die gewählte Datei in Media Directory und trägt ihren Namen in Document ein. Importierte Dateien enthalten die Teilenummer im Dateinamen; ein nummerierter Zusatz verhindert das Überschreiben vorhandener Dateien. Bilder bleiben Dateien, deren Namen im MongoDB-Eintrag referenziert werden. Speichern Sie Änderungen und Medienverweise mit Add oder Update.
+
+[tab:publishing]
+# Veröffentlichung
+Publishing erzeugt einen responsiven, einseitigen HTML-Mietkatalog. Die Liste zeigt die Geräte, die durch die aktuelle Suche in List und das Seitenlimit geladen wurden. Refresh lädt die Einträge neu. Select Highlighted markiert hervorgehobene Datensätze, Select All alle angezeigten Datensätze und Clear Selection entfernt die Markierungen. Ein Doppelklick auf ausgewählte Zeilen ändert deren Veröffentlichungsmarkierung.
+
+Publish Selection schreibt markierte Datensätze, Publish All fragt dagegen die gesamte Sammlung ab. In beiden Fällen werden Einträge mit aktiviertem Don&#x27;t Publish ausgeschlossen. Die veröffentlichten Geräte werden nach Teilenummer sortiert. Die Ausgabe erfolgt in die eingestellte Publish HTML File; falls kein Ziel festgelegt ist, wird eines abgefragt. Verfügbare referenzierte Bilder werden in einen zugehörigen Medienordner neben der HTML-Datei kopiert.
+
+Die veröffentlichte Seite zeigt Gerätekarten, Bilder, Namen, Beschreibungen, Buchungsstatus und Preise. Besucher können nach Teilenummer oder Beschreibung suchen, einen Preiszeitraum wählen und nach Teilenummer, Name, Beschreibung sowie auf- oder absteigendem Preis sortieren. Die Zeiträume heißen Daily, 3 Day, Weekly und Monthly. Das Währungssymbol stammt aus Config. Ist für einen gewählten Zeitraum kein Preis ungleich null vorhanden, erscheint Ask for price.
+
+Publishing schreibt an den gewählten HTML-Ausgabepfad und kann eine vorhandene HTML-Datei ersetzen. Prüfen Sie vor der Veröffentlichung Ziel und Auswahl. Verschieben Sie den zugehörigen Medienordner zusammen mit der HTML-Datei, wenn die Website an einen anderen Ort kommt.
+
+[tab:fields]
+# Felder
+Fields enthält die Untertabs Tree View Fields und Editor Fields. Tree View Fields steuert die Spalten in List und ihre Reihenfolge. Geben Sie für jede Spalte Feldnamen, Beschriftung, Breite und Ausrichtung sowie bei Bedarf die Metadaten Index oder Unique an. Add / Apply erstellt oder aktualisiert die Definition, Remove entfernt sie aus der konfigurierten Liste, Up und Down ändern die Reihenfolge. Eine Änderung der Definition baut die sichtbare Liste neu auf.
+
+Editor Fields steuert das Eingabeformular. Eine Felddefinition enthält Name, Beschriftung, Typ, Zeilenanzahl, Länge sowie die Angaben Index und Unique. Unterstützte Typcodes sind 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type und 8 Media. Mehrzeilige Texte, Kontrollkästchen und die Auswahl des Preiszeitraums richten sich nach dem Feldtyp. Mit Add / Apply, Remove, Up und Down verwalten Sie Definitionen und Reihenfolge.
+
+Die Definitionen werden in rental_catalog.json gespeichert. Wenn ein Feld in der Oberfläche geändert oder entfernt wird, wird es nicht automatisch aus vorhandenen MongoDB-Dokumenten gelöscht. Beim Verbinden versucht die Anwendung außerdem, einen eindeutigen Index für part_number zu erstellen. Prüfen Sie vorhandene Daten, bevor Sie Schlüsselfelder oder ihre Definitionen ändern.
+
+[tab:config]
+# Konfiguration
+Mongo URI, Database und Collection legen die MongoDB-Datenquelle fest. Die Vorgaben lauten localhost, rental und catalog. Page Size begrenzt die Zahl der in List geladenen Datensätze. Media Directory bezeichnet den Ordner für importierte Bilder und Dokumente; wählen Sie ihn mit Browse. Publish HTML File legt das Ausgabeziel fest, Currency Symbol das Währungspräfix vor veröffentlichten Preisen.
+
+Connect + Refresh verbindet sich erneut mit der angegebenen MongoDB-Datenbank und lädt die Einträge neu. Save Config schreibt die Einstellungen in rental_catalog.json neben dem Quellcode. Gespeichert werden auch der gewählte Haupttab, der ausgewählte Fields-Untertab, der zuletzt ausgewählte Datensatz, Darstellungsoptionen und Fenstermaße. MongoDB-Dokumente und tatsächliche Mediendateien sind von dieser Konfigurationsdatei getrennt.
+
+Vor dem Import von Bildern oder Dokumenten muss der Medienordner festgelegt sein. Publishing kopiert vorhandene referenzierte Bilder aus diesem Ordner, bettet deren Originaldaten aber nicht in MongoDB ein. Sichern Sie Datenbank, Medienverzeichnis und HTML-Ausgabepfade nach Bedarf.
+
+[tab:ui-choices]
+# Oberflächeneinstellungen
+UI Choices verwendet die gemeinsame Oberflächenkomponente zur Auswahl von Design und Anzeigedichte. Änderungen werden in der Anwendungskonfiguration gespeichert. Die Vorgaben sind Graphite als Design und Normal als Dichte. Fehlt die gemeinsame Komponente, zeigt der Tab eine Erklärung.
+
+[tab:gateway]
+# Gateway
+Gateway bindet den gemeinsamen Anwendungscontroller ein, sofern GatewayController verfügbar ist. Damit erreichen Sie den zentralen Programmstarter unabhängig von den Mietkatalog-Datensätzen. Kann der Controller nicht geladen werden, zeigt der Tab eine entsprechende Meldung.
+</p></div><div class="langtext" data-lang="es" hidden><p style="white-space:pre-wrap">[intro]
+# Catálogo de alquiler — qué hace esta aplicación
+Rental Catalog mantiene en MongoDB un catálogo de equipos disponibles para alquiler o venta. Cada registro contiene un número de pieza único, nombre, descripciones, cantidad, tarifas de alquiler para distintos períodos, indicadores de reserva y publicación, y referencias a imágenes o documentos. Los campos de List y Editor se pueden configurar sin modificar el código fuente de Python. Publishing genera un catálogo HTML adaptable a diferentes pantallas, con búsqueda, imágenes y precios de alquiler.
+
+Empiece por Config para establecer la conexión MongoDB, la carpeta de archivos multimedia y el destino del HTML publicado. Utilice List para explorar o buscar registros existentes; Editor para crear o actualizar los datos del equipo; y Publishing para generar el catálogo. Fields controla las columnas y los campos de entrada que aparecen en List y Editor. Haga copias de seguridad separadas de los registros importantes de la base de datos y de los archivos multimedia antes de realizar modificaciones grandes o actualizar la publicación.
+
+[tab:list]
+# Lista
+List muestra los registros de equipos de la base de datos y colección MongoDB configuradas. El cuadro Search busca en el número de pieza, nombre corto, descripción larga y descripción detallada, sin distinguir mayúsculas de minúsculas. New abre un registro nuevo en Editor y Refresh vuelve a cargar los resultados actuales. Al seleccionar un registro de la lista, sus detalles se cargan en Editor.
+
+De manera predeterminada, las columnas son Part, Name, Qty, 3 Day, Weekly, Monthly, Book y Don&#x27;t Publish. La pestaña Fields define los nombres, anchos, alineaciones y orden de las columnas. Page Size, en Config, limita el número máximo de registros coincidentes que se muestran. El pie de página indica la cantidad cargada y el total de coincidencias.
+
+[tab:editor]
+# Editor
+Editor crea y actualiza registros de equipos. Search envía el texto introducido a List. New limpia el formulario, genera un número de pieza provisional, establece la cantidad en 1 y selecciona como valor predeterminado el precio de tres días. Add inserta un registro nuevo en MongoDB. Update modifica el registro seleccionado; seleccione antes un elemento de List.
+
+Cada número de pieza debe tener exactamente dos letras seguidas de dos dígitos, como AB12, y ser único. El formulario predeterminado incluye Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image y Document. Los importes se almacenan como números, la cantidad como entero y los dos indicadores como valores booleanos. Default Price permite elegir entre los períodos diario, de tres días, semanal y mensual. Fields controla qué entradas aparecen en Editor.
+
+El área Media muestra una vista previa de la imagen principal. Pick Image copia una imagen del sistema de archivos a Media Directory. Paste Image importa una imagen del portapapeles si está disponible Pillow. Se puede arrastrar una imagen a la vista previa cuando está instalado tkinterdnd2. Pick Document copia un archivo seleccionado a Media Directory e introduce su nombre en Document. Los archivos importados usan el número de pieza en el nombre y un sufijo numerado evita sobrescribir archivos existentes. Las imágenes se guardan como archivos y se referencian por su nombre en MongoDB. Utilice Add o Update para guardar los cambios en el registro y las referencias multimedia.
+
+[tab:publishing]
+# Publicación
+Publishing genera un catálogo HTML de alquiler adaptable y de una sola página. La lista muestra los registros cargados según la búsqueda actual de List y su límite de página. Refresh vuelve a cargar las entradas. Select Highlighted marca los registros resaltados; Select All marca todos los registros mostrados; Clear Selection quita las marcas. Al hacer doble clic en las filas seleccionadas, se alterna su selección para publicación.
+
+Publish Selection escribe los registros marcados, mientras que Publish All consulta toda la colección. En ambos casos se excluyen los registros con Don&#x27;t Publish activado. Los artículos publicados se ordenan por número de pieza. El resultado se escribe en Publish HTML File, configurado previamente, o se solicita un destino si no se ha establecido. Cuando están disponibles los archivos referenciados, las imágenes actuales se copian a una carpeta multimedia adjunta, junto al archivo HTML.
+
+La página publicada presenta fichas de equipos, imágenes, nombres, descripciones, estado de reserva y precios. Los visitantes pueden buscar por número de pieza o descripción, elegir un período de precios y ordenar por número de pieza, nombre, descripción o precio ascendente o descendente. Los períodos son Daily, 3 Day, Weekly y Monthly. El símbolo monetario procede de Config. Cuando no hay ningún precio distinto de cero para el período seleccionado, se muestra Ask for price.
+
+Publishing escribe en la ruta HTML seleccionada y puede sustituir un archivo HTML existente. Compruebe el destino y los artículos que pretende publicar antes de continuar. Al trasladar el sitio publicado, conserve la carpeta multimedia adjunta junto con el archivo HTML.
+
+[tab:fields]
+# Campos
+Fields contiene dos subpestañas: Tree View Fields y Editor Fields. Tree View Fields controla las columnas de List y su orden. Para cada columna, introduzca el nombre del campo, etiqueta, ancho y alineación; configure los metadatos Index o Unique si corresponde. Add / Apply crea o actualiza la definición; Remove la quita de la lista configurada; Up y Down cambian el orden. Al modificar la definición se reconstruye la lista mostrada.
+
+Editor Fields controla el formulario de entrada. Cada definición contiene nombre, etiqueta, tipo, número de líneas, longitud y metadatos Index y Unique. Los códigos admitidos son 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type y 8 Media. Según el tipo, se muestran textos de varias líneas, casillas y el selector del período de precios. Utilice Add / Apply, Remove, Up y Down para gestionar el orden y las definiciones.
+
+Las definiciones se guardan en rental_catalog.json. Cambiar o quitar un campo de la interfaz no lo elimina automáticamente de los documentos existentes de MongoDB. La aplicación también intenta crear un índice único sobre part_number al conectarse a la colección. Revise los datos existentes antes de modificar campos clave o sus definiciones.
+
+[tab:config]
+# Configuración
+Mongo URI, Database y Collection definen el origen de datos MongoDB. Los valores iniciales son localhost, rental y catalog. Page Size controla el máximo de registros cargados en List. Media Directory es la carpeta de imágenes y documentos importados; selecciónela con Browse. Publish HTML File especifica el destino del catálogo generado y Currency Symbol el prefijo de los precios publicados.
+
+Connect + Refresh vuelve a conectar con la base MongoDB especificada y recarga los registros. Save Config escribe los ajustes en rental_catalog.json, junto al código de la aplicación. También se guardan la pestaña principal seleccionada, la subpestaña Fields seleccionada, el registro seleccionado más reciente, las preferencias visuales y las dimensiones de la ventana. Los documentos de MongoDB y los archivos multimedia físicos son independientes de este archivo de configuración.
+
+Debe configurar Media Directory antes de importar imágenes o documentos. Publishing copia las imágenes referenciadas desde esa carpeta cuando existen; no incrusta el contenido original de las imágenes en MongoDB. Mantenga copias de seguridad adecuadas de la base de datos, la carpeta multimedia y las rutas de salida HTML.
+
+[tab:ui-choices]
+# Opciones de interfaz
+UI Choices usa el componente compartido para seleccionar la apariencia, incluidos el tema y la densidad de visualización. Los cambios se guardan en la configuración. El tema inicial es Graphite y la densidad, Normal. Si el componente compartido no está disponible, esta pestaña muestra un mensaje explicativo.
+
+[tab:gateway]
+# Gateway
+Gateway integra el controlador compartido de aplicaciones cuando GatewayController está disponible. Permite acceder al lanzador común de aplicaciones, independientemente de los registros del catálogo de alquiler. Si no se puede cargar el controlador, se muestra un mensaje de indisponibilidad.
+</p></div><div class="langtext" data-lang="es-mx" hidden><p style="white-space:pre-wrap">[intro]
+# Catálogo de renta — qué hace esta aplicación
+Rental Catalog mantiene en MongoDB un catálogo de equipos disponibles para renta o venta. Cada registro contiene un número de pieza único, nombre, descripciones, cantidad, precios de renta para distintos períodos, indicadores de reserva y publicación, y referencias a imágenes o documentos. Los campos de List y Editor se pueden configurar sin modificar el código fuente de Python. Publishing genera un catálogo HTML adaptable a diferentes pantallas, con búsqueda, imágenes y precios de renta.
+
+Empiece por Config para establecer la conexión MongoDB, la carpeta de archivos de medios y el destino del HTML publicado. Utilice List para explorar o buscar registros existentes; Editor para crear o actualizar los datos del equipo; y Publishing para generar el catálogo. Fields controla las columnas y los campos de entrada que aparecen en List y Editor. Haga copias de seguridad separadas de los registros importantes de la base de datos y de los archivos de medios antes de realizar modificaciones grandes o actualizar la publicación.
+
+[tab:list]
+# Lista
+List muestra los registros de equipos de la base de datos y colección MongoDB configuradas. El cuadro Search busca en el número de pieza, nombre corto, descripción larga y descripción detallada, sin distinguir mayúsculas de minúsculas. New abre un registro nuevo en Editor y Refresh vuelve a cargar los resultados actuales. Al seleccionar un registro de la lista, sus detalles se cargan en Editor.
+
+De forma predeterminada, las columnas son Part, Name, Qty, 3 Day, Weekly, Monthly, Book y Don&#x27;t Publish. La pestaña Fields define los nombres, anchos, alineaciones y orden de las columnas. Page Size, en Config, limita el número máximo de registros coincidentes que se muestran. El pie de página indica la cantidad cargada y el total de coincidencias.
+
+[tab:editor]
+# Editor
+Editor crea y actualiza registros de equipos. Search envía el texto introducido a List. New limpia el formulario, genera un número de pieza provisional, establece la cantidad en 1 y selecciona como valor predeterminado el precio de tres días. Add inserta un registro nuevo en MongoDB. Update modifica el registro seleccionado; seleccione antes un elemento de List.
+
+Cada número de pieza debe tener exactamente dos letras seguidas de dos dígitos, como AB12, y ser único. El formulario predeterminado incluye Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image y Document. Los montos se almacenan como números, la cantidad como entero y los dos indicadores como valores booleanos. Default Price permite elegir entre los períodos diario, de tres días, semanal y mensual. Fields controla qué entradas aparecen en Editor.
+
+El área Media muestra una vista previa de la imagen principal. Pick Image copia una imagen del sistema de archivos a Media Directory. Paste Image importa una imagen del portapapeles si está disponible Pillow. Se puede arrastrar una imagen a la vista previa cuando está instalado tkinterdnd2. Pick Document copia un archivo seleccionado a Media Directory e introduce su nombre en Document. Los archivos importados usan el número de pieza en el nombre y un sufijo numerado evita sobrescribir archivos existentes. Las imágenes se guardan como archivos y se referencian por su nombre en MongoDB. Utilice Add o Update para guardar los cambios en el registro y las referencias multimedia.
+
+[tab:publishing]
+# Publicación
+Publishing genera un catálogo HTML de renta adaptable y de una página. La lista muestra los registros cargados según la búsqueda actual de List y su límite de página. Refresh vuelve a cargar las entradas. Select Highlighted marca los registros resaltados; Select All marca todos los registros mostrados; Clear Selection quita las marcas. Al hacer doble clic en las filas seleccionadas, se alterna su selección para publicación.
+
+Publish Selection escribe los registros marcados, mientras que Publish All consulta toda la colección. En ambos casos se excluyen los registros con Don&#x27;t Publish activado. Los equipos publicados se ordenan por número de pieza. El resultado se escribe en Publish HTML File, configurado previamente, o se solicita un destino si no se ha establecido. Cuando están disponibles los archivos referenciados, las imágenes actuales se copian a una carpeta de medios adjunta, junto al archivo HTML.
+
+La página publicada presenta tarjetas de equipos, imágenes, nombres, descripciones, estado de reserva y precios. Los visitantes pueden buscar por número de pieza o descripción, elegir un período de precios y ordenar por número de pieza, nombre, descripción o precio ascendente o descendente. Los períodos son Daily, 3 Day, Weekly y Monthly. El símbolo monetario procede de Config. Cuando no hay ningún precio distinto de cero para el período seleccionado, se muestra Ask for price.
+
+Publishing escribe en la ruta HTML seleccionada y puede sustituir un archivo HTML existente. Compruebe el destino y los equipos que desea publicar antes de continuar. Al trasladar el sitio publicado, conserve la carpeta de medios adjunta junto con el archivo HTML.
+
+[tab:fields]
+# Campos
+Fields contiene dos subpestañas: Tree View Fields y Editor Fields. Tree View Fields controla las columnas de List y su orden. Para cada columna, introduzca el nombre del campo, etiqueta, ancho y alineación; configure los metadatos Index o Unique si corresponde. Add / Apply crea o actualiza la definición; Remove la quita de la lista configurada; Up y Down cambian el orden. Al modificar la definición se reconstruye la lista mostrada.
+
+Editor Fields controla el formulario de entrada. Cada definición contiene nombre, etiqueta, tipo, número de líneas, longitud y metadatos Index y Unique. Los códigos admitidos son 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type y 8 Media. Según el tipo, se muestran textos de varias líneas, casillas y el selector del período de precios. Utilice Add / Apply, Remove, Up y Down para gestionar el orden y las definiciones.
+
+Las definiciones se guardan en rental_catalog.json. Cambiar o quitar un campo de la interfaz no lo elimina automáticamente de los documentos existentes de MongoDB. La aplicación también intenta crear un índice único sobre part_number al conectarse a la colección. Revise los datos existentes antes de modificar campos clave o sus definiciones.
+
+[tab:config]
+# Configuración
+Mongo URI, Database y Collection definen el origen de datos MongoDB. Los valores iniciales son localhost, rental y catalog. Page Size controla el máximo de registros cargados en List. Media Directory es la carpeta de imágenes y documentos importados; selecciónela con Browse. Publish HTML File especifica el destino del catálogo generado y Currency Symbol el prefijo de los precios publicados.
+
+Connect + Refresh vuelve a conectar con la base MongoDB especificada y recarga los registros. Save Config escribe los ajustes en rental_catalog.json, junto al código de la aplicación. También se guardan la pestaña principal seleccionada, la subpestaña Fields seleccionada, el registro seleccionado más reciente, las preferencias visuales y las dimensiones de la ventana. Los documentos de MongoDB y los archivos de medios físicos son independientes de este archivo de configuración.
+
+Debe configurar Media Directory antes de importar imágenes o documentos. Publishing copia las imágenes referenciadas desde esa carpeta cuando existen; no incrusta el contenido original de las imágenes en MongoDB. Mantenga copias de seguridad adecuadas de la base de datos, la carpeta de medios y las rutas de salida HTML.
+
+[tab:ui-choices]
+# Opciones de interfaz
+UI Choices usa el componente compartido para seleccionar la apariencia, incluidos el tema y la densidad de visualización. Los cambios se guardan en la configuración. El tema inicial es Graphite y la densidad, Normal. Si el componente compartido no está disponible, esta pestaña muestra un mensaje explicativo.
+
+[tab:gateway]
+# Gateway
+Gateway integra el controlador compartido de aplicaciones cuando GatewayController está disponible. Permite acceder al lanzador común de aplicaciones, independientemente de los registros del catálogo de renta. Si no se puede cargar el controlador, se muestra un mensaje de indisponibilidad.
+</p></div><div class="langtext" data-lang="fr" hidden><p style="white-space:pre-wrap">[intro]
+# Catalogue de location — fonction de cette application
+Rental Catalog gère dans MongoDB un catalogue de matériel proposé à la location ou à la vente. Chaque fiche contient une référence unique, un nom, des descriptions, une quantité, des tarifs de location selon la durée, des indicateurs de réservation et de publication, ainsi que des références à des images ou documents. Les champs de List et Editor se configurent sans modifier le code Python. Publishing crée un catalogue HTML adaptatif et consultable par recherche, avec des images et des tarifs.
+
+Commencez dans Config pour définir la connexion MongoDB, le dossier des médias et la destination HTML publiée. Utilisez List pour parcourir et rechercher les fiches existantes, Editor pour créer ou modifier le matériel et Publishing pour produire le catalogue. Fields détermine les colonnes et les champs de saisie affichés dans List et Editor. Sauvegardez séparément les données importantes et les fichiers médias avant des modifications importantes ou des mises à jour de publication.
+
+[tab:list]
+# Liste
+List affiche les fiches du matériel provenant de la base et de la collection MongoDB configurées. Search recherche sans tenir compte de la casse dans la référence, le nom court, la description longue et la description détaillée. New ouvre une nouvelle fiche dans Editor ; Refresh recharge les résultats actuels. La sélection d&#x27;une ligne charge ses détails dans Editor.
+
+Les colonnes par défaut sont Part, Name, Qty, 3 Day, Weekly, Monthly, Book et Don&#x27;t Publish. L&#x27;onglet Fields définit leurs noms, largeurs, alignements et ordre. Page Size dans Config limite le nombre maximal de fiches correspondantes affichées ; le pied de page indique le nombre chargé et le nombre total de correspondances.
+
+[tab:editor]
+# Éditeur
+Editor permet de créer et modifier les fiches du matériel. Search transmet le texte saisi à List. New efface le formulaire, propose une référence, fixe la quantité à 1 et choisit le tarif de trois jours par défaut. Add insère une nouvelle fiche MongoDB. Update modifie la fiche sélectionnée ; choisissez d&#x27;abord un élément dans List.
+
+Chaque référence doit comporter exactement deux lettres suivies de deux chiffres, par exemple AB12, et être unique. Le formulaire standard contient Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image et Document. Les montants sont enregistrés numériquement, les quantités en nombres entiers et les deux indicateurs en booléens. Default Price choisit une période quotidienne, de trois jours, hebdomadaire ou mensuelle. Fields détermine les champs visibles dans Editor.
+
+La zone Media affiche un aperçu de l&#x27;image principale. Pick Image copie une image du système de fichiers vers Media Directory. Paste Image importe une image du presse-papiers lorsque Pillow est disponible. Le glisser-déposer sur l&#x27;aperçu fonctionne si tkinterdnd2 est installé. Pick Document copie le fichier sélectionné vers Media Directory et inscrit son nom dans Document. Les fichiers importés incluent la référence dans leur nom ; un suffixe numéroté évite d&#x27;écraser un fichier existant. Les images restent des fichiers dont le nom est référencé dans MongoDB. Utilisez Add ou Update pour enregistrer les modifications et leurs références médias.
+
+[tab:publishing]
+# Publication
+Publishing produit un catalogue de location HTML adaptatif sur une seule page. La liste présente les fiches chargées par la recherche et la limite de pagination actuelles de List. Refresh recharge les entrées. Select Highlighted marque les fiches surlignées, Select All marque toutes les fiches affichées et Clear Selection retire les marques. Un double-clic sur les lignes sélectionnées inverse leur sélection de publication.
+
+Publish Selection écrit les fiches marquées, tandis que Publish All interroge toute la collection. Dans les deux cas, les fiches dont Don&#x27;t Publish est activé sont exclues. Les éléments publiés sont triés par référence. Le résultat est écrit dans Publish HTML File configuré, ou une destination est demandée si rien n&#x27;est défini. Lorsque les fichiers référencés existent, les images sont copiées dans un dossier média associé, à côté du fichier HTML.
+
+La page publiée affiche des cartes de matériel avec images, noms, descriptions, statut de réservation et prix. Les visiteurs peuvent rechercher par référence ou description, choisir une période tarifaire et trier par référence, nom, description, prix croissant ou décroissant. Les périodes proposées sont Daily, 3 Day, Weekly et Monthly. Le symbole monétaire provient de Config. Si aucun tarif non nul n&#x27;existe pour la période choisie, le message Ask for price s&#x27;affiche.
+
+Publishing écrit à l&#x27;emplacement HTML choisi et peut remplacer un fichier HTML existant. Vérifiez la destination et la sélection des fiches avant de publier. Conservez le dossier média associé avec le fichier HTML lors du déplacement du site.
+
+[tab:fields]
+# Champs
+Fields contient deux sous-onglets, Tree View Fields et Editor Fields. Tree View Fields gère les colonnes de List et leur ordre d&#x27;affichage. Pour chaque colonne, indiquez le nom du champ, son libellé, sa largeur et son alignement ; renseignez Index ou Unique si nécessaire. Add / Apply crée ou actualise une définition, Remove la retire de la liste configurée, et Up et Down modifient l&#x27;ordre. Modifier ces définitions reconstruit la liste affichée.
+
+Editor Fields gère le formulaire de saisie. Chaque définition comprend un nom, un libellé, un type, un nombre de lignes, une longueur et les métadonnées Index et Unique. Les codes de type acceptés sont 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type et 8 Media. Selon le type, des champs multilignes, des cases à cocher et un sélecteur de période sont affichés. Utilisez Add / Apply, Remove, Up et Down pour gérer l&#x27;ordre et les définitions.
+
+Les définitions sont enregistrées dans rental_catalog.json. Modifier ou supprimer un champ dans l&#x27;interface ne supprime pas automatiquement ce champ dans les documents MongoDB existants. À la connexion, l&#x27;application essaie aussi de créer un index unique sur part_number. Examinez les données existantes avant de modifier des champs clés ou leurs définitions.
+
+[tab:config]
+# Configuration
+Mongo URI, Database et Collection définissent la source MongoDB. Les valeurs par défaut sont localhost, rental et catalog. Page Size limite le nombre d&#x27;enregistrements chargés dans List. Media Directory désigne le dossier des images et documents importés ; choisissez-le avec Browse. Publish HTML File définit la destination du catalogue généré, et Currency Symbol le préfixe monétaire affiché avec les prix.
+
+Connect + Refresh reconnecte la base MongoDB indiquée et recharge les fiches. Save Config enregistre les paramètres dans rental_catalog.json, à côté du code de l&#x27;application. L&#x27;application mémorise également l&#x27;onglet principal actif, le sous-onglet Fields choisi, la dernière fiche sélectionnée, les réglages d&#x27;apparence et la taille de la fenêtre. Les documents MongoDB et les fichiers médias physiques restent distincts de cette configuration.
+
+Configurez le dossier média avant d&#x27;importer des images ou documents. Publishing copie depuis ce dossier les images référencées lorsqu&#x27;elles existent ; les données d&#x27;image originales ne sont pas intégrées à MongoDB. Sauvegardez selon les besoins la base de données, le dossier média et les destinations HTML.
+
+[tab:ui-choices]
+# Options d&#x27;interface
+UI Choices utilise le composant partagé pour régler l&#x27;apparence, notamment le thème et la densité d&#x27;affichage. Les modifications sont enregistrées dans la configuration. Le thème initial est Graphite et la densité Normal. Si le composant partagé manque, l&#x27;onglet affiche un message explicatif.
+
+[tab:gateway]
+# Gateway
+Gateway intègre le contrôleur partagé lorsque GatewayController est disponible. Il donne accès au lanceur d&#x27;applications commun, indépendamment des fiches du catalogue de location. Si le contrôleur ne peut pas être chargé, l&#x27;onglet affiche un message d&#x27;indisponibilité.
+</p></div><div class="langtext" data-lang="id" hidden><p style="white-space:pre-wrap">[intro]
+# Katalog penyewaan — fungsi aplikasi ini
+Rental Catalog mengelola katalog peralatan yang disewakan atau dijual dalam MongoDB. Setiap catatan memiliki nomor suku cadang unik, nama, deskripsi, jumlah, tarif sewa untuk berbagai periode, penanda pemesanan dan publikasi, serta referensi gambar atau dokumen. Kolom dan isian di List dan Editor dapat dikonfigurasi tanpa mengubah kode sumber Python. Publishing menghasilkan katalog HTML yang responsif, dapat dicari, serta memuat gambar dan tarif sewa.
+
+Mulailah dari Config untuk mengatur koneksi MongoDB, folder berkas media dan tujuan HTML yang dipublikasikan. Gunakan List untuk menelusuri atau mencari catatan, Editor untuk membuat atau memperbarui rincian peralatan, dan Publishing untuk menghasilkan katalog. Fields mengatur kolom dan masukan yang tampil pada List dan Editor. Cadangkan catatan basis data penting dan berkas media secara terpisah sebelum melakukan perubahan besar atau memperbarui publikasi.
+
+[tab:list]
+# Daftar
+List menampilkan catatan peralatan dari basis data dan koleksi MongoDB yang telah dikonfigurasi. Search mencari berdasarkan nomor suku cadang, nama singkat, deskripsi panjang dan deskripsi terperinci tanpa membedakan huruf besar dan kecil. New membuka catatan baru di Editor, sedangkan Refresh memuat ulang hasil saat ini. Memilih catatan di daftar akan memuat rinciannya ke Editor.
+
+Kolom bawaan adalah Part, Name, Qty, 3 Day, Weekly, Monthly, Book dan Don&#x27;t Publish. Tab Fields menentukan nama, lebar, perataan dan urutan kolom. Page Size pada Config membatasi jumlah maksimal catatan cocok yang ditampilkan; bagian bawah menampilkan jumlah yang dimuat dan total kecocokan.
+
+[tab:editor]
+# Editor
+Editor membuat dan memperbarui catatan peralatan. Search mengirim teks yang dimasukkan ke List. New mengosongkan formulir, menghasilkan calon nomor suku cadang, mengatur jumlah menjadi 1 dan memilih tarif tiga hari sebagai bawaan. Add memasukkan catatan MongoDB baru. Update mengubah catatan terpilih; pilih item dari List terlebih dahulu.
+
+Setiap nomor suku cadang harus terdiri dari tepat dua huruf diikuti dua digit, seperti AB12, dan harus unik. Formulir bawaan memuat Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image dan Document. Nilai uang disimpan sebagai angka, jumlah sebagai bilangan bulat dan kedua penanda sebagai Boolean. Default Price memilih periode harian, tiga hari, mingguan atau bulanan. Fields mengatur masukan yang ditampilkan di Editor.
+
+Area Media menampilkan pratinjau gambar utama. Pick Image menyalin gambar dari sistem berkas ke Media Directory. Paste Image mengimpor gambar dari papan klip jika Pillow tersedia. Gambar dapat diseret ke pratinjau jika tkinterdnd2 dipasang. Pick Document menyalin berkas terpilih ke Media Directory dan mengisi nama berkasnya pada Document. Nama berkas yang diimpor menyertakan nomor suku cadang; akhiran angka mencegah penimpaan berkas yang sudah ada. Gambar tetap disimpan sebagai berkas dan dirujuk berdasarkan namanya pada MongoDB. Gunakan Add atau Update untuk menyimpan perubahan catatan dan referensi media.
+
+[tab:publishing]
+# Publikasi
+Publishing menghasilkan katalog sewa HTML responsif satu halaman. Daftar menampilkan catatan yang dimuat melalui pencarian List saat ini dan batas halaman. Refresh memuat ulang entri. Select Highlighted menandai catatan yang disorot, Select All menandai semua catatan yang ditampilkan, dan Clear Selection menghapus tanda. Klik ganda pada baris terpilih akan mengalihkan status pilihannya untuk publikasi.
+
+Publish Selection menulis catatan bertanda, sedangkan Publish All mengambil seluruh koleksi. Keduanya mengecualikan catatan dengan Don&#x27;t Publish aktif. Item yang diterbitkan diurutkan menurut nomor suku cadang. Hasil disimpan pada Publish HTML File yang dikonfigurasi atau aplikasi meminta tujuan jika belum ditetapkan. Gambar rujukan yang tersedia disalin ke folder media pendamping di samping berkas HTML.
+
+Halaman terbitan menyediakan kartu peralatan, gambar, nama, deskripsi, status pemesanan dan informasi harga. Pengunjung dapat mencari berdasarkan nomor suku cadang atau deskripsi, memilih periode tarif, lalu mengurutkan menurut nomor, nama, deskripsi atau harga naik dan turun. Periodenya adalah Daily, 3 Day, Weekly dan Monthly. Simbol mata uang berasal dari Config. Jika periode terpilih tidak memiliki harga selain nol, halaman menampilkan Ask for price.
+
+Publishing menulis ke jalur HTML terpilih dan dapat mengganti berkas HTML yang sudah ada. Periksa tujuan dan pilihan catatan sebelum menerbitkan. Saat memindahkan situs yang dipublikasikan, sertakan folder media pendamping bersama berkas HTML.
+
+[tab:fields]
+# Bidang
+Fields mempunyai dua subtab: Tree View Fields dan Editor Fields. Tree View Fields mengatur kolom List dan urutan tampilannya. Untuk setiap kolom, masukkan nama bidang, label, lebar, dan perataan; atur metadata Index atau Unique jika dibutuhkan. Add / Apply membuat atau memperbarui definisi, Remove menghapusnya dari daftar konfigurasi, dan Up serta Down mengubah urutannya. Mengubah definisi akan membangun ulang List yang ditampilkan.
+
+Editor Fields mengatur formulir masukan catatan. Setiap definisi berisi nama, label, jenis, jumlah baris, panjang, serta metadata Index dan Unique. Kode jenis yang didukung adalah 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type dan 8 Media. Teks multibaris, kotak centang dan pemilih periode tarif ditampilkan sesuai jenis bidang. Gunakan Add / Apply, Remove, Up dan Down untuk mengatur definisi dan urutannya.
+
+Definisi disimpan dalam rental_catalog.json. Mengubah atau menghapus bidang dari antarmuka tidak otomatis menghapus bidang tersebut dari dokumen MongoDB yang sudah ada. Aplikasi juga mencoba membuat indeks unik pada part_number saat terhubung ke koleksi. Periksa data sebelum mengubah bidang utama atau definisinya.
+
+[tab:config]
+# Konfigurasi
+Mongo URI, Database dan Collection menentukan sumber data MongoDB. Nilai bawaan adalah localhost, rental dan catalog. Page Size menentukan jumlah maksimal catatan yang dimuat di List. Media Directory adalah folder untuk gambar dan dokumen impor; pilih dengan Browse. Publish HTML File menentukan tujuan katalog, sedangkan Currency Symbol mengatur awalan mata uang pada harga terbitan.
+
+Connect + Refresh menyambung kembali ke basis data MongoDB yang ditentukan dan memuat ulang catatan. Save Config menulis pengaturan ke rental_catalog.json di samping sumber aplikasi. Aplikasi juga menyimpan tab utama dan subtab Fields terpilih, catatan terakhir, pengaturan tampilan, dan ukuran jendela. Dokumen MongoDB dan berkas media fisik terpisah dari berkas konfigurasi ini.
+
+Media Directory harus diatur sebelum mengimpor gambar atau dokumen. Publishing menyalin gambar rujukan dari folder tersebut jika tersedia dan tidak menanamkan isi gambar asli di MongoDB. Pastikan basis data, folder media, dan jalur keluaran HTML dicadangkan sesuai kebutuhan.
+
+[tab:ui-choices]
+# Pilihan antarmuka
+UI Choices menggunakan komponen antarmuka bersama untuk memilih tema dan kepadatan tampilan. Perubahan disimpan dalam konfigurasi aplikasi. Tema awal adalah Graphite dan kepadatan Normal. Jika komponen bersama tidak tersedia, tab menampilkan pesan penjelasan.
+
+[tab:gateway]
+# Gateway
+Gateway mengintegrasikan pengendali aplikasi bersama jika GatewayController tersedia. Fitur ini memberi akses ke peluncur aplikasi umum secara terpisah dari catatan katalog sewa. Jika pengendali tidak dapat dimuat, tab menampilkan pesan bahwa fitur tidak tersedia.
+</p></div><div class="langtext" data-lang="it" hidden><p style="white-space:pre-wrap">[intro]
+# Catalogo noleggio — funzione dell&#x27;applicazione
+Rental Catalog gestisce in MongoDB un catalogo di attrezzature disponibili per il noleggio o la vendita. Ogni scheda ha un numero di articolo univoco, nome, descrizioni, quantità, tariffe per diversi periodi, indicatori di prenotazione e pubblicazione e riferimenti a immagini o documenti. I campi di List e Editor possono essere configurati senza modificare il codice Python. Publishing crea un catalogo HTML adattabile e ricercabile, con immagini e tariffe.
+
+Iniziare da Config per impostare la connessione MongoDB, la cartella dei file multimediali e la destinazione HTML pubblicata. Usare List per esplorare o cercare le schede esistenti, Editor per creare o modificare i dati delle attrezzature e Publishing per generare il catalogo. Fields determina le colonne e gli input visibili in List e Editor. Eseguire backup separati dei dati importanti e dei file multimediali prima di modifiche estese o aggiornamenti della pubblicazione.
+
+[tab:list]
+# Elenco
+List mostra le schede dalla raccolta e dal database MongoDB configurati. Search cerca numero di articolo, nome breve, descrizione lunga e descrizione dettagliata senza distinguere maiuscole e minuscole. New apre una nuova scheda in Editor; Refresh ricarica i risultati correnti. Selezionando una scheda nell&#x27;elenco, i dettagli vengono caricati in Editor.
+
+Le colonne predefinite sono Part, Name, Qty, 3 Day, Weekly, Monthly, Book e Don&#x27;t Publish. Fields ne controlla nomi, larghezze, allineamenti e ordine. Page Size in Config limita il numero massimo di schede corrispondenti mostrate; il piè di pagina indica il numero caricato e il totale dei risultati.
+
+[tab:editor]
+# Editor
+Editor crea e aggiorna le schede delle attrezzature. Search passa il testo inserito a List. New svuota il modulo, propone un numero di articolo, imposta la quantità a 1 e sceglie come predefinita la tariffa di tre giorni. Add inserisce un nuovo record MongoDB. Update modifica il record selezionato; prima selezionare un elemento in List.
+
+Ogni numero di articolo deve contenere esattamente due lettere seguite da due cifre, per esempio AB12, e deve essere univoco. Il modulo standard contiene Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image e Document. Gli importi sono memorizzati come numeri, la quantità come intero e i due indicatori come valori booleani. Default Price sceglie tra periodo giornaliero, di tre giorni, settimanale e mensile. Fields controlla i campi visibili in Editor.
+
+L&#x27;area Media mostra l&#x27;anteprima dell&#x27;immagine principale. Pick Image copia un&#x27;immagine dal file system a Media Directory. Paste Image importa un&#x27;immagine dagli appunti quando Pillow è disponibile. Con tkinterdnd2 installato, è possibile trascinare un&#x27;immagine sull&#x27;anteprima. Pick Document copia un file scelto in Media Directory e ne inserisce il nome in Document. I file importati riportano il numero di articolo nel nome; un suffisso numerico impedisce di sovrascrivere file esistenti. Le immagini restano file, referenziati per nome nel record MongoDB. Usare Add o Update per salvare modifiche e riferimenti multimediali.
+
+[tab:publishing]
+# Pubblicazione
+Publishing genera un catalogo HTML responsivo a pagina singola. L&#x27;elenco contiene i record caricati dalla ricerca attuale di List e dal limite di pagina. Refresh ricarica le voci. Select Highlighted contrassegna i record evidenziati, Select All contrassegna tutti quelli visualizzati e Clear Selection rimuove i contrassegni. Un doppio clic sulle righe selezionate ne cambia lo stato di selezione per la pubblicazione.
+
+Publish Selection scrive i record contrassegnati, mentre Publish All interroga l&#x27;intera raccolta. Entrambe le operazioni escludono i record con Don&#x27;t Publish attivo. Gli articoli pubblicati sono ordinati per numero di articolo. Il risultato viene scritto nel Publish HTML File configurato oppure viene richiesta una destinazione se non definita. Le immagini referenziate e disponibili vengono copiate in una cartella multimediale associata accanto al file HTML.
+
+La pagina pubblicata contiene schede delle attrezzature con immagini, nomi, descrizioni, stato delle prenotazioni e prezzi. I visitatori possono cercare per numero di articolo o descrizione, scegliere un periodo tariffario e ordinare per articolo, nome, descrizione oppure prezzo crescente o decrescente. I periodi sono Daily, 3 Day, Weekly e Monthly. Il simbolo di valuta deriva da Config. Se non esiste un prezzo diverso da zero per il periodo scelto, appare Ask for price.
+
+Publishing scrive nel percorso HTML selezionato e può sostituire un file HTML esistente. Controllare destinazione e selezione prevista prima di pubblicare. Quando si sposta il sito, mantenere la cartella multimediale associata insieme al file HTML.
+
+[tab:fields]
+# Campi
+Fields contiene due sottoschede: Tree View Fields e Editor Fields. Tree View Fields gestisce le colonne di List e il relativo ordine. Per ogni colonna inserire nome del campo, etichetta, larghezza e allineamento e, se necessari, i metadati Index o Unique. Add / Apply crea o aggiorna la definizione, Remove la elimina dall&#x27;elenco configurato, Up e Down ne modificano l&#x27;ordine. Cambiando le definizioni viene ricostruito l&#x27;elenco visualizzato.
+
+Editor Fields gestisce il modulo di immissione. Ogni definizione comprende nome, etichetta, tipo, numero di righe, lunghezza e metadati Index e Unique. I codici supportati sono 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type e 8 Media. Testo multilinea, caselle di controllo e selettore del periodo vengono mostrati in base al tipo. Usare Add / Apply, Remove, Up e Down per gestire definizioni e ordine.
+
+Le definizioni vengono salvate in rental_catalog.json. Modificare o rimuovere un campo dall&#x27;interfaccia non lo elimina automaticamente dai documenti MongoDB già presenti. Alla connessione alla raccolta, l&#x27;applicazione tenta anche di creare un indice univoco su part_number. Verificare i dati esistenti prima di modificare i campi chiave o le loro definizioni.
+
+[tab:config]
+# Configurazione
+Mongo URI, Database e Collection definiscono l&#x27;origine MongoDB. I valori iniziali sono localhost, rental e catalog. Page Size controlla il numero massimo di record caricati in List. Media Directory è la cartella per immagini e documenti importati; selezionarla con Browse. Publish HTML File indica il percorso del catalogo e Currency Symbol il prefisso monetario visualizzato sui prezzi.
+
+Connect + Refresh ristabilisce la connessione al database MongoDB specificato e ricarica i record. Save Config salva le impostazioni in rental_catalog.json accanto al codice dell&#x27;applicazione. Vengono memorizzati anche scheda principale e sottoscheda Fields selezionate, ultimo record selezionato, impostazioni grafiche e dimensioni della finestra. I documenti MongoDB e i file multimediali fisici sono distinti da questo file di configurazione.
+
+Impostare Media Directory prima di importare immagini o documenti. Publishing copia dalla cartella le immagini referenziate, se disponibili, ma non incorpora i dati originali delle immagini in MongoDB. Conservare backup appropriati di database, cartella multimediale e percorsi di output HTML.
+
+[tab:ui-choices]
+# Opzioni dell&#x27;interfaccia
+UI Choices usa il componente condiviso per scegliere tema e densità di visualizzazione. Le modifiche vengono salvate nella configurazione. Il tema iniziale è Graphite e la densità Normal. Se il componente non è disponibile, la scheda mostra un messaggio esplicativo.
+
+[tab:gateway]
+# Gateway
+Gateway integra il controller condiviso delle applicazioni se GatewayController è disponibile. Consente di accedere all&#x27;avvio comune delle applicazioni indipendentemente dai record del catalogo noleggio. Se il controller non può essere caricato, la scheda mostra un messaggio di indisponibilità.
+</p></div><div class="langtext" data-lang="ja" hidden><p style="white-space:pre-wrap">[intro]
+# レンタルカタログ — このアプリケーションの機能
+Rental Catalog は、レンタルまたは販売する機器のカタログを MongoDB で管理します。各機器レコードには、一意の部品番号、名称、説明、数量、期間別レンタル料金、予約と公開のフラグ、画像や文書への参照が含まれます。List と Editor の項目は Python のソースコードを変更せずに設定できます。Publishing は、画像と料金を掲載した、検索可能で画面サイズに対応する HTML カタログを作成します。
+
+最初に Config で MongoDB 接続、メディアファイルのフォルダー、公開 HTML の保存先を設定してください。List で既存のレコードを参照・検索し、Editor で機器情報を作成・更新し、Publishing でカタログを生成します。Fields では List と Editor に表示する列や入力項目を指定します。大規模な編集や公開内容の更新前には、重要なデータベースレコードとメディアファイルを別々にバックアップしてください。
+
+[tab:list]
+# 一覧
+List は設定された MongoDB データベースとコレクションの機器レコードを表示します。Search は部品番号、短い名称、長い説明、詳細な説明を大文字と小文字を区別せず検索します。New は Editor で新しいレコードを開き、Refresh は現在の検索結果を再読み込みします。一覧のレコードを選ぶと、詳細が Editor に読み込まれます。
+
+標準の列は Part、Name、Qty、3 Day、Weekly、Monthly、Book、Don&#x27;t Publish です。Fields タブで列名、幅、配置、順序を設定します。Config の Page Size は表示する一致レコードの最大数を制限し、下部には読み込み件数と一致総数が表示されます。
+
+[tab:editor]
+# エディター
+Editor は機器レコードを作成・更新します。Search は入力した文字列を List に渡します。New はフォームを消去し、部品番号の候補を生成し、数量を 1 にして 3 日間料金を標準にします。Add は MongoDB に新規レコードを挿入します。Update は選択したレコードを変更するため、先に List で対象を選択してください。
+
+部品番号は AB12 のように、ちょうど 2 文字の英字に 2 桁の数字を続けた一意の値でなければなりません。標準フォームには Part Number、Short Name、Long Description、Detailed Description、Quantity、Daily Price、3 Day Price、Weekly Price、Monthly Price、Default Price、Don&#x27;t Publish、Book、Primary Image、Document が含まれます。金額は数値、数量は整数、二つのフラグは真偽値として保存します。Default Price は日単位、3 日間、週単位、月単位から選びます。Fields で Editor の入力項目を管理します。
+
+Media 領域は主画像をプレビューします。Pick Image はファイルシステムから画像を Media Directory にコピーします。Pillow が利用可能なら Paste Image でクリップボードの画像を取り込めます。tkinterdnd2 がインストールされていれば、プレビューへのドラッグもできます。Pick Document は選択したファイルを Media Directory にコピーし、ファイル名を Document に設定します。取り込むファイル名には部品番号を使用し、既存のファイルを上書きしないよう番号の接尾辞を追加します。画像はファイルとして保存され、MongoDB レコードではファイル名で参照します。変更とメディア参照は Add または Update で保存してください。
+
+[tab:publishing]
+# 公開
+Publishing は、レスポンシブな 1 ページの HTML レンタルカタログを生成します。一覧には現在の List 検索とページ件数制限で読み込んだ機器が表示されます。Refresh は一覧を再読み込みします。Select Highlighted は強調行、Select All は表示中の全行を選択し、Clear Selection は選択を解除します。選択行をダブルクリックすると公開対象の選択状態が切り替わります。
+
+Publish Selection は選択したレコードを書き出し、Publish All はコレクション全体を照会します。どちらの場合も Don&#x27;t Publish が有効なレコードは除外します。公開項目は部品番号順です。出力は設定済みの Publish HTML File に保存され、未設定なら保存先を尋ねます。参照画像が存在する場合は、HTML ファイルの横にある付属メディアフォルダーへコピーされます。
+
+公開ページには機器カード、画像、名称、説明、予約状況、価格が表示されます。訪問者は部品番号または説明で検索し、料金期間を選び、部品番号・名称・説明・価格の昇順または降順で並べ替えられます。期間は Daily、3 Day、Weekly、Monthly です。通貨記号は Config で設定します。選んだ期間にゼロ以外の価格がないときは Ask for price と表示します。
+
+Publishing は指定された HTML パスに書き込み、既存の HTML ファイルを置き換える場合があります。公開前に保存先と公開対象を確認してください。公開済みサイトを移動するときは、HTML ファイルと付属メディアフォルダーを一緒に移動してください。
+
+[tab:fields]
+# フィールド
+Fields には Tree View Fields と Editor Fields という二つのサブタブがあります。Tree View Fields は List の列と表示順を管理します。各列のフィールド名、ラベル、幅、配置を入力し、必要に応じて Index または Unique のメタデータを設定します。Add / Apply は定義を追加・更新し、Remove は設定済み一覧から削除し、Up と Down は順序を変更します。定義を変更すると表示中の List が再構築されます。
+
+Editor Fields は入力フォームを管理します。定義には名称、ラベル、種類、行数、長さ、Index、Unique が含まれます。利用可能な種類コードは 1 Short、2 Long、3 Text、4 Integer、5 Money、6 Boolean、7 Price Type、8 Media です。複数行テキスト、チェックボックス、料金期間の選択は種類に応じて表示されます。Add / Apply、Remove、Up、Down で定義と順序を管理してください。
+
+定義は rental_catalog.json に保存されます。画面上でフィールドを変更・削除しても、既存の MongoDB 文書からは自動的に削除されません。コレクション接続時には part_number に一意のインデックスを作成することも試みます。重要なフィールドや定義を変更する前に既存のデータを確認してください。
+
+[tab:config]
+# 設定
+Mongo URI、Database、Collection で MongoDB の接続先を定義します。標準値は localhost、rental、catalog です。Page Size は List に読み込むレコードの最大数です。Media Directory は取り込んだ画像や文書のフォルダーで、Browse から選択します。Publish HTML File は生成カタログの保存先、Currency Symbol は公開価格の通貨記号です。
+
+Connect + Refresh は指定された MongoDB に再接続してレコードを再読み込みします。Save Config はソースファイルと同じ場所の rental_catalog.json に設定を書き込みます。メインタブ、Fields サブタブ、最後に選択したレコード、外観設定、ウィンドウのサイズも保存します。MongoDB の文書と実際のメディアファイルは、この設定ファイルとは別です。
+
+画像や文書を取り込む前に Media Directory を設定してください。Publishing は参照先の画像が存在するときにそのフォルダーからコピーしますが、元画像の内容を MongoDB に埋め込みません。必要に応じてデータベース、メディアフォルダー、HTML 出力先をバックアップしてください。
+
+[tab:ui-choices]
+# 画面表示の選択
+UI Choices は共通インターフェース部品でテーマや表示密度などを設定します。変更はアプリケーション設定に保存されます。初期テーマは Graphite、密度は Normal です。共通部品が利用できない場合は説明が表示されます。
+
+[tab:gateway]
+# Gateway
+GatewayController が利用可能な場合、Gateway は共通のアプリケーション管理機能を統合します。レンタルカタログのレコードとは独立して共通のアプリ起動機能を使えます。読み込みに失敗した場合は利用不可のメッセージが表示されます。
+</p></div><div class="langtext" data-lang="ko" hidden><p style="white-space:pre-wrap">[intro]
+# 대여 목록 — 이 응용 프로그램의 기능
+Rental Catalog는 대여 또는 판매할 장비의 목록을 MongoDB에서 관리합니다. 각 장비 기록에는 고유한 부품 번호, 이름, 설명, 수량, 기간별 대여 요금, 예약 및 게시 표시와 이미지 또는 문서 참조가 포함됩니다. List와 Editor의 필드는 Python 소스 코드를 변경하지 않고 설정할 수 있습니다. Publishing은 이미지와 요금이 포함된 반응형 검색 가능 HTML 목록을 생성합니다.
+
+먼저 Config에서 MongoDB 연결, 미디어 파일 폴더와 게시할 HTML 위치를 지정합니다. List에서는 기존 기록을 검색하고 탐색하며, Editor에서는 장비 정보를 만들거나 수정하고, Publishing에서는 목록을 생성합니다. Fields는 List와 Editor에 표시할 열과 입력 항목을 제어합니다. 대규모 수정이나 게시 내용 변경 전에 중요한 데이터베이스 기록과 미디어 파일을 각각 백업하십시오.
+
+[tab:list]
+# 목록
+List는 설정된 MongoDB 데이터베이스와 컬렉션의 장비 기록을 보여 줍니다. Search는 부품 번호, 짧은 이름, 긴 설명, 상세 설명을 대소문자 구분 없이 검색합니다. New는 Editor에서 새 기록을 열고 Refresh는 현재 결과를 다시 불러옵니다. 목록의 기록을 선택하면 해당 세부 정보가 Editor에 표시됩니다.
+
+기본 열은 Part, Name, Qty, 3 Day, Weekly, Monthly, Book, Don&#x27;t Publish입니다. Fields 탭에서 열 이름, 너비, 정렬 방식과 순서를 지정합니다. Config의 Page Size는 표시할 일치 기록의 최대 수를 제한합니다. 아래쪽에는 불러온 기록 수와 전체 일치 수가 표시됩니다.
+
+[tab:editor]
+# 편집기
+Editor는 장비 기록을 만들고 갱신합니다. Search는 입력한 문장을 List로 전달합니다. New는 양식을 지우고 후보 부품 번호를 생성하며 수량을 1로 설정하고 3일 요금을 기본으로 선택합니다. Add는 MongoDB에 새 기록을 추가합니다. Update는 선택된 기록을 변경하므로 먼저 List에서 항목을 선택해야 합니다.
+
+부품 번호는 AB12처럼 정확히 두 글자 뒤에 숫자 두 개가 오고 중복되지 않아야 합니다. 기본 양식에는 Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image, Document가 있습니다. 금액은 숫자, 수량은 정수, 두 표시 항목은 불리언으로 저장됩니다. Default Price는 일일, 3일, 주간, 월간 기간 중 하나를 선택합니다. Fields에서 Editor의 표시 항목을 조정합니다.
+
+Media 영역에서는 기본 이미지를 미리 볼 수 있습니다. Pick Image는 파일 시스템의 이미지를 Media Directory로 복사합니다. Pillow를 사용할 수 있으면 Paste Image로 클립보드 이미지를 가져올 수 있습니다. tkinterdnd2가 설치되어 있으면 미리 보기 영역으로 이미지를 끌어다 놓을 수 있습니다. Pick Document는 선택한 파일을 Media Directory로 복사하고 파일 이름을 Document에 입력합니다. 가져온 파일 이름에는 부품 번호가 들어가며, 숫자 접미사를 사용해 기존 파일의 덮어쓰기를 방지합니다. 이미지는 파일로 저장되고 MongoDB에서는 파일 이름으로 참조됩니다. 변경한 기록과 미디어 참조는 Add 또는 Update로 저장합니다.
+
+[tab:publishing]
+# 게시
+Publishing은 반응형 단일 페이지 HTML 대여 목록을 만듭니다. 목록에는 현재 List 검색과 페이지 제한에 따라 불러온 장비 기록이 표시됩니다. Refresh는 항목을 다시 불러옵니다. Select Highlighted는 강조된 기록을, Select All은 표시된 모든 기록을 선택하고 Clear Selection은 선택 표시를 지웁니다. 선택한 행을 두 번 클릭하면 게시 선택 상태가 전환됩니다.
+
+Publish Selection은 선택 표시한 기록을 기록하고 Publish All은 전체 컬렉션을 조회합니다. 두 경우 모두 Don&#x27;t Publish가 활성화된 기록은 제외됩니다. 게시 항목은 부품 번호순으로 정렬됩니다. 결과는 설정된 Publish HTML File에 저장되며 설정되지 않았으면 저장 위치를 묻습니다. 참조된 이미지가 존재하면 HTML 파일 옆의 별도 미디어 폴더로 복사됩니다.
+
+게시된 페이지에는 장비 카드, 이미지, 이름, 설명, 예약 상태와 가격이 나옵니다. 방문자는 부품 번호나 설명으로 검색하고 요금 기간을 선택하며 부품 번호, 이름, 설명 또는 가격 오름차순 및 내림차순으로 정렬할 수 있습니다. 기간은 Daily, 3 Day, Weekly, Monthly입니다. 통화 기호는 Config에서 가져옵니다. 선택한 기간에 0이 아닌 요금이 없으면 Ask for price가 표시됩니다.
+
+Publishing은 선택된 HTML 경로에 기록하며 기존 HTML 파일을 교체할 수도 있습니다. 게시 전에 대상 위치와 게시할 기록을 확인하십시오. 게시된 사이트를 이동할 때에는 HTML 파일과 해당 미디어 폴더를 함께 이동하십시오.
+
+[tab:fields]
+# 필드
+Fields에는 Tree View Fields와 Editor Fields라는 두 하위 탭이 있습니다. Tree View Fields는 List의 열과 표시 순서를 조정합니다. 각 열에 필드 이름, 라벨, 너비와 정렬을 입력하고 필요한 경우 Index 또는 Unique 메타데이터를 설정합니다. Add / Apply는 정의를 추가하거나 갱신하고 Remove는 설정 목록에서 제거하며 Up과 Down은 순서를 변경합니다. 정의를 바꾸면 표시된 List가 다시 만들어집니다.
+
+Editor Fields는 기록 입력 양식을 조정합니다. 필드 정의에는 이름, 라벨, 유형, 줄 수, 길이, Index 및 Unique 메타데이터가 포함됩니다. 지원 유형 코드는 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type, 8 Media입니다. 여러 줄 텍스트, 확인란과 가격 기간 선택기는 필드 유형에 따라 표시됩니다. Add / Apply, Remove, Up, Down으로 정의와 순서를 관리합니다.
+
+정의는 rental_catalog.json에 저장됩니다. 화면에서 필드를 수정하거나 제거해도 기존 MongoDB 문서의 해당 필드가 자동으로 삭제되지는 않습니다. 컬렉션 연결 시 part_number의 고유 인덱스 생성도 시도합니다. 핵심 필드나 정의를 변경하기 전에 기존 데이터를 검토하십시오.
+
+[tab:config]
+# 설정
+Mongo URI, Database, Collection은 MongoDB 데이터 원본을 정의합니다. 기본값은 localhost, rental, catalog입니다. Page Size는 List가 불러올 최대 기록 수입니다. Media Directory는 가져온 이미지와 문서의 폴더이며 Browse로 선택합니다. Publish HTML File은 결과 목록의 위치를, Currency Symbol은 게시 가격 앞에 표시할 통화 기호를 설정합니다.
+
+Connect + Refresh는 지정한 MongoDB에 다시 연결하고 기록을 새로 불러옵니다. Save Config는 응용 프로그램 소스 옆의 rental_catalog.json에 설정을 저장합니다. 선택된 기본 탭, Fields 하위 탭, 최근 기록, 화면 표시 설정과 창 크기도 저장됩니다. MongoDB 문서와 실제 미디어 파일은 이 설정 파일과 별개입니다.
+
+이미지 또는 문서를 가져오기 전에 Media Directory를 설정해야 합니다. Publishing은 참조된 이미지가 있으면 해당 폴더에서 복사하며 원본 이미지 자체를 MongoDB에 포함하지 않습니다. 데이터베이스, 미디어 폴더와 HTML 출력 경로를 적절히 백업하십시오.
+
+[tab:ui-choices]
+# 사용자 인터페이스 옵션
+UI Choices는 공통 인터페이스 구성 요소를 이용하여 테마와 화면 밀도 같은 외형 설정을 선택합니다. 변경 사항은 응용 프로그램 설정에 저장됩니다. 초기 테마는 Graphite, 밀도는 Normal입니다. 공통 구성 요소를 사용할 수 없으면 설명 메시지가 나타납니다.
+
+[tab:gateway]
+# Gateway
+GatewayController를 사용할 수 있으면 Gateway는 공통 응용 프로그램 제어 기능을 연결합니다. 대여 목록의 기록과 별도로 공용 프로그램 실행기를 사용할 수 있습니다. 제어 기능을 불러오지 못하면 사용할 수 없다는 메시지가 표시됩니다.
+</p></div><div class="langtext" data-lang="ms" hidden><p style="white-space:pre-wrap">[intro]
+# Katalog sewaan — fungsi aplikasi ini
+Rental Catalog mengurus katalog peralatan untuk disewa atau dijual dalam MongoDB. Setiap rekod mempunyai nombor alat ganti yang unik, nama, penerangan, kuantiti, harga sewaan mengikut tempoh, penanda tempahan dan penerbitan serta rujukan kepada imej atau dokumen. Medan dalam List dan Editor boleh dikonfigurasi tanpa mengubah kod sumber Python. Publishing menghasilkan katalog HTML responsif yang boleh dicari, berserta imej dan harga sewaan.
+
+Mulakan dengan Config untuk menetapkan sambungan MongoDB, folder fail media dan destinasi HTML yang diterbitkan. Gunakan List untuk menyemak atau mencari rekod sedia ada, Editor untuk membuat atau mengemas kini maklumat peralatan, dan Publishing untuk menghasilkan katalog. Fields mengawal lajur dan ruang input yang muncul dalam List dan Editor. Sandarkan rekod pangkalan data penting dan fail media secara berasingan sebelum membuat perubahan besar atau kemas kini penerbitan.
+
+[tab:list]
+# Senarai
+List memaparkan rekod peralatan daripada pangkalan data dan koleksi MongoDB yang telah ditetapkan. Search mencari nombor alat ganti, nama ringkas, penerangan panjang dan penerangan terperinci tanpa membezakan huruf besar dan kecil. New membuka rekod baharu dalam Editor, manakala Refresh memuatkan semula hasil semasa. Memilih rekod dalam senarai akan memuatkan butirannya ke Editor.
+
+Lajur lalai ialah Part, Name, Qty, 3 Day, Weekly, Monthly, Book dan Don&#x27;t Publish. Tab Fields menetapkan nama, lebar, penjajaran dan susunan lajur. Page Size dalam Config mengehadkan bilangan maksimum rekod sepadan yang dipaparkan; bahagian bawah menunjukkan bilangan dimuatkan dan jumlah padanan.
+
+[tab:editor]
+# Editor
+Editor membuat dan mengemas kini rekod peralatan. Search menghantar teks yang ditaip kepada List. New mengosongkan borang, menjana cadangan nombor alat ganti, menetapkan kuantiti kepada 1 dan memilih harga tiga hari sebagai lalai. Add memasukkan rekod baharu dalam MongoDB. Update mengubah rekod terpilih; pilih item dalam List terlebih dahulu.
+
+Setiap nombor alat ganti mesti mengandungi tepat dua huruf diikuti dua digit, seperti AB12, dan mestilah unik. Borang lalai mengandungi Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image dan Document. Nilai wang disimpan sebagai angka, kuantiti sebagai integer dan kedua-dua penanda sebagai Boolean. Default Price memilih tempoh harian, tiga hari, mingguan atau bulanan. Fields menentukan input yang dipaparkan dalam Editor.
+
+Bahagian Media memaparkan pratonton imej utama. Pick Image menyalin imej daripada sistem fail ke Media Directory. Paste Image mengimport imej daripada papan klip apabila Pillow tersedia. Imej boleh diseret ke pratonton jika tkinterdnd2 dipasang. Pick Document menyalin fail terpilih ke Media Directory dan meletakkan namanya dalam Document. Fail import menggunakan nombor alat ganti dalam nama fail; akhiran bernombor mengelakkan fail sedia ada ditulis ganti. Imej disimpan sebagai fail dan dirujuk mengikut nama dalam rekod MongoDB. Gunakan Add atau Update untuk menyimpan perubahan rekod dan rujukan media.
+
+[tab:publishing]
+# Penerbitan
+Publishing menghasilkan katalog sewaan HTML satu halaman yang responsif. Senarai menunjukkan rekod yang dimuatkan melalui carian List semasa dan had halaman. Refresh memuat semula entri. Select Highlighted menandakan rekod yang diserlahkan, Select All menandakan semua rekod yang dipaparkan, dan Clear Selection membuang tanda pilihan. Klik dua kali pada baris terpilih untuk menukar status pemilihan penerbitan.
+
+Publish Selection menulis rekod bertanda, manakala Publish All mendapatkan seluruh koleksi. Kedua-duanya mengecualikan rekod yang mempunyai Don&#x27;t Publish diaktifkan. Item yang diterbitkan disusun mengikut nombor alat ganti. Output ditulis ke Publish HTML File yang ditetapkan atau aplikasi meminta destinasi jika belum dipilih. Imej yang dirujuk dan tersedia disalin ke folder media pendamping di sebelah fail HTML.
+
+Halaman terbitan mengandungi kad peralatan, imej, nama, penerangan, status tempahan dan maklumat harga. Pengunjung boleh mencari berdasarkan nombor alat ganti atau penerangan, memilih tempoh harga dan menyusun mengikut nombor, nama, penerangan atau harga menaik atau menurun. Tempohnya ialah Daily, 3 Day, Weekly dan Monthly. Simbol mata wang ditentukan dalam Config. Jika tiada harga bukan sifar untuk tempoh dipilih, halaman memaparkan Ask for price.
+
+Publishing menulis ke laluan HTML terpilih dan mungkin menggantikan fail HTML sedia ada. Semak destinasi dan pilihan katalog sebelum menerbitkan. Apabila memindahkan laman yang diterbitkan, pindahkan folder media pendamping bersama fail HTML.
+
+[tab:fields]
+# Medan
+Fields mempunyai dua subtab: Tree View Fields dan Editor Fields. Tree View Fields mengawal lajur List dan susunan paparan. Bagi setiap lajur, masukkan nama medan, label, lebar dan penjajaran serta tetapkan metadata Index atau Unique jika perlu. Add / Apply membuat atau mengemas kini takrif, Remove membuangnya daripada senarai konfigurasi, dan Up serta Down mengubah susunan. Mengubah takrif senarai membina semula paparan List.
+
+Editor Fields mengawal borang input rekod. Setiap takrif medan mengandungi nama, label, jenis, bilangan baris, panjang serta metadata Index dan Unique. Kod jenis yang disokong ialah 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type dan 8 Media. Teks berbilang baris, kotak semak dan pemilih tempoh harga dipaparkan mengikut jenis medan. Gunakan Add / Apply, Remove, Up dan Down untuk mengurus susunan dan takrif.
+
+Takrif disimpan dalam rental_catalog.json. Mengubah atau membuang medan dalam antara muka tidak memadam medan tersebut daripada dokumen MongoDB sedia ada secara automatik. Aplikasi juga cuba mewujudkan indeks unik pada part_number ketika menyambung ke koleksi. Semak data sedia ada sebelum mengubah medan utama atau takrifnya.
+
+[tab:config]
+# Konfigurasi
+Mongo URI, Database dan Collection menentukan sumber data MongoDB. Nilai lalai ialah localhost, rental dan catalog. Page Size menetapkan bilangan maksimum rekod yang dimuatkan dalam List. Media Directory ialah folder bagi imej dan dokumen import; pilih melalui Browse. Publish HTML File menetapkan destinasi katalog dan Currency Symbol awalan simbol mata wang pada harga terbitan.
+
+Connect + Refresh menyambung semula ke pangkalan data MongoDB yang ditetapkan dan memuat semula rekod. Save Config menulis tetapan ke rental_catalog.json di sebelah sumber aplikasi. Aplikasi turut menyimpan tab utama, subtab Fields, rekod terakhir dipilih, pilihan penampilan dan saiz tetingkap. Dokumen MongoDB dan fail media fizikal berasingan daripada fail konfigurasi ini.
+
+Media Directory mesti ditetapkan sebelum mengimport imej atau dokumen. Publishing menyalin imej yang dirujuk dari folder itu jika wujud; kandungan imej asal tidak dibenamkan dalam MongoDB. Pastikan pangkalan data, folder media dan laluan output HTML disandarkan mengikut keperluan.
+
+[tab:ui-choices]
+# Pilihan antara muka
+UI Choices menggunakan komponen antara muka dikongsi untuk memilih tema dan kepadatan paparan. Perubahan disimpan dalam konfigurasi aplikasi. Tema awal ialah Graphite dan kepadatan Normal. Jika komponen dikongsi tidak tersedia, tab memaparkan mesej penerangan.
+
+[tab:gateway]
+# Gateway
+Gateway mengintegrasikan pengawal aplikasi dikongsi apabila GatewayController tersedia. Ia memberikan akses kepada pelancar aplikasi umum secara berasingan daripada rekod katalog sewaan. Jika pengawal tidak dapat dimuatkan, tab memaparkan mesej tidak tersedia.
+</p></div><div class="langtext" data-lang="nl" hidden><p style="white-space:pre-wrap">[intro]
+# Verhuurcatalogus — wat deze toepassing doet
+Rental Catalog beheert in MongoDB een catalogus van apparatuur voor verhuur of verkoop. Elk record heeft een uniek onderdeelnummer, een naam, beschrijvingen, hoeveelheid, huurprijzen voor verschillende perioden, boekings- en publicatiemarkeringen en verwijzingen naar afbeeldingen of documenten. De velden van List en Editor zijn instelbaar zonder de Python-broncode aan te passen. Publishing maakt een responsieve, doorzoekbare HTML-catalogus met afbeeldingen en huurprijzen.
+
+Begin bij Config om de MongoDB-verbinding, de map voor mediabestanden en de bestemming van de gepubliceerde HTML in te stellen. Gebruik List om records te bekijken of te zoeken, Editor om apparatuurgegevens aan te maken of bij te werken en Publishing om de catalogus te produceren. Fields bepaalt welke kolommen en invoervelden in List en Editor verschijnen. Maak afzonderlijke back-ups van belangrijke databankrecords en mediabestanden voordat u grote wijzigingen of publicatie-updates uitvoert.
+
+[tab:list]
+# Lijst
+List toont apparatuurrecords uit de ingestelde MongoDB-databank en collectie. Search zoekt hoofdletterongevoelig in onderdeelnummer, korte naam, lange beschrijving en gedetailleerde beschrijving. New opent een nieuw record in Editor en Refresh laadt de huidige resultaten opnieuw. Wanneer u een record selecteert, worden de details in Editor geladen.
+
+Standaard zijn de kolommen Part, Name, Qty, 3 Day, Weekly, Monthly, Book en Don&#x27;t Publish zichtbaar. Fields bepaalt hun namen, breedten, uitlijning en volgorde. Page Size in Config beperkt het maximale aantal getoonde overeenkomende records. De voettekst vermeldt het geladen aantal en het totale aantal overeenkomsten.
+
+[tab:editor]
+# Editor
+Editor maakt apparatuurrecords aan en werkt ze bij. Search geeft de ingevoerde tekst door aan List. New wist het formulier, maakt een voorstel voor een onderdeelnummer, stelt de hoeveelheid in op 1 en kiest standaard de driedaagse prijs. Add voegt een nieuw MongoDB-record toe. Update wijzigt het geselecteerde record; selecteer eerst een item in List.
+
+Elk onderdeelnummer moet uit precies twee letters gevolgd door twee cijfers bestaan, bijvoorbeeld AB12, en uniek zijn. Het standaardformulier bevat Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image en Document. Geldbedragen worden numeriek opgeslagen, aantallen als gehele getallen en de twee markeringen als booleaanse waarden. Default Price kiest de dagelijkse, driedaagse, wekelijkse of maandelijkse periode. Fields bepaalt welke invoervelden in Editor zichtbaar zijn.
+
+Het onderdeel Media toont een voorbeeld van de hoofdafbeelding. Pick Image kopieert een afbeelding uit het bestandssysteem naar Media Directory. Paste Image importeert een afbeelding van het klembord wanneer Pillow beschikbaar is. Bij installatie van tkinterdnd2 kunt u een afbeelding naar het voorbeeld slepen. Pick Document kopieert een geselecteerd bestand naar Media Directory en zet de bestandsnaam in Document. Geïmporteerde bestandsnamen bevatten het onderdeelnummer; een genummerd achtervoegsel voorkomt dat bestaande bestanden worden overschreven. Afbeeldingen blijven losse bestanden die op naam worden aangeduid in MongoDB. Gebruik Add of Update om gewijzigde recordgegevens en mediaverwijzingen op te slaan.
+
+[tab:publishing]
+# Publiceren
+Publishing maakt een responsieve HTML-verhuurcatalogus op één pagina. De lijst toont records die door de huidige zoekopdracht in List en de paginalimiet zijn geladen. Refresh laadt de items opnieuw. Select Highlighted markeert gemarkeerde records, Select All alle momenteel getoonde records en Clear Selection verwijdert de selectiemarkeringen. Dubbelklikken op geselecteerde rijen schakelt hun publicatieselectie om.
+
+Publish Selection schrijft de gemarkeerde records weg; Publish All doorzoekt de volledige collectie. In beide gevallen worden records met ingeschakeld Don&#x27;t Publish uitgesloten. Gepubliceerde items worden op onderdeelnummer gesorteerd. De uitvoer wordt opgeslagen in de ingestelde Publish HTML File of er wordt om een bestemming gevraagd als deze ontbreekt. Beschikbare afbeeldingen worden gekopieerd naar een bijbehorende mediamap naast het HTML-bestand.
+
+De gepubliceerde pagina toont apparatuurkaarten, afbeeldingen, namen, beschrijvingen, boekingsstatus en prijzen. Bezoekers kunnen zoeken op onderdeelnummer of beschrijving, een prijsperiode kiezen en sorteren op onderdeelnummer, naam, beschrijving of oplopende en aflopende prijs. De perioden zijn Daily, 3 Day, Weekly en Monthly. Het valutasymbool komt uit Config. Als er geen niet-nulprijs voor de gekozen periode is, verschijnt Ask for price.
+
+Publishing schrijft naar het gekozen HTML-pad en kan een bestaand HTML-bestand vervangen. Controleer vóór publicatie de bestemming en beoogde selectie. Bewaar de bijbehorende mediamap samen met het HTML-bestand wanneer u de gepubliceerde site verplaatst.
+
+[tab:fields]
+# Velden
+Fields heeft twee subtabbladen: Tree View Fields en Editor Fields. Tree View Fields beheert de kolommen van List en hun weergavevolgorde. Vul voor elke kolom veldnaam, label, breedte en uitlijning in en stel zo nodig de metadata Index of Unique in. Add / Apply maakt of wijzigt de definitie, Remove verwijdert deze uit de ingestelde lijst en Up en Down wijzigen de volgorde. Een gewijzigde definitie bouwt de zichtbare lijst opnieuw op.
+
+Editor Fields beheert het invoerformulier. Elke velddefinitie bevat naam, label, type, aantal regels, lengte en de metadata Index en Unique. Ondersteunde typecodes zijn 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type en 8 Media. Meerregelige tekst, selectievakjes en de prijsperiodeselector verschijnen volgens het veldtype. Gebruik Add / Apply, Remove, Up en Down voor de volgorde en definities.
+
+Definities worden opgeslagen in rental_catalog.json. Een veld in de interface wijzigen of verwijderen, verwijdert het niet automatisch uit bestaande MongoDB-documenten. De toepassing probeert bij verbinding met de collectie ook een unieke index op part_number te maken. Controleer bestaande gegevens voordat u sleutelvelden of hun definities wijzigt.
+
+[tab:config]
+# Configuratie
+Mongo URI, Database en Collection bepalen de MongoDB-gegevensbron. De standaardwaarden zijn localhost, rental en catalog. Page Size bepaalt het maximale aantal records dat List laadt. Media Directory is de map voor geïmporteerde afbeeldingen en documenten; selecteer deze met Browse. Publish HTML File bepaalt de uitvoerlocatie en Currency Symbol het valutavoorvoegsel bij gepubliceerde prijzen.
+
+Connect + Refresh maakt opnieuw verbinding met de opgegeven MongoDB-databank en laadt de records opnieuw. Save Config slaat instellingen op in rental_catalog.json naast de programmabron. Ook het actieve hoofdtabblad, het gekozen Fields-subtabblad, het laatst geselecteerde record, weergave-instellingen en vensterafmetingen worden bewaard. MongoDB-documenten en echte mediabestanden staan los van dit configuratiebestand.
+
+Stel de mediamap in voordat u afbeeldingen of documenten importeert. Publishing kopieert beschikbare, vermelde afbeeldingen uit die map; de oorspronkelijke afbeeldingsgegevens worden niet in MongoDB opgenomen. Zorg voor back-ups van de databank, mediamap en HTML-uitvoerpaden.
+
+[tab:ui-choices]
+# Interfaceopties
+UI Choices gebruikt de gedeelde interfacecomponent om thema en weergavedichtheid te kiezen. Wijzigingen worden in de configuratie bewaard. Standaard zijn het thema Graphite en de dichtheid Normal. Als de gedeelde component ontbreekt, toont het tabblad een uitleg.
+
+[tab:gateway]
+# Gateway
+Gateway integreert de gedeelde toepassingscontroller als GatewayController beschikbaar is. Zo kunt u het gemeenschappelijke startprogramma openen, los van de records in de verhuurcatalogus. Kan de controller niet worden geladen, dan verschijnt een melding dat deze niet beschikbaar is.
+</p></div><div class="langtext" data-lang="pt" hidden><p style="white-space:pre-wrap">[intro]
+# Catálogo de aluguer — finalidade desta aplicação
+Rental Catalog mantém em MongoDB um catálogo de equipamentos disponíveis para aluguer ou venda. Cada registo contém um número de peça único, nome, descrições, quantidade, preços de aluguer para diferentes períodos, indicadores de reserva e publicação, e referências a imagens ou documentos. Os campos de List e Editor podem ser configurados sem alterar o código Python. Publishing produz um catálogo HTML responsivo e pesquisável com imagens e preços.
+
+Comece em Config para definir a ligação MongoDB, a pasta de ficheiros multimédia e o destino do HTML publicado. Utilize List para consultar ou pesquisar registos, Editor para criar ou atualizar os dados dos equipamentos e Publishing para criar o catálogo. Fields controla as colunas e entradas apresentadas em List e Editor. Faça cópias de segurança separadas dos registos importantes e dos ficheiros multimédia antes de grandes alterações ou atualizações da publicação.
+
+[tab:list]
+# Lista
+List apresenta os equipamentos da base de dados e coleção MongoDB configuradas. Search procura no número de peça, nome curto, descrição longa e descrição detalhada sem distinguir maiúsculas e minúsculas. New abre um novo registo em Editor e Refresh recarrega os resultados atuais. Ao selecionar um registo da lista, os seus detalhes são carregados em Editor.
+
+As colunas predefinidas são Part, Name, Qty, 3 Day, Weekly, Monthly, Book e Don&#x27;t Publish. Fields define os nomes, larguras, alinhamentos e ordem das colunas. Page Size, em Config, limita o máximo de registos correspondentes apresentados; o rodapé informa quantos foram carregados e o total de correspondências.
+
+[tab:editor]
+# Editor
+Editor cria e atualiza registos de equipamentos. Search envia o texto introduzido para List. New limpa o formulário, gera um possível número de peça, define a quantidade como 1 e escolhe o preço de três dias por defeito. Add insere um novo registo em MongoDB. Update modifica o registo selecionado; escolha primeiro um item em List.
+
+O número de peça deve ter exatamente duas letras seguidas de dois algarismos, como AB12, e ser único. O formulário inclui Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image e Document. Os valores monetários são guardados como números, a quantidade como inteiro e os dois indicadores como booleanos. Default Price escolhe entre os períodos diário, de três dias, semanal e mensal. Fields determina as entradas visíveis em Editor.
+
+Media mostra uma pré-visualização da imagem principal. Pick Image copia uma imagem do sistema de ficheiros para Media Directory. Paste Image importa do ambiente de transferência quando Pillow está disponível. Com tkinterdnd2 instalado, pode arrastar uma imagem para a pré-visualização. Pick Document copia o ficheiro selecionado para Media Directory e coloca o seu nome em Document. Os nomes dos ficheiros importados incluem o número de peça; um sufixo numérico evita substituir ficheiros existentes. As imagens são guardadas como ficheiros, referenciados pelo nome no registo MongoDB. Utilize Add ou Update para guardar os dados e referências multimédia alterados.
+
+[tab:publishing]
+# Publicação
+Publishing cria um catálogo HTML responsivo numa única página. A lista mostra os registos carregados pela pesquisa atual de List e respetivo limite de página. Refresh recarrega as entradas. Select Highlighted marca os registos destacados, Select All marca todos os registos visíveis e Clear Selection retira as marcas. O duplo clique nas linhas selecionadas alterna a sua seleção para publicação.
+
+Publish Selection escreve os registos marcados; Publish All consulta toda a coleção. Ambos excluem os registos com Don&#x27;t Publish ativo. Os artigos publicados são ordenados por número de peça. O resultado é escrito em Publish HTML File ou, caso não exista destino configurado, é solicitado um. As imagens referenciadas disponíveis são copiadas para uma pasta multimédia associada ao lado do ficheiro HTML.
+
+A página apresenta cartões de equipamentos, imagens, nomes, descrições, estado das reservas e preços. Os visitantes podem pesquisar por número de peça ou descrição, escolher um período e ordenar por número de peça, nome, descrição ou preço crescente ou decrescente. Os períodos são Daily, 3 Day, Weekly e Monthly. O símbolo monetário vem de Config. Se o período escolhido não tiver preço diferente de zero, surge Ask for price.
+
+Publishing escreve no caminho HTML selecionado e pode substituir um ficheiro existente. Confirme o destino e a seleção pretendida antes de publicar. Ao mover o sítio publicado, mantenha a pasta multimédia associada junto do ficheiro HTML.
+
+[tab:fields]
+# Campos
+Fields inclui os sub-separadores Tree View Fields e Editor Fields. Tree View Fields controla as colunas de List e a respetiva ordem. Para cada coluna, introduza nome, etiqueta, largura e alinhamento, e indique Index ou Unique quando necessário. Add / Apply cria ou atualiza a definição, Remove retira-a da lista configurada e Up e Down alteram a ordem. Alterar a definição reconstrói a lista apresentada.
+
+Editor Fields controla o formulário de entrada. Cada definição contém nome, etiqueta, tipo, número de linhas, comprimento e metadados Index e Unique. Os códigos suportados são 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type e 8 Media. Os campos de texto com várias linhas, caixas de seleção e seletor do período aparecem conforme o tipo. Utilize Add / Apply, Remove, Up e Down para gerir a ordem e as definições.
+
+As definições são guardadas em rental_catalog.json. Alterar ou remover um campo na interface não o elimina automaticamente dos documentos MongoDB existentes. Ao ligar à coleção, a aplicação também tenta criar um índice único para part_number. Reveja os dados antes de alterar os campos principais ou as respetivas definições.
+
+[tab:config]
+# Configuração
+Mongo URI, Database e Collection definem a origem dos dados MongoDB. Os valores predefinidos são localhost, rental e catalog. Page Size controla o máximo de registos carregados em List. Media Directory é a pasta de imagens e documentos importados; escolha-a com Browse. Publish HTML File indica o destino do catálogo e Currency Symbol define o prefixo monetário dos preços publicados.
+
+Connect + Refresh restabelece a ligação à base MongoDB indicada e recarrega os registos. Save Config grava as definições em rental_catalog.json ao lado do código da aplicação. Também são guardados o separador principal, o sub-separador Fields, o último registo selecionado, as opções visuais e as dimensões da janela. Os documentos MongoDB e os ficheiros multimédia físicos são separados desta configuração.
+
+Defina Media Directory antes de importar imagens ou documentos. Publishing copia as imagens referenciadas existentes dessa pasta; não incorpora os dados originais das imagens em MongoDB. Mantenha cópias de segurança da base de dados, da pasta multimédia e dos caminhos de saída HTML.
+
+[tab:ui-choices]
+# Opções de interface
+UI Choices usa o componente de interface partilhado para selecionar o tema e a densidade de apresentação. As alterações ficam guardadas na configuração. O tema inicial é Graphite e a densidade Normal. Se o componente partilhado não estiver disponível, o separador apresenta uma mensagem explicativa.
+
+[tab:gateway]
+# Gateway
+Gateway integra o controlador partilhado quando GatewayController está disponível. Permite aceder ao lançador comum de aplicações, independentemente dos registos do catálogo de aluguer. Se o controlador não carregar, o separador apresenta uma mensagem de indisponibilidade.
+</p></div><div class="langtext" data-lang="ru" hidden><p style="white-space:pre-wrap">[intro]
+# Каталог аренды — назначение приложения
+Rental Catalog ведёт в MongoDB каталог оборудования, предназначенного для аренды или продажи. Каждая запись содержит уникальный номер изделия, наименование, описания, количество, арендные цены для разных периодов, признаки бронирования и публикации, а также ссылки на изображения или документы. Поля List и Editor можно настраивать без изменения исходного кода Python. Publishing создаёт адаптивный HTML-каталог с поиском, изображениями и арендными ценами.
+
+Сначала откройте Config и настройте подключение к MongoDB, папку медиафайлов и место сохранения опубликованного HTML. Используйте List для просмотра и поиска записей, Editor — для создания и обновления сведений об оборудовании, Publishing — для создания каталога. Fields определяет, какие столбцы и поля ввода отображаются в List и Editor. Перед крупными изменениями или обновлением публикации отдельно сохраните резервные копии важных записей базы данных и медиафайлов.
+
+[tab:list]
+# Список
+List показывает записи оборудования из настроенной базы данных и коллекции MongoDB. Search ищет по номеру изделия, краткому названию, длинному и подробному описаниям без учёта регистра букв. New открывает новую запись в Editor, а Refresh повторно загружает текущие результаты. При выборе строки из списка её данные загружаются в Editor.
+
+По умолчанию отображаются столбцы Part, Name, Qty, 3 Day, Weekly, Monthly, Book и Don&#x27;t Publish. Вкладка Fields задаёт названия, ширину, выравнивание и порядок столбцов. Параметр Page Size в Config ограничивает максимальное число показанных совпадающих записей. Внизу выводятся количество загруженных записей и общее число совпадений.
+
+[tab:editor]
+# Редактор
+Editor создаёт и изменяет записи оборудования. Search передаёт введённый текст в List. New очищает форму, предлагает номер изделия, устанавливает количество 1 и выбирает трёхдневный тариф по умолчанию. Add добавляет запись в MongoDB. Update изменяет выбранную запись; сначала выберите элемент в List.
+
+Каждый номер изделия должен содержать ровно две буквы и две следующие за ними цифры, например AB12, и быть уникальным. Стандартная форма содержит Part Number, Short Name, Long Description, Detailed Description, Quantity, Daily Price, 3 Day Price, Weekly Price, Monthly Price, Default Price, Don&#x27;t Publish, Book, Primary Image и Document. Денежные значения хранятся в числовом формате, количество — как целое число, а два признака — как логические значения. Default Price выбирает суточный, трёхдневный, недельный или месячный период. Fields управляет видимостью полей Editor.
+
+В области Media отображается основное изображение. Pick Image копирует изображение из файловой системы в Media Directory. Paste Image импортирует изображение из буфера обмена при наличии Pillow. При установленном tkinterdnd2 изображение можно перетащить в область просмотра. Pick Document копирует выбранный файл в Media Directory и записывает его имя в Document. Имена импортированных файлов содержат номер изделия; числовой суффикс предотвращает перезапись существующих файлов. Изображения хранятся как файлы, а записи MongoDB ссылаются на них по имени. Используйте Add или Update для сохранения изменений и ссылок на медиафайлы.
+
+[tab:publishing]
+# Публикация
+Publishing создаёт адаптивный одностраничный HTML-каталог аренды. Список содержит записи, загруженные текущим поиском List и ограничением размера страницы. Refresh обновляет записи. Select Highlighted отмечает выделенные строки, Select All — все отображаемые, Clear Selection — снимает отметки. Двойной щелчок по выбранной строке переключает её выбор для публикации.
+
+Publish Selection записывает отмеченные элементы, а Publish All запрашивает всю коллекцию. В обоих случаях исключаются записи с включённым Don&#x27;t Publish. Опубликованные позиции упорядочиваются по номеру изделия. Результат записывается в настроенный Publish HTML File; если путь не задан, программа запрашивает его. При наличии указанных изображений они копируются в сопутствующую папку медиафайлов рядом с HTML-файлом.
+
+На опубликованной странице отображаются карточки оборудования, изображения, названия, описания, статус бронирования и цены. Посетители могут искать по номеру изделия или описанию, выбирать период оплаты и сортировать по номеру, названию, описанию или цене по возрастанию и убыванию. Периоды: Daily, 3 Day, Weekly и Monthly. Символ валюты задаётся в Config. Если для выбранного периода нет цены, отличной от нуля, выводится Ask for price.
+
+Publishing записывает результат по выбранному HTML-пути и может заменить существующий HTML-файл. Перед публикацией проверьте место назначения и выбранные записи. При переносе сайта перемещайте сопутствующую папку медиафайлов вместе с HTML-файлом.
+
+[tab:fields]
+# Поля
+Fields содержит две вложенные вкладки: Tree View Fields и Editor Fields. Tree View Fields управляет столбцами List и их порядком. Для каждого столбца укажите имя поля, подпись, ширину, выравнивание и при необходимости метаданные Index или Unique. Add / Apply создаёт либо обновляет определение, Remove удаляет его из настроенного списка, Up и Down меняют порядок. Изменение списка определений перестраивает отображаемый List.
+
+Editor Fields управляет формой ввода записи. Определение поля содержит имя, подпись, тип, число строк, длину и метаданные Index и Unique. Поддерживаются коды типов 1 Short, 2 Long, 3 Text, 4 Integer, 5 Money, 6 Boolean, 7 Price Type и 8 Media. Многострочный текст, флажки и выбор тарифного периода отображаются в зависимости от типа поля. Для управления определениями и порядком используйте Add / Apply, Remove, Up и Down.
+
+Определения сохраняются в rental_catalog.json. Изменение или удаление поля из интерфейса само по себе не удаляет его из существующих документов MongoDB. При подключении к коллекции приложение также пытается создать уникальный индекс для part_number. Проверьте имеющиеся данные перед изменением ключевых полей и их определений.
+
+[tab:config]
+# Конфигурация
+Mongo URI, Database и Collection задают источник данных MongoDB. Значения по умолчанию: localhost, rental и catalog. Page Size ограничивает число записей, загружаемых в List. Media Directory — папка импортированных изображений и документов; выберите её через Browse. Publish HTML File задаёт место сохранения каталога, а Currency Symbol — символ валюты перед опубликованными ценами.
+
+Connect + Refresh повторно подключается к указанной базе MongoDB и обновляет записи. Save Config записывает параметры в rental_catalog.json рядом с исходным кодом. Приложение также сохраняет выбранную основную вкладку, подвкладку Fields, последний выбранный элемент, параметры оформления и размеры окна. Документы MongoDB и реальные медиафайлы существуют отдельно от файла конфигурации.
+
+Перед импортом изображений или документов необходимо настроить Media Directory. Publishing копирует из этой папки существующие изображения, на которые есть ссылки, но не встраивает исходные изображения в MongoDB. При необходимости создавайте резервные копии базы данных, медиафайлов и HTML-результатов.
+
+[tab:ui-choices]
+# Настройки интерфейса
+UI Choices использует общий интерфейсный компонент для выбора оформления и плотности отображения. Изменения сохраняются в конфигурации приложения. Начальная тема — Graphite, плотность — Normal. Если общий компонент недоступен, вкладка показывает поясняющее сообщение.
+
+[tab:gateway]
+# Gateway
+Gateway подключает общий контроллер приложений при наличии GatewayController. Он предоставляет доступ к общему запуску приложений независимо от записей каталога аренды. Если контроллер не загружается, вкладка выводит сообщение о недоступности.
+</p></div><div class="langtext" data-lang="zh" hidden><p style="white-space:pre-wrap">[intro]
+# 租赁目录 — 本应用的功能
+Rental Catalog 使用 MongoDB 管理供出租或出售的设备目录。每条设备记录包含唯一的零件编号、名称、说明、数量、不同租期的租金、预订和发布标志，以及图像或文档的引用。List 和 Editor 的字段可以配置，而无需修改 Python 源代码。Publishing 可生成适应不同屏幕、支持搜索并包含图片和租金的 HTML 目录。
+
+首先在 Config 中设置 MongoDB 连接、媒体文件夹和发布 HTML 的目标位置。使用 List 浏览或搜索现有记录，使用 Editor 创建或更新设备信息，使用 Publishing 生成目录。Fields 控制 List 和 Editor 中显示的列和输入项。在进行大规模编辑或更新发布内容之前，应分别备份重要的数据库记录和媒体文件。
+
+[tab:list]
+# 列表
+List 显示来自已配置 MongoDB 数据库和集合的设备记录。Search 可按零件编号、简称、长描述和详细描述进行不区分大小写的搜索。New 在 Editor 中打开新记录，Refresh 重新加载当前结果。选择列表中的记录后，其详细信息会加载到 Editor。
+
+默认列为 Part、Name、Qty、3 Day、Weekly、Monthly、Book 和 Don&#x27;t Publish。Fields 选项卡用于设置列名、宽度、对齐方式和顺序。Config 中的 Page Size 限制显示的匹配记录数量；底部状态栏显示已加载数量和匹配总数。
+
+[tab:editor]
+# 编辑器
+Editor 用于创建和更新设备记录。Search 将输入的文本传递给 List。New 清空表单、生成候选零件编号、将数量设为 1，并默认选择三天租金。Add 向 MongoDB 插入新记录。Update 修改选中的记录；使用之前须先在 List 中选中一项。
+
+每个零件编号必须由恰好两个字母和后续两个数字组成，例如 AB12，并且必须唯一。默认表单包含 Part Number、Short Name、Long Description、Detailed Description、Quantity、Daily Price、3 Day Price、Weekly Price、Monthly Price、Default Price、Don&#x27;t Publish、Book、Primary Image 和 Document。金额以数值存储，数量以整数存储，两个标志以布尔值存储。Default Price 可选择每日、三天、每周或每月租期。Fields 控制 Editor 中显示的输入项。
+
+Media 区域预览主图片。Pick Image 将文件系统中的图片复制到指定的 Media Directory。安装 Pillow 后，Paste Image 可以从剪贴板导入图片；安装 tkinterdnd2 后，可以将图片拖入预览区域。Pick Document 将选中的文件复制到 Media Directory，并把文件名填入 Document 字段。导入文件的名称包含零件编号；如有重名，会添加数字后缀以避免覆盖现有文件。图片以独立文件保存，MongoDB 记录仅通过文件名引用图片。使用 Add 或 Update 保存记录更改和媒体引用。
+
+[tab:publishing]
+# 发布
+Publishing 可生成响应式单页 HTML 租赁目录。列表显示当前 List 搜索及页面数量限制所加载的设备记录。Refresh 重新加载条目。Select Highlighted 标记高亮记录；Select All 标记当前显示的所有记录；Clear Selection 清除标记。双击选中的行可切换其发布选择状态。
+
+Publish Selection 写入已标记的记录，而 Publish All 查询整个集合。两种方式均会排除已启用 Don&#x27;t Publish 的记录。发布项目按零件编号排序。输出写入配置的 Publish HTML File；若未设置目标，则会要求选择路径。引用的图片文件存在时，会被复制到 HTML 文件旁边的配套媒体文件夹。
+
+发布的页面包含设备卡片、图片、名称、说明、预订状态和价格。访问者可以按零件编号或说明搜索，选择租金期限，并按零件编号、名称、说明或价格升降序排序。租期包括 Daily、3 Day、Weekly 和 Monthly。显示的货币符号来自 Config。若所选期限没有非零价格，页面将显示 Ask for price。
+
+Publishing 将内容写入选定的 HTML 输出路径，可能替换已有 HTML 文件。发布前请确认路径及要发布的设备选择。移动已发布的网站时，务必将配套媒体文件夹与 HTML 文件一起移动。
+
+[tab:fields]
+# 字段
+Fields 包含 Tree View Fields 和 Editor Fields 两个子选项卡。Tree View Fields 控制 List 的列及显示顺序。为每列输入字段名、标签、宽度和对齐方式，并按需设置 Index 或 Unique 元数据。Add / Apply 创建或更新定义；Remove 从配置列表中删除定义；Up 和 Down 调整顺序。更改列表定义后，显示的 List 将重新构建。
+
+Editor Fields 控制记录输入表单。字段定义包含名称、标签、类型、行数、长度以及 Index 和 Unique 元数据。支持的类型代码为 1 Short、2 Long、3 Text、4 Integer、5 Money、6 Boolean、7 Price Type 和 8 Media。多行文字、复选框和价格期限选择器根据字段类型显示。使用 Add / Apply、Remove、Up 和 Down 管理定义及排序。
+
+定义保存在 rental_catalog.json 中。界面中修改或删除字段，不会自动删除现有 MongoDB 文档中的该字段。连接集合时，应用还会尝试在 part_number 上建立唯一索引。修改关键字段或其定义前，请检查现有数据。
+
+[tab:config]
+# 配置
+Mongo URI、Database 和 Collection 定义 MongoDB 数据源。默认值分别为 localhost、rental 和 catalog。Page Size 控制 List 加载的最大记录数。Media Directory 是导入图片和文档的文件夹，可通过 Browse 选择。Publish HTML File 指定生成目录的目标路径；Currency Symbol 设置发布价格前的货币符号。
+
+Connect + Refresh 重新连接指定的 MongoDB 数据库并加载记录。Save Config 将设置写入源代码旁的 rental_catalog.json。应用还保存当前主选项卡、Fields 子选项卡、最近选中的记录、外观设置和窗口大小。MongoDB 文档内容和实际媒体文件与该配置文件相互独立。
+
+导入图片或文档之前必须设置媒体文件夹。Publishing 从此文件夹复制存在的引用图片，而不会将原始图片内容嵌入 MongoDB。请根据需要备份数据库、媒体文件夹和 HTML 输出路径。
+
+[tab:ui-choices]
+# 界面选项
+UI Choices 使用共享界面组件选择主题和显示密度等外观选项。更改会保存到应用配置。初始主题为 Graphite，密度为 Normal。如果共享组件不可用，选项卡会显示说明信息。
+
+[tab:gateway]
+# Gateway
+当 GatewayController 可用时，Gateway 会集成共享应用控制器，可独立于租赁目录记录访问公共应用启动器。如果控制器无法加载，选项卡会显示不可用提示。
+</p></div></div>
+  </section>
+  
+  <section class="panel" id="features"><h2>Features</h2><div id="features-body"><p>Features not supplied.</p></div></section>
+  
+  <section class="panel" id="primary-poster"><h2>Primary poster</h2><div class="posters"><a href="images/poster-cpc-rental-catalouge-poster.webp"><img src="images/poster-cpc-rental-catalouge-poster.webp" alt="Primary poster" loading="lazy"></a></div></section>
+  <section class="panel" id="posters"><h2>Posters (1)</h2><div class="posters"><a href="images/poster-cpc-rental-catalouge-poster.webp"><img src="images/poster-cpc-rental-catalouge-poster.webp" alt="cpc_rental_catalouge_poster.webp" loading="lazy"></a></div></section>
+  <section class="panel" id="repository-files"><h2>Repository files</h2><section class="panel"><h2>Additional HTML pages (3)</h2><ul><li><a href="files/cpc_rental_catalouge-brochure.htm">cpc_rental_catalouge-brochure.htm</a> (406,274 bytes)</li><li><a href="files/depth_lifter_learning_page.html">depth_lifter_learning_page.html</a> (4,346,458 bytes)</li><li><a href="files/learn.htm">learn.htm</a> (6,741,155 bytes)</li></ul></section><section class="panel"><h2>Report indexes (1)</h2><ul><li><a href="files/depth_lifter_reports/index.html">depth_lifter_reports</a> (17 files)</li></ul></section></section>
+</main>
+</div>
+<footer class="footer" id="connect"><div class="wrap"><div class="footer-top"><div>
+<img class="footer-brand-logo" src="images/logo-logo.webp" alt="" width="78" height="78">
+<p class="kicker">Keep exploring</p><h2>There is always another door.</h2>
+<p>Mr Bmulti is the creative and educational work of Christopher Patrick Cotton, bringing songs, learning resources, science, software, art, and questions together.</p>
+<p>Most importantly: keep the curiosity, and keep asking for evidence.</p>
+<p class="funding-note"><strong>Funding is very welcome, as I am a tourist on this planet.</strong> With funding to bring in some assistance, there will be 1,000 songs, more than 20 books, a peer-to-peer sharing app for media, and many more public applications and fun learning resources.</p>
+<div class="support-art"><img alt="Colourful illustrated record artwork about supporting music and creativity" loading="lazy" src="data:image/webp;base64,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"><span>Every contribution helps more songs, books and learning tools reach new people.</span></div>
+</div>
+<nav class="footer-links" aria-label="Projects, contact and funding">
+<a href="https://mrbmulti.com" rel="noopener noreferrer" target="_blank">Stories Songs Explorer<span>mrbmulti.com ↗</span></a>
+<a href="https://bmulti.github.io/portfolio/" rel="noopener noreferrer" target="_blank">Python AI Framework and Sample Applications<span>bmulti.github.io/portfolio ↗</span></a>
+<a href="https://oncotton.github.io/index/" rel="noopener noreferrer" target="_blank">Golang and JavaScript Shares<span>oncotton.github.io/index ↗</span></a>
+<a href="https://mrbmullti.github.io/index/" rel="noopener noreferrer" target="_blank">Gateway and few Wild ideas<span>mrbmullti.github.io/index ↗</span></a>
+<a href="https://x.com/Trumpocene" rel="noopener noreferrer" target="_blank">@Trumpocene<span>On X ↗</span></a>
+<a href="mailto:bmulti@gmail.com">Send an email<span>bmulti@gmail.com ↗</span></a>
+<a class="support-link" href="https://buymeacoffee.com/bmutli" rel="noopener noreferrer" target="_blank">Buy Me a Coffee<span>Support the learning projects ↗</span></a>
+<a class="support-link" href="https://www.paypal.com/ncp/payment/YTNE39LWA4WMN" rel="noopener noreferrer" target="_blank">PayPal<span>Contribute to future resources ↗</span></a>
+</nav></div>
+<div class="footer-bottom"><span>© <span id="footer-year"></span> Christopher Patrick Cotton · Mr Bmulti · A little museum of ideas</span><a href="#top">Back to the top ↑</a></div></div></footer>
+<dialog id="viewer" aria-label="Poster viewer">
+  <div class="v-bar"><strong id="v-title">Poster</strong>
+    <button type="button" id="v-out" aria-label="Zoom out">−</button><button type="button" id="v-fit">Fit</button><button type="button" id="v-in" aria-label="Zoom in">+</button>
+    <button type="button" class="close" id="v-close">Close ✕</button></div>
+  <div class="v-stage" id="v-stage"><a id="v-link" href="#" title="Open the repository index"><img id="v-img" alt="" src="data:,"></a></div>
+  <div class="v-hint">Click the poster to open its repository index · Esc or click outside to close · + − or Control and mouse wheel to zoom</div>
+</dialog>
+<script>
+
+var footerYear=document.getElementById("footer-year");
+if(footerYear&&!/^\d{4}$/.test(footerYear.textContent.trim()))footerYear.textContent=new Date().getFullYear();
+
+(function(){
+var $=function(s,r){return (r||document).querySelector(s);},$$=function(s,r){return Array.from((r||document).querySelectorAll(s));};
+/* interface words follow the selected language; the documentation text itself comes from the language files */
+var T={
+"en":{menu:"Menu",close:"Close",lang:"Language",step:"Step {n} of {t}",steps:"{t} steps",min:"{m} min read",zoom:"Tap a screenshot to enlarge",next:"Next",prev:"Previous",onpage:"On this page",more:"More pages",start:"Start the tour"},
+"ceb":{menu:"Menu",close:"Isira",lang:"Pinulongan",step:"Lakang {n} sa {t}",steps:"{t} ka lakang",min:"{m} min nga basahon",zoom:"Pindota ang screenshot aron mapadako",next:"Sunod",prev:"Nauna",onpage:"Niining panid",more:"Dugang mga panid",start:"Sugdi ang tour"},
+"de":{menu:"Menü",close:"Schließen",lang:"Sprache",step:"Schritt {n} von {t}",steps:"{t} Schritte",min:"{m} Min. Lesezeit",zoom:"Screenshot antippen zum Vergrößern",next:"Weiter",prev:"Zurück",onpage:"Auf dieser Seite",more:"Weitere Seiten",start:"Tour starten"},
+"es":{menu:"Menú",close:"Cerrar",lang:"Idioma",step:"Paso {n} de {t}",steps:"{t} pasos",min:"{m} min de lectura",zoom:"Toca una captura para ampliarla",next:"Siguiente",prev:"Anterior",onpage:"En esta página",more:"Más páginas",start:"Empezar el recorrido"},
+"fr":{menu:"Menu",close:"Fermer",lang:"Langue",step:"Étape {n} sur {t}",steps:"{t} étapes",min:"{m} min de lecture",zoom:"Touchez une capture pour l’agrandir",next:"Suivant",prev:"Précédent",onpage:"Sur cette page",more:"Autres pages",start:"Commencer la visite"},
+"id":{menu:"Menu",close:"Tutup",lang:"Bahasa",step:"Langkah {n} dari {t}",steps:"{t} langkah",min:"{m} mnt baca",zoom:"Ketuk tangkapan layar untuk memperbesar",next:"Berikutnya",prev:"Sebelumnya",onpage:"Di halaman ini",more:"Halaman lain",start:"Mulai tur"},
+"it":{menu:"Menu",close:"Chiudi",lang:"Lingua",step:"Passo {n} di {t}",steps:"{t} passi",min:"{m} min di lettura",zoom:"Tocca uno screenshot per ingrandirlo",next:"Avanti",prev:"Indietro",onpage:"In questa pagina",more:"Altre pagine",start:"Inizia il tour"},
+"ja":{menu:"メニュー",close:"閉じる",lang:"言語",step:"ステップ {n} / {t}",steps:"{t} ステップ",min:"読了目安 {m} 分",zoom:"スクリーンショットをタップすると拡大します",next:"次へ",prev:"前へ",onpage:"このページの内容",more:"その他のページ",start:"ツアーを始める"},
+"ko":{menu:"메뉴",close:"닫기",lang:"언어",step:"{t}단계 중 {n}단계",steps:"{t}단계",min:"읽는 시간 {m}분",zoom:"스크린샷을 누르면 확대됩니다",next:"다음",prev:"이전",onpage:"이 페이지 목차",more:"다른 페이지",start:"둘러보기 시작"},
+"ms":{menu:"Menu",close:"Tutup",lang:"Bahasa",step:"Langkah {n} daripada {t}",steps:"{t} langkah",min:"{m} min bacaan",zoom:"Ketik tangkapan skrin untuk membesarkan",next:"Seterusnya",prev:"Sebelumnya",onpage:"Pada halaman ini",more:"Halaman lain",start:"Mulakan lawatan"},
+"nl":{menu:"Menu",close:"Sluiten",lang:"Taal",step:"Stap {n} van {t}",steps:"{t} stappen",min:"{m} min leestijd",zoom:"Tik op een schermafbeelding om te vergroten",next:"Volgende",prev:"Vorige",onpage:"Op deze pagina",more:"Andere pagina’s",start:"Start de rondleiding"},
+"pt":{menu:"Menu",close:"Fechar",lang:"Idioma",step:"Passo {n} de {t}",steps:"{t} passos",min:"{m} min de leitura",zoom:"Toque numa captura para ampliar",next:"Seguinte",prev:"Anterior",onpage:"Nesta página",more:"Outras páginas",start:"Iniciar o percurso"},
+"ru":{menu:"Меню",close:"Закрыть",lang:"Язык",step:"Шаг {n} из {t}",steps:"Шагов: {t}",min:"{m} мин чтения",zoom:"Нажмите на скриншот, чтобы увеличить",next:"Далее",prev:"Назад",onpage:"На этой странице",more:"Другие страницы",start:"Начать обзор"},
+"zh":{menu:"菜单",close:"关闭",lang:"语言",step:"第 {n} 步，共 {t} 步",steps:"共 {t} 步",min:"阅读约 {m} 分钟",zoom:"点击截图可放大",next:"下一步",prev:"上一步",onpage:"本页内容",more:"更多页面",start:"开始导览"}
+};
+T["es-mx"]=T.es;
+var sel=document.getElementById("doclang"),sel2=null,storageKey="mrbmulti.documentation.language";
+function code(){var v=String((sel&&sel.value)||document.documentElement.lang||"en").toLowerCase().replace("_","-");return T[v]?v:(T[v.split("-")[0]]?v.split("-")[0]:"en");}
+function t(k,o){var s=(T[code()]||T.en)[k]||T.en[k]||"";if(o)for(var x in o)s=s.replace("{"+x+"}",o[x]);return s;}
+function i18n(){$$("[data-i]").forEach(function(e){e.textContent=t(e.dataset.i);});$$("[data-ia]").forEach(function(e){e.setAttribute("aria-label",t(e.dataset.ia));});}
+function normal(value){return String(value||"").normalize("NFKC").toLowerCase().replace(/\b(tab|screenshot|screen)\b/g,"").replace(/[^\p{L}\p{N}]+/gu," ").trim();}
+
+/* screenshots come from the gallery list, which stays at the end of the page */
+var shots=$$("#screenshots .gallery figure").map(function(f){var im=f.querySelector("img"),st=f.querySelector("strong"),cp=f.querySelector("figcaption");var title=st?st.textContent.trim():(im?im.alt:"");
+  return {src:im?im.getAttribute("src"):"",alt:im?im.alt:title,title:title,cap:cp?cp.textContent.replace(title,"").trim():"",key:normal(title)};});
+function find(name,used){if(!name)return -1;var i;
+  for(i=0;i<shots.length;i++)if(!used[i]&&shots[i].key===name)return i;
+  for(i=0;i<shots.length;i++){var k=shots[i].key;if(!used[i]&&k.length>=4&&name.length>=4&&(name.indexOf(k)>-1||k.indexOf(name)>-1))return i;}
+  return -1;}
+function findAll(name,used){var r=[],i;if(!name)return r;
+  for(i=0;i<shots.length;i++)if(!used[i]&&shots[i].key===name)r.push(i);
+  for(i=0;i<shots.length;i++){var k=shots[i].key;if(r.indexOf(i)<0&&!used[i]&&k.length>=4&&name.length>=4&&(name.indexOf(k)>-1||k.indexOf(name)>-1))r.push(i);}
+  return r;}
+function makeShot(s){var f=document.createElement("figure");f.className="shot";
+  var bar=document.createElement("div");bar.className="bar";bar.innerHTML="<i></i><i></i><i></i>";var sp=document.createElement("span");sp.textContent=s.title;bar.appendChild(sp);
+  var im=document.createElement("img");im.src=s.src;im.alt=s.alt;im.loading="lazy";f.appendChild(bar);f.appendChild(im);
+  if(s.cap){var c=document.createElement("figcaption");c.textContent=s.cap;f.appendChild(c);}return f;}
+
+/* plain text blocks (description, features): screenshot directly after the matching heading */
+function placeInto(root){if(!root||root.dataset.placed)return;root.dataset.placed="1";var used={};
+  $$("h2,h3,h4,h5,h6",root).forEach(function(h){var i=find(normal(h.textContent),used);if(i>-1){used[i]=1;h.after(makeShot(shots[i]));}});}
+
+/* language text becomes a guided tour: one numbered step per heading, its screenshot after its text */
+function stepify(lt){if(lt.dataset.built)return;lt.dataset.built="1";
+  var c=code(),kids=Array.from(lt.childNodes),frag=document.createDocumentFragment(),cur=null,lead=null,n=0,used={},steps=[];
+  kids.forEach(function(node){
+    if(node.nodeType===1&&/^H[2-4]$/.test(node.tagName)){n++;
+      cur=document.createElement("section");cur.className="step";cur.dataset.n=n;
+      var num=document.createElement("div");num.className="step-n";num.textContent=n;num.setAttribute("aria-hidden","true");
+      var body=document.createElement("div");body.className="step-body";
+      cur.appendChild(num);cur.appendChild(body);if(!node.id)node.id="tour-"+c+"-"+n;body.appendChild(node);frag.appendChild(cur);steps.push({el:cur,body:body,h:node});}
+    else if(!cur){if(!lead){lead=document.createElement("div");lead.className="lead";frag.insertBefore(lead,frag.firstChild);}lead.appendChild(node);}
+    else steps[steps.length-1].body.appendChild(node);});
+  steps.forEach(function(s){findAll(normal(s.h.textContent),used).forEach(function(k){used[k]=1;s.body.appendChild(makeShot(shots[k]));});});
+  /* a screenshot with no matching heading goes after the first block of text that names it (the intro first) */
+  shots.forEach(function(s,k){if(used[k]||!s.key)return;var hosts=(lead?[lead]:[]).concat(steps.map(function(x){return x.body;}));
+    for(var j=0;j<hosts.length;j++)if(normal(hosts[j].textContent).indexOf(s.key)>-1){hosts[j].appendChild(makeShot(s));used[k]=1;break;}});
+  steps.forEach(function(s,i){
+    if(i<steps.length-1){var nx=steps[i+1],a=document.createElement("a");a.className="next";a.href="#"+nx.h.id;
+      var l=document.createElement("b");l.dataset.i="next";l.textContent=t("next");var sp=document.createElement("span");sp.textContent=nx.h.textContent;a.appendChild(l);a.appendChild(document.createTextNode("→"));a.appendChild(sp);s.body.appendChild(a);}});
+  lt.replaceChildren(frag);lt.dataset.steps=n;
+  var txt=lt.textContent||"",cjk=/[\u3040-\u30ff\u4e00-\u9fff\uac00-\ud7af]/.test(txt);
+  lt.dataset.mins=Math.max(1,Math.round(cjk?txt.length/400:txt.split(/\s+/).length/200));}
+
+function meta(){var m=document.getElementById("tour-meta");if(!m)return;var lt=$(".langtext:not([hidden])");
+  if(!lt){m.textContent="";return;}var parts=[];if(+lt.dataset.steps)parts.push(t("steps",{t:lt.dataset.steps}));parts.push(t("min",{m:lt.dataset.mins||1}));if(shots.length)parts.push(t("zoom"));m.textContent=parts.join(" · ");}
+
+/* page index: sidebar (wide screens) and drawer (narrow screens) from the same headings */
+var items=[];
+function index(){var lists=[$("#toc"),$("#toc-m")].filter(Boolean);lists.forEach(function(l){l.replaceChildren();});items=[];
+  function add(el,id,text,sub,num){items.push({h:el,id:id});lists.forEach(function(l){var a=document.createElement("a");a.href="#"+id;a.className=sub?"lv2":"lv1";a.dataset.id=id;
+    if(num){var b=document.createElement("span");b.className="n";b.textContent=num;a.appendChild(b);}var s=document.createElement("span");s.textContent=text;a.appendChild(s);l.appendChild(a);});}
+  $$("#application h2,#application h3,#application h4,#application h5,#application h6").forEach(function(h,i){
+    if(h.closest("[hidden]"))return;if(!h.id)h.id="section-"+i;
+    var sub=!!h.closest(".langtext,#description-text,#features-body"),st=h.closest(".step");
+    add(h,h.id,h.textContent,sub,st?st.dataset.n:"");});
+  var f=document.getElementById("connect");if(f)add(f,"connect",t("contact")||"Contact and funding",false,"");}
+T.en.contact="Contact and funding";
+
+/* follow the reader: highlight in the index, step tracker on narrow screens */
+var raf=0,narrow=window.matchMedia("(max-width:999px)");
+function H(){var tb=document.getElementById("topbar");var h=tb?tb.offsetHeight:64;document.documentElement.style.setProperty("--hh",h+"px");return h;}
+function spy(){raf=0;var hh=H(),cur=null;
+  items.forEach(function(it){if(it.h.getBoundingClientRect().top<=hh+70)cur=it;});
+  $$(".toc a").forEach(function(a){a.classList.toggle("on",!!cur&&a.dataset.id===cur.id);});
+  var side=$(".side"),act=$("#toc a.on");
+  if(side&&act&&side.offsetParent!==null){var r=act.getBoundingClientRect(),sr=side.getBoundingClientRect();if(r.top<sr.top+30)side.scrollTop-=sr.top+30-r.top;else if(r.bottom>sr.bottom-10)side.scrollTop+=r.bottom-sr.bottom+10;}
+  var steps=$$(".langtext:not([hidden]) .step"),bar=document.getElementById("tourbar"),idx=-1;
+  steps.forEach(function(s,i){if(s.getBoundingClientRect().top<=hh+70)idx=i;s.classList.remove("cur");});
+  var on=narrow.matches&&steps.length&&idx>-1&&steps[steps.length-1].getBoundingClientRect().bottom>hh+10;
+  if(idx>-1)steps[idx].classList.add("cur");
+  bar.hidden=!on;if(on){$("#tb-step").textContent=t("step",{n:idx+1,t:steps.length});$("#tb-title").textContent=steps[idx].querySelector(".step-body>h2,.step-body>h3,.step-body>h4").textContent;
+    $("#tb-fill").style.width=((idx+1)/steps.length*100)+"%";$("#tb-prev").disabled=idx<1;$("#tb-next").disabled=idx>=steps.length-1;bar._steps=steps;bar._idx=idx;}}
+function req(){if(!raf)raf=requestAnimationFrame(spy);}
+function go(d){var bar=document.getElementById("tourbar"),s=bar._steps,i=bar._idx+d;if(s&&s[i])s[i].scrollIntoView({behavior:"smooth",block:"start"});}
+document.getElementById("tb-prev").onclick=function(){go(-1);};document.getElementById("tb-next").onclick=function(){go(1);};
+window.addEventListener("scroll",req,{passive:true});window.addEventListener("resize",req);
+
+/* hamburger drawer */
+var drawer=document.getElementById("drawer"),scrim=document.getElementById("scrim"),burger=document.getElementById("burger");
+function openMenu(){drawer.classList.add("open");scrim.classList.add("open");drawer.setAttribute("aria-hidden","false");burger.setAttribute("aria-expanded","true");document.documentElement.style.overflow="hidden";document.getElementById("dr-close").focus();}
+function closeMenu(back){drawer.classList.remove("open");scrim.classList.remove("open");drawer.setAttribute("aria-hidden","true");burger.setAttribute("aria-expanded","false");document.documentElement.style.overflow="";if(back)burger.focus();}
+burger.onclick=function(){drawer.classList.contains("open")?closeMenu(true):openMenu();};
+document.getElementById("dr-close").onclick=function(){closeMenu(true);};scrim.onclick=function(){closeMenu(true);};
+drawer.addEventListener("click",function(e){if(e.target.closest("a"))closeMenu(false);});
+document.addEventListener("keydown",function(e){if(!drawer.classList.contains("open"))return;
+  if(e.key==="Escape")closeMenu(true);
+  if(e.key==="Tab"){var f=$$("a[href],button,select",drawer).filter(function(x){return !x.disabled&&x.offsetParent!==null;});if(!f.length)return;var a=f[0],z=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus();}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus();}}});
+narrow.addEventListener&&narrow.addEventListener("change",function(){if(!narrow.matches)closeMenu(false);req();});
+
+/* language */
+function language(){
+  if(sel){$$(".langtext").forEach(function(d){d.hidden=d.dataset.lang!==sel.value;});document.documentElement.lang=sel.value;if(sel2)sel2.value=sel.value;}
+  $$(".langtext:not([hidden])").forEach(stepify);
+  i18n();meta();index();req();}
+placeInto(document.getElementById("description-text"));placeInto(document.getElementById("features-body"));
+if(sel){var saved="";try{saved=localStorage.getItem(storageKey)||"";}catch(e){}
+  var options=Array.from(sel.options);var choice=options.find(function(o){return o.value===saved;})||options.find(function(o){return /^en(?:[-_]|$)/i.test(o.value)||/^English$/i.test(o.textContent.trim());});if(choice)sel.value=choice.value;
+  var holder=document.getElementById("dr-sel");if(holder){sel2=sel.cloneNode(true);sel2.id="doclang2";sel2.value=sel.value;holder.replaceWith(sel2);}
+  function chosen(v){sel.value=v;try{localStorage.setItem(storageKey,sel.value);}catch(e){}language();}
+  sel.addEventListener("change",function(){chosen(sel.value);});
+  if(sel2)sel2.addEventListener("change",function(){chosen(sel2.value);});}
+
+var extra=document.getElementById("extra-links"),extraM=document.getElementById("extra-links-m"),seenPages=new Set();
+document.querySelectorAll("#repository-files a[href],#description-text a[href],#langtexts a[href],#features a[href]").forEach(function(a){
+  if(a.classList.contains("next"))return;
+  var url;try{url=new URL(a.getAttribute("href"),document.baseURI);}catch(e){return;}
+  if(!/\.html?$/i.test(url.pathname)||seenPages.has(url.href))return;seenPages.add(url.href);
+  [extra,extraM].forEach(function(box){if(!box)return;var copy=a.cloneNode(true);copy.className="lv1";box.appendChild(copy);});
+});
+if(extra&&extra.children.length){document.getElementById("extra-pages").hidden=false;document.getElementById("extra-m").hidden=false;}
+language();
+var description=document.getElementById("description-text").textContent.trim().replace(/\s+/g," ");if(description)document.getElementById("header-description").textContent=description.length>120?description.slice(0,117)+"…":description;
+H();req();
+})();
+var modal=document.getElementById("viewer"),img=document.getElementById("v-img"),link=document.getElementById("v-link"),stage=document.getElementById("v-stage"),vt=document.getElementById("v-title"),scale=1,fitW=0;
+function apply(){if(scale<=1){scale=1;img.style.maxWidth=img.style.maxHeight=img.style.width="";return;}img.style.maxWidth="none";img.style.maxHeight="none";img.style.width=Math.round(fitW*scale)+"px";}
+function zoom(f){if(scale===1)fitW=img.getBoundingClientRect().width;scale=Math.min(8,Math.max(1,scale*f));apply();}
+function shut(){modal.close();}
+document.getElementById("application").addEventListener("click",function(e){var picture=e.target.closest(".shot img,.gallery img,.posters img");if(!picture)return;e.preventDefault();scale=1;apply();img.src=picture.src;img.alt=picture.alt;link.href=picture.src;vt.textContent=picture.alt;modal.showModal();stage.scrollTop=stage.scrollLeft=0;});
+document.getElementById("v-in").onclick=function(){zoom(1.25);};document.getElementById("v-out").onclick=function(){zoom(.8);};document.getElementById("v-fit").onclick=function(){scale=1;apply();};document.getElementById("v-close").onclick=shut;
+modal.addEventListener("click",function(e){if(e.target===modal)shut();});stage.addEventListener("wheel",function(e){if(e.ctrlKey){e.preventDefault();zoom(e.deltaY<0?1.2:.83);}},{passive:false});
+
+</script>
+</body></html>

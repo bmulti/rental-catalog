@@ -1,0 +1,1283 @@
+<!doctype html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>cpc_rental_catalouge-calls_index.html</title>
+<style id="cpc-code-css">
+:root{--code-font:'JetBrains Mono','Cascadia Code','Fira Code',Consolas,Menlo,monospace;--code-size:13px;--code-lh:1.55;--tab:4;--maxw:1300px}
+html[data-mode="projector"]{--code-size:22px;--code-lh:1.6;--maxw:none}
+html[data-theme="light"]{--page:#ffffff;--text:#1f2328;--panel:#f6f8fa;--border:#d0d7de;--muted:#59636e;--link:#0969da;--accent:#0969da;--on-accent:#ffffff;--shadow:0 1px 2px rgba(31,35,40,.06),0 4px 14px rgba(31,35,40,.06);--keyword:#cf222e;--builtin:#0550ae;--string:#0a3069;--comment:#6a737d;--number:#0550ae;--operator:#24292f;--definition:#8250df;--decorator:#953800}
+html[data-theme="dark"]{--page:#0d1117;--text:#e6edf3;--panel:#161b22;--border:#30363d;--muted:#8b949e;--link:#58a6ff;--accent:#1f6feb;--on-accent:#ffffff;--shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35);--keyword:#ff7b72;--builtin:#79c0ff;--string:#a5d6ff;--comment:#8b949e;--number:#79c0ff;--operator:#e6edf3;--definition:#d2a8ff;--decorator:#ffa657}
+
+
+/* cpc_code_html_template.css
+   Page and code-card styles for the published source pages.
+
+   OPTIONAL: if this file is missing it is re-created from the copy built into
+   cpc_treeviews.py; if it is present, it is used exactly as written.
+
+   It is placed AFTER the generated theme/root variables (--page, --text,
+   --code-size ...), so a rule or variable here overrides them, e.g.
+       :root { --code-size: 15px; }
+       html[data-theme='dark'] { --accent: #f78166; }
+*/
+html {
+  color-scheme: light;
+}
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+html[data-mode='projector'][data-theme='light'] {
+  --page: #ffffff;
+  --text: #000000;
+  --muted: #2f3640;
+  --border: #9aa4b2;
+}
+html[data-mode='projector'][data-theme='dark'] {
+  --page: #000000;
+  --text: #ffffff;
+  --panel: #0b0f14;
+  --muted: #c9d1d9;
+  --border: #586374;
+}
+body {
+  background: var(--page);
+  color: var(--text);
+  font:
+    15px/1.6 system-ui,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  margin: 0;
+  padding: 0 26px 48px;
+  -webkit-font-smoothing: antialiased;
+}
+html[data-mode='projector'] body {
+  font-size: 20px;
+}
+#cpc-bar {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  margin: 0 -26px;
+  padding: 9px 26px;
+  background: var(--page);
+  background: color-mix(in srgb, var(--page) 88%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.cpc-bar-in {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+.cpc-logo {
+  height: 26px;
+  width: auto;
+  border-radius: 5px;
+  display: block;
+}
+.cpc-home {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  padding: 4px 2px;
+}
+.cpc-home:hover {
+  color: var(--link);
+}
+.cpc-grow {
+  flex: 1;
+}
+.cpc-btn {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 5px 11px;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.3;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+}
+.cpc-btn:hover {
+  border-color: var(--accent);
+}
+.cpc-btn[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+.cpc-btn:focus-visible,
+.cpc-copy:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.cpc-seg {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.cpc-seg .cpc-btn {
+  border: 0;
+  border-radius: 0;
+  border-left: 1px solid var(--border);
+}
+.cpc-seg .cpc-btn:first-child {
+  border-left: 0;
+}
+main {
+  max-width: var(--maxw);
+  margin: 22px auto;
+}
+h1 {
+  font-size: 1.6rem;
+  letter-spacing: -0.01em;
+  margin: 12px 0 6px;
+}
+h2 {
+  font-size: 1.1rem;
+  margin: 22px 0 8px;
+}
+a {
+  color: var(--link);
+}
+.meta {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.report {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+  font-family: var(--code-font);
+  font-size: calc(var(--code-size) + var(--code-delta, 0px));
+  line-height: var(--code-lh);
+  tab-size: var(--tab);
+}
+.cpc-card {
+  margin: 14px 0;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.cpc-card[hidden] {
+  display: none;
+}
+.cpc-card.code {
+  margin-left: 36px;
+}
+.cpc-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px 5px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font:
+    600 11px/1.2 system-ui,
+    sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cpc-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.cpc-copy:hover {
+  color: var(--text);
+  border-color: var(--border);
+  background: var(--page);
+}
+.cpc-copy.done {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.cpc-card pre.source {
+  margin: 0;
+  padding: 10px 0;
+  overflow: auto;
+  background: transparent;
+  border: 0;
+  font-family: var(--code-font);
+  font-size: calc(var(--code-size) + var(--code-delta, 0px));
+  line-height: var(--code-lh);
+  tab-size: var(--tab);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+.cpc-card code {
+  font: inherit;
+}
+.source-line {
+  display: block;
+  white-space: pre;
+  padding: 0 16px 0 0;
+  border-left: 3px solid transparent;
+  scroll-margin-top: 96px;
+}
+.source-line:target {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-left-color: var(--accent);
+}
+.line-number {
+  display: inline-block;
+  box-sizing: content-box;
+  width: var(--gut, 3ch);
+  padding: 0 10px 0 12px;
+  margin-right: 14px;
+  text-align: right;
+  border-right: 1px solid var(--border);
+  color: var(--muted);
+  user-select: none;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+a.line-number:hover {
+  color: var(--link);
+}
+html[data-lines='off'] .line-number {
+  display: none;
+}
+html[data-lines='off'] .source-line {
+  padding-left: 16px;
+}
+html[data-wrap='on'] .source-line {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.tok-keyword {
+  color: var(--keyword);
+  font-weight: 600;
+}
+.tok-builtin {
+  color: var(--builtin);
+}
+.tok-string {
+  color: var(--string);
+}
+.tok-comment {
+  color: var(--comment);
+  font-style: italic;
+}
+.tok-number {
+  color: var(--number);
+}
+.tok-operator {
+  color: var(--operator);
+}
+.tok-definition {
+  color: var(--definition);
+  font-weight: 600;
+}
+.tok-decorator {
+  color: var(--decorator);
+}
+.index-list {
+  columns: 2;
+  column-width: 270px;
+  padding-left: 22px;
+}
+.index-list li {
+  break-inside: avoid;
+  margin: 2px 0;
+}
+.index-list a {
+  overflow-wrap: anywhere;
+}
+.index-list small {
+  color: var(--muted);
+}
+html[data-mode='projector'] nav[aria-label='Definitions'] {
+  display: none;
+}
+#cpc-filter {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 420px;
+  margin: 10px 0 4px;
+  padding: 8px 12px;
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font: inherit;
+}
+#cpc-filter:focus {
+  outline: 2px solid var(--accent);
+  border-color: var(--accent);
+}
+#nav,
+#bottom-nav {
+  display: none;
+}
+@media (max-width: 650px) {
+  :root {
+    --code-size: 12px;
+  }
+  body {
+    padding: 0 10px 32px;
+  }
+  #cpc-bar {
+    margin: 0 -10px;
+    padding: 8px 10px;
+  }
+  .index-list {
+    columns: 1;
+  }
+  .cpc-card.code {
+    margin-left: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+@media print {
+  #cpc-bar {
+    display: none;
+  }
+  body {
+    padding: 0;
+  }
+  .cpc-card {
+    box-shadow: none;
+  }
+  .cpc-copy {
+    display: none;
+  }
+}
+
+</style>
+<script id="cpc-code-js">
+
+/* cpc_code_html_template.js
+   Control bar (theme / projector / size / lines / wrap / reset), copy buttons
+   and keyboard shortcuts (t, p, /) for the published source pages.
+
+   OPTIONAL: if this file is missing it is re-created from the copy built into
+   cpc_treeviews.py; if it is present, it is used exactly as written.
+
+   Keep the config placeholder on the first 'var C =' line: it is replaced with
+   the page's config (theme, mode, logo, index_href ...) when the page is built.
+*/
+(function () {
+  var C = {"theme": "light", "mode": "normal", "line_numbers": true, "wrap": false, "logo": "logo.png", "host_address": "", "index_href": "index.html", "storage_key": "cpc_code_view"},
+    KEY = C.storage_key,
+    root = document.documentElement;
+  var S = { theme: C.theme, mode: C.mode, delta: 0, lines: C.line_numbers, wrap: C.wrap };
+  function load() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (raw) {
+        var o = JSON.parse(raw);
+        for (var k in S) {
+          if (o && o[k] !== undefined) S[k] = o[k];
+        }
+      } else {
+        var old = localStorage.getItem('depth_lifter_html_theme');
+        if (old === 'light' || old === 'dark') S.theme = old;
+      }
+    } catch (e) {}
+  }
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(S));
+    } catch (e) {}
+  }
+  function apply() {
+    root.dataset.theme = S.theme === 'dark' ? 'dark' : 'light';
+    root.dataset.mode = S.mode === 'projector' ? 'projector' : 'normal';
+    root.dataset.lines = S.lines ? 'on' : 'off';
+    root.dataset.wrap = S.wrap ? 'on' : 'off';
+    root.style.setProperty('--code-delta', S.delta + 'px');
+    var P = {
+      'theme:light': S.theme !== 'dark',
+      'theme:dark': S.theme === 'dark',
+      projector: S.mode === 'projector',
+      lines: !!S.lines,
+      wrap: !!S.wrap,
+    };
+    var bs = document.querySelectorAll('[data-cpc]');
+    for (var i = 0; i < bs.length; i++) {
+      var k = bs[i].dataset.cpc;
+      if (k in P) bs[i].setAttribute('aria-pressed', String(P[k]));
+    }
+  }
+  function act(n) {
+    if (n === 'theme:light' || n === 'theme:dark') S.theme = n.slice(6);
+    else if (n === 'projector') S.mode = S.mode === 'projector' ? 'normal' : 'projector';
+    else if (n === 'lines') S.lines = !S.lines;
+    else if (n === 'wrap') S.wrap = !S.wrap;
+    else if (n === 'bigger') S.delta = Math.min(S.delta + 1, 20);
+    else if (n === 'smaller') S.delta = Math.max(S.delta - 1, -4);
+    else if (n === 'reset') {
+      S.theme = C.theme;
+      S.mode = C.mode;
+      S.delta = 0;
+      S.lines = C.line_numbers;
+      S.wrap = C.wrap;
+      try {
+        localStorage.removeItem(KEY);
+      } catch (e) {}
+      apply();
+      return;
+    }
+    apply();
+    save();
+  }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function btn(label, name, title, parent) {
+    var b = el('button', 'cpc-btn', label);
+    b.type = 'button';
+    b.dataset.cpc = name;
+    b.title = title || label;
+    b.addEventListener('click', function () {
+      act(name);
+    });
+    parent.appendChild(b);
+    return b;
+  }
+  function url(p) {
+    return C.host_address ? C.host_address.replace(/\/+$/, '') + '/' + p.replace(/^\/+/, '') : p;
+  }
+  function build() {
+    var bar = document.getElementById('cpc-bar');
+    if (!bar) return;
+    bar.textContent = '';
+    var row = el('div', 'cpc-bar-in');
+    if (C.logo) {
+      var img = el('img', 'cpc-logo');
+      img.alt = '';
+      img.src = url(C.logo);
+      img.addEventListener('error', function () {
+        img.remove();
+      });
+      if (C.index_href) {
+        var la = el('a');
+        la.href = url(C.index_href);
+        la.appendChild(img);
+        row.appendChild(la);
+      } else row.appendChild(img);
+    }
+    if (C.index_href) {
+      var h = el('a', 'cpc-home', '\u2190 Index');
+      h.href = url(C.index_href);
+      row.appendChild(h);
+    }
+    row.appendChild(el('span', 'cpc-grow'));
+    var seg = el('span', 'cpc-seg');
+    btn('Light', 'theme:light', 'Light theme (t)', seg);
+    btn('Dark', 'theme:dark', 'Dark theme (t)', seg);
+    row.appendChild(seg);
+    btn('Projector', 'projector', 'Projector mode (p)', row);
+    var sz = el('span', 'cpc-seg');
+    btn('A\u2212', 'smaller', 'Smaller code', sz);
+    btn('A+', 'bigger', 'Larger code', sz);
+    row.appendChild(sz);
+    if (document.querySelector('.source-line')) {
+      btn('# Lines', 'lines', 'Line numbers', row);
+      btn('Wrap', 'wrap', 'Wrap long lines', row);
+    }
+    btn('Reset', 'reset', 'Back to the page defaults', row);
+    bar.appendChild(row);
+    apply();
+  }
+  function cardText(card) {
+    var pre = card.querySelector('pre');
+    if (!pre) return card.textContent;
+    var rows = pre.querySelectorAll('.source-line');
+    if (!rows.length) return pre.textContent;
+    return Array.prototype.map
+      .call(rows, function (r) {
+        var c = r.cloneNode(true),
+          n = c.querySelector('.line-number');
+        if (n) n.remove();
+        return c.textContent;
+      })
+      .join('\n');
+  }
+  function fallback(t, ok) {
+    var a = document.createElement('textarea');
+    a.value = t;
+    a.style.position = 'fixed';
+    a.style.opacity = '0';
+    document.body.appendChild(a);
+    a.select();
+    try {
+      if (document.execCommand('copy')) ok();
+    } catch (e) {}
+    document.body.removeChild(a);
+  }
+  function copyText(t, b) {
+    function ok() {
+      b.classList.add('done');
+      b.title = 'Copied';
+      setTimeout(function () {
+        b.classList.remove('done');
+        b.title = 'Copy code';
+      }, 1200);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText)
+      navigator.clipboard.writeText(t).then(ok, function () {
+        fallback(t, ok);
+      });
+    else fallback(t, ok);
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.cpc-copy');
+    if (!b) return;
+    var card = b.closest('.cpc-card');
+    if (card) copyText(cardText(card), b);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (e.key === 't') act(S.theme === 'dark' ? 'theme:light' : 'theme:dark');
+    else if (e.key === 'p') act('projector');
+    else if (e.key === '/') {
+      var f = document.getElementById('cpc-filter');
+      if (f) {
+        e.preventDefault();
+        f.focus();
+      }
+    }
+  });
+  window.chooseTheme = function (t) {
+    act('theme:' + (t === 'dark' ? 'dark' : 'light'));
+  };
+  load();
+  apply();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', build);
+  else build();
+})();
+
+</script>
+<style id="page-css"></style></head><body><header id="cpc-bar"></header><div id="nav" hidden></div><main><h1>cpc_rental_catalouge-calls_index.html</h1><pre class="report">source_file = cpc_rental_catalouge.py
+source_modified = 2026-11-22 16:41:32
+function()    first line;  -&gt; what it calls    (where that comes from)    xN = times
+
+attach()    849
+    -&gt; kwargs.pop    (local variable or parameter)
+    -&gt; RentalCatalog    (this file, line 228)
+main()    852
+    -&gt; RentalCatalog    (this file, line 228)
+    -&gt; root.mainloop    (local variable or parameter)
+    -&gt; tk.Tk    (import tkinter as tk)    x2
+    -&gt; tkinterdnd2.TkinterDnD.Tk    (import tkinterdnd2)
+class RentalCatalog    228-847
+    __init__()    229
+        -&gt; bool    (builtin)
+        -&gt; copy.deepcopy    (import copy)
+        -&gt; isinstance    (builtin)    x2
+        -&gt; Path    (from pathlib import Path)
+        -&gt; Path(__file__).resolve    (method or call on an expression)
+        -&gt; queue.Queue    (import queue)
+        -&gt; self._apply_theme    (this class, line 285)
+        -&gt; self._build_ui    (this class, line 296)
+        -&gt; self._load_config    (this class, line 260)
+        -&gt; self.config.get    (attribute of self (inherited or set at run time))
+        -&gt; self.connect_and_refresh    (this class, line 745)
+        -&gt; self.master.after    (attribute of self (inherited or set at run time))
+        -&gt; self.master.protocol    (attribute of self (inherited or set at run time))
+        -&gt; set    (builtin)
+        -&gt; str    (builtin)
+        -&gt; tk.BooleanVar    (import tkinter as tk)    x4
+        -&gt; tk.StringVar    (import tkinter as tk)    x20
+    _apply_ef()    664
+        -&gt; bool    (builtin)    x2
+        -&gt; self._apply_field    (this class, line 668)
+        -&gt; self._int    (this class, line 823)    x2
+        -&gt; self._rebuild_form    (this class, line 369)
+        -&gt; self.ef.get    (attribute of self (inherited or set at run time))
+        -&gt; self.ef.get().strip    (method or call on an expression)
+        -&gt; self.ei.get    (attribute of self (inherited or set at run time))
+        -&gt; self.el.get    (attribute of self (inherited or set at run time))
+        -&gt; self.el.get().strip    (method or call on an expression)
+        -&gt; self.ele.get    (attribute of self (inherited or set at run time))
+        -&gt; self.en.get    (attribute of self (inherited or set at run time))
+        -&gt; self.et.get    (attribute of self (inherited or set at run time))
+        -&gt; self.eu.get    (attribute of self (inherited or set at run time))
+    _apply_field()    668
+        -&gt; len    (builtin)
+        -&gt; list    (builtin)
+        -&gt; next    (builtin)
+        -&gt; r.get    (local variable or parameter)    x2
+        -&gt; r.update    (local variable or parameter)
+        -&gt; rows.append    (local variable or parameter)
+        -&gt; self._refresh_fields    (this class, line 696)
+        -&gt; self._renumber    (this class, line 813)
+        -&gt; self.config.get    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+        -&gt; x.get    (local variable or parameter)
+    _apply_records()    764
+        -&gt; d.get    (local variable or parameter)
+        -&gt; len    (builtin)    x2
+        -&gt; self._clear    (this class, line 810)
+        -&gt; self._display    (this class, line 828)
+        -&gt; self._insert    (this class, line 804)
+        -&gt; self._ordered    (this class, line 812)
+        -&gt; self._refresh_publish    (this class, line 543)
+        -&gt; self.page_var.set    (attribute of self (inherited or set at run time))
+        -&gt; self.status_var.set    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)
+    _apply_tf()    661
+        -&gt; bool    (builtin)    x2
+        -&gt; self._apply_field    (this class, line 668)
+        -&gt; self._int    (this class, line 823)
+        -&gt; self._rebuild_list    (this class, line 334)
+        -&gt; self.refresh_records    (this class, line 755)
+        -&gt; self.ta.get    (attribute of self (inherited or set at run time))
+        -&gt; self.tf.get    (attribute of self (inherited or set at run time))
+        -&gt; self.tf.get().strip    (method or call on an expression)
+        -&gt; self.ti.get    (attribute of self (inherited or set at run time))
+        -&gt; self.tl.get    (attribute of self (inherited or set at run time))
+        -&gt; self.tl.get().strip    (method or call on an expression)
+        -&gt; self.tu.get    (attribute of self (inherited or set at run time))
+        -&gt; self.tw.get    (attribute of self (inherited or set at run time))
+    _apply_theme()    285
+        -&gt; dict    (builtin)
+        -&gt; self.host_context.get    (attribute of self (inherited or set at run time))
+        -&gt; self.master.geometry    (attribute of self (inherited or set at run time))
+        -&gt; self.master.title    (attribute of self (inherited or set at run time))
+        -&gt; ui_theme.apply_app_icon    (import cpc_ui_theme as ui_theme)
+        -&gt; ui_theme.apply_theme    (import cpc_ui_theme as ui_theme)
+    _browse_media()    717
+        -&gt; filedialog.askdirectory    (from tkinter import filedialog)
+        -&gt; self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.media_directory_var.get().strip    (method or call on an expression)
+        -&gt; self.media_directory_var.set    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+    _browse_publish()    720
+        -&gt; filedialog.asksaveasfilename    (from tkinter import filedialog)
+        -&gt; self.publish_file_var.set    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+    _build_config()    706
+        -&gt; enumerate    (builtin)
+        -&gt; len    (builtin)    x2
+        -&gt; o.columnconfigure    (local variable or parameter)
+        -&gt; o.pack    (local variable or parameter)
+        -&gt; ttk.Button    (from tkinter import ttk)    x3
+        -&gt; ttk.Button(o, text=&#x27;Browse&#x27;, command=cm…    (method or call on an expression)
+        -&gt; ttk.Button(o, text=&#x27;Connect + Refresh&#x27;,…    (method or call on an expression)
+        -&gt; ttk.Button(o, text=&#x27;Save Config&#x27;, comma…    (method or call on an expression)
+        -&gt; ttk.Entry    (from tkinter import ttk)
+        -&gt; ttk.Entry(o, textvariable=var).grid    (method or call on an expression)
+        -&gt; ttk.Frame    (from tkinter import ttk)
+        -&gt; ttk.Label    (from tkinter import ttk)
+        -&gt; ttk.Label(o, text=lab).grid    (method or call on an expression)
+    _build_editor()    351
+        -&gt; c.columnconfigure    (local variable or parameter)
+        -&gt; c.grid    (local variable or parameter)
+        -&gt; e.bind    (local variable or parameter)
+        -&gt; e.grid    (local variable or parameter)
+        -&gt; m.columnconfigure    (local variable or parameter)
+        -&gt; m.grid    (local variable or parameter)
+        -&gt; m.rowconfigure    (local variable or parameter)
+        -&gt; self._editor_search    (this class, line 436)
+        -&gt; self._enable_drop    (this class, line 519)
+        -&gt; self._rebuild_form    (this class, line 369)
+        -&gt; self.form.columnconfigure    (attribute of self (inherited or set at run time))
+        -&gt; self.form.grid    (attribute of self (inherited or set at run time))
+        -&gt; self.preview.grid    (attribute of self (inherited or set at run time))
+        -&gt; t.columnconfigure    (local variable or parameter)    x2
+        -&gt; t.rowconfigure    (local variable or parameter)
+        -&gt; ttk.Button    (from tkinter import ttk)    x7
+        -&gt; ttk.Button(c, text=&#x27;Add&#x27;, command=self.…    (method or call on an expression)
+        -&gt; ttk.Button(c, text=&#x27;New&#x27;, command=self.…    (method or call on an expression)
+        -&gt; ttk.Button(c, text=&#x27;Search&#x27;, command=se…    (method or call on an expression)
+        -&gt; ttk.Button(c, text=&#x27;Update&#x27;, command=se…    (method or call on an expression)
+        -&gt; ttk.Button(m, text=&#x27;Paste Image&#x27;, comma…    (method or call on an expression)
+        -&gt; ttk.Button(m, text=&#x27;Pick Document&#x27;, com…    (method or call on an expression)
+        -&gt; ttk.Button(m, text=&#x27;Pick Image&#x27;, comman…    (method or call on an expression)
+        -&gt; ttk.Entry    (from tkinter import ttk)
+        -&gt; ttk.Frame    (from tkinter import ttk)    x2
+        -&gt; ttk.Label    (from tkinter import ttk)    x3
+        -&gt; ttk.Label(c, text=&#x27;Search&#x27;).grid    (method or call on an expression)
+        -&gt; ttk.Label(m, text=&#x27;Drop an image here, …    (method or call on an expression)
+        -&gt; ttk.LabelFrame    (from tkinter import ttk)
+    _build_fields()    621
+        -&gt; self._field_panel    (this class, line 627)    x2
+        -&gt; self._select_tab    (this class, line 309)
+        -&gt; self.config.get    (attribute of self (inherited or set at run time))
+        -&gt; self.fields_notebook.add    (attribute of self (inherited or set at run time))    x2
+        -&gt; self.fields_notebook.bind    (attribute of self (inherited or set at run time))
+        -&gt; self.fields_notebook.pack    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+        -&gt; ttk.Frame    (from tkinter import ttk)    x2
+        -&gt; ttk.Notebook    (from tkinter import ttk)
+    _build_gateway()    735
+        -&gt; cls    (local variable or parameter)    x3
+        -&gt; fn    (local variable or parameter)
+        -&gt; getattr    (builtin)
+        -&gt; h.pack    (local variable or parameter)
+        -&gt; ttk.Frame    (from tkinter import ttk)
+        -&gt; ttk.Label    (from tkinter import ttk)
+        -&gt; ttk.Label(h, text=&#x27;Gateway controller i…    (method or call on an expression)
+    _build_list()    316
+        -&gt; b.columnconfigure    (local variable or parameter)
+        -&gt; b.grid    (local variable or parameter)
+        -&gt; c.columnconfigure    (local variable or parameter)
+        -&gt; c.grid    (local variable or parameter)
+        -&gt; e.bind    (local variable or parameter)
+        -&gt; e.grid    (local variable or parameter)
+        -&gt; self._rebuild_list    (this class, line 334)
+        -&gt; self.list_holder.grid    (attribute of self (inherited or set at run time))
+        -&gt; t.columnconfigure    (local variable or parameter)
+        -&gt; t.rowconfigure    (local variable or parameter)
+        -&gt; ttk.Button    (from tkinter import ttk)    x2
+        -&gt; ttk.Button(c, text=&#x27;New&#x27;, command=self.…    (method or call on an expression)
+        -&gt; ttk.Button(c, text=&#x27;Refresh&#x27;, command=s…    (method or call on an expression)
+        -&gt; ttk.Entry    (from tkinter import ttk)
+        -&gt; ttk.Frame    (from tkinter import ttk)    x3
+        -&gt; ttk.Label    (from tkinter import ttk)    x3
+        -&gt; ttk.Label(b, textvariable=self.page_var…    (method or call on an expression)
+        -&gt; ttk.Label(b, textvariable=self.status_v…    (method or call on an expression)
+        -&gt; ttk.Label(c, text=&#x27;Search&#x27;).grid    (method or call on an expression)
+    _build_publish()    532
+        -&gt; c.grid    (local variable or parameter)
+        -&gt; h.grid    (local variable or parameter)
+        -&gt; self._tree    (this class, line 796)
+        -&gt; self.publish    (this class, line 565)    x2
+        -&gt; self.publish_tree.bind    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_tree.configure    (attribute of self (inherited or set at run time))
+        -&gt; t.columnconfigure    (local variable or parameter)
+        -&gt; t.rowconfigure    (local variable or parameter)
+        -&gt; ttk.Button    (from tkinter import ttk)    x3
+        -&gt; ttk.Button(c, text=&#x27;Publish All&#x27;, comma…    (method or call on an expression)
+        -&gt; ttk.Button(c, text=&#x27;Publish Selection&#x27;,…    (method or call on an expression)
+        -&gt; ttk.Button(c, text=text, command=cmd).p…    (method or call on an expression)
+        -&gt; ttk.Frame    (from tkinter import ttk)    x2
+        -&gt; ttk.Label    (from tkinter import ttk)
+        -&gt; ttk.Label(t, text=&quot;Double-click to togg…    (method or call on an expression)
+    _build_ui()    296
+        -&gt; self._build_config    (this class, line 706)
+        -&gt; self._build_editor    (this class, line 351)
+        -&gt; self._build_fields    (this class, line 621)
+        -&gt; self._build_gateway    (this class, line 735)
+        -&gt; self._build_list    (this class, line 316)
+        -&gt; self._build_publish    (this class, line 532)
+        -&gt; self._build_ui_choices    (this class, line 724)
+        -&gt; self._select_tab    (this class, line 309)
+        -&gt; self.config.get    (attribute of self (inherited or set at run time))
+        -&gt; self.notebook.add    (attribute of self (inherited or set at run time))
+        -&gt; self.notebook.bind    (attribute of self (inherited or set at run time))
+        -&gt; self.notebook.pack    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+        -&gt; ttk.Frame    (from tkinter import ttk)    x7
+        -&gt; ttk.Notebook    (from tkinter import ttk)
+    _build_ui_choices()    724
+        -&gt; callable    (builtin)
+        -&gt; getattr    (builtin)
+        -&gt; self.master.winfo_toplevel    (attribute of self (inherited or set at run time))
+        -&gt; ttk.Label    (from tkinter import ttk)
+        -&gt; ttk.Label(self.ui_choices_tab, text=&#x27;Sh…    (method or call on an expression)
+        -&gt; ui_choices.attach    (import cpc_ui_choices as ui_choices)
+    _clear()    810
+        -&gt; tr.delete    (local variable or parameter)
+        -&gt; tr.get_children    (local variable or parameter)
+    _connect()    749
+        -&gt; c.admin.command    (local variable or parameter)
+        -&gt; MongoClient    (from pymongo import MongoClient)
+        -&gt; x.create_index    (local variable or parameter)
+    _display()    828
+        -&gt; isinstance    (builtin)    x2
+        -&gt; json.dumps    (import json)
+        -&gt; str    (builtin)
+    _doc()    391
+        -&gt; bool    (builtin)
+        -&gt; d.get    (local variable or parameter)
+        -&gt; Decimal    (from decimal import Decimal)
+        -&gt; float    (builtin)
+        -&gt; images.insert    (local variable or parameter)
+        -&gt; int    (builtin)
+        -&gt; isinstance    (builtin)    x2
+        -&gt; list    (builtin)
+        -&gt; self.current_record.get    (attribute of self (inherited or set at run time))    x2
+        -&gt; self.editor_widgets.items    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)    x2
+        -&gt; str(v or &#x27;0&#x27;).replace    (method or call on an expression)
+        -&gt; w._v.get    (local variable or parameter)
+        -&gt; w.get    (local variable or parameter)
+    _drop()    524
+        -&gt; p.is_file    (local variable or parameter)
+        -&gt; p.suffix.lower    (local variable or parameter)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; self._import_image    (this class, line 476)
+        -&gt; self.master.tk.splitlist    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)
+        -&gt; str(e.data).strip    (method or call on an expression)
+    _editor_search()    436
+        -&gt; self._select_tab    (this class, line 309)
+        -&gt; self.editor_search_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.editor_search_var.get().strip    (method or call on an expression)
+        -&gt; self.list_search_var.set    (attribute of self (inherited or set at run time))
+        -&gt; self.refresh_records    (this class, line 755)
+    _ef_selected()    656
+        -&gt; bool    (builtin)    x2
+        -&gt; self.edit_fields_tree.item    (attribute of self (inherited or set at run time))
+        -&gt; self.edit_fields_tree.selection    (attribute of self (inherited or set at run time))
+        -&gt; self.ef.set    (attribute of self (inherited or set at run time))
+        -&gt; self.ei.set    (attribute of self (inherited or set at run time))
+        -&gt; self.el.set    (attribute of self (inherited or set at run time))
+        -&gt; self.ele.set    (attribute of self (inherited or set at run time))
+        -&gt; self.en.set    (attribute of self (inherited or set at run time))
+        -&gt; self.et.set    (attribute of self (inherited or set at run time))
+        -&gt; self.eu.set    (attribute of self (inherited or set at run time))
+    _enable_drop()    519
+        -&gt; w.dnd_bind    (local variable or parameter)
+        -&gt; w.drop_target_register    (local variable or parameter)
+    _field_panel()    627
+        -&gt; e.grid    (local variable or parameter)
+        -&gt; h.grid    (local variable or parameter)
+        -&gt; self._move_field    (this class, line 686)    x2
+        -&gt; self._refresh_fields    (this class, line 696)
+        -&gt; self._remove_field    (this class, line 678)
+        -&gt; self._tree    (this class, line 796)
+        -&gt; t.columnconfigure    (local variable or parameter)
+        -&gt; t.rowconfigure    (local variable or parameter)
+        -&gt; ttk.Button    (from tkinter import ttk)    x4
+        -&gt; ttk.Button(e, text=&#x27;Add / Apply&#x27;, comma…    (method or call on an expression)
+        -&gt; ttk.Button(e, text=&#x27;Down&#x27;, command=lamb…    (method or call on an expression)
+        -&gt; ttk.Button(e, text=&#x27;Remove&#x27;, command=la…    (method or call on an expression)
+        -&gt; ttk.Button(e, text=&#x27;Up&#x27;, command=lambda…    (method or call on an expression)
+        -&gt; ttk.Checkbutton    (from tkinter import ttk)    x4
+        -&gt; ttk.Checkbutton(e, text=&#x27;Index&#x27;, variab…    (method or call on an expression)    x2
+        -&gt; ttk.Checkbutton(e, text=&#x27;Unique&#x27;, varia…    (method or call on an expression)    x2
+        -&gt; ttk.Combobox    (from tkinter import ttk)    x2
+        -&gt; ttk.Combobox(e, textvariable=self.et, v…    (method or call on an expression)
+        -&gt; ttk.Combobox(e, textvariable=self.ta, v…    (method or call on an expression)
+        -&gt; ttk.Entry    (from tkinter import ttk)    x5
+        -&gt; ttk.Entry(e, textvariable=fv, width=17)…    (method or call on an expression)
+        -&gt; ttk.Entry(e, textvariable=lv, width=17)…    (method or call on an expression)
+        -&gt; ttk.Entry(e, textvariable=self.ele, wid…    (method or call on an expression)
+        -&gt; ttk.Entry(e, textvariable=self.en, widt…    (method or call on an expression)
+        -&gt; ttk.Entry(e, textvariable=self.tw, widt…    (method or call on an expression)
+        -&gt; ttk.Frame    (from tkinter import ttk)    x2
+        -&gt; ttk.Label    (from tkinter import ttk)    x7
+        -&gt; ttk.Label(e, text=&#x27;Align&#x27;).grid    (method or call on an expression)
+        -&gt; ttk.Label(e, text=&#x27;Field&#x27;).grid    (method or call on an expression)
+        -&gt; ttk.Label(e, text=&#x27;Label&#x27;).grid    (method or call on an expression)
+        -&gt; ttk.Label(e, text=&#x27;Length&#x27;).grid    (method or call on an expression)
+        -&gt; ttk.Label(e, text=&#x27;Lines&#x27;).grid    (method or call on an expression)
+        -&gt; ttk.Label(e, text=&#x27;Type&#x27;).grid    (method or call on an expression)
+        -&gt; ttk.Label(e, text=&#x27;Width&#x27;).grid    (method or call on an expression)
+        -&gt; tuple    (builtin)
+    _generate_part()    817
+        -&gt; &#x27;&#x27;.join    (method or call on an expression)    x2
+        -&gt; random.choices    (import random)    x2
+        -&gt; range    (builtin)
+        -&gt; RuntimeError    (builtin)
+        -&gt; self.collection.find_one    (attribute of self (inherited or set at run time))
+    _get()    445
+        -&gt; self.editor_types.get    (attribute of self (inherited or set at run time))
+        -&gt; self.editor_widgets.get    (attribute of self (inherited or set at run time))
+        -&gt; w._v.get    (local variable or parameter)
+        -&gt; w.get    (local variable or parameter)
+    _html()    590
+        -&gt; json.dumps    (import json)    x2
+        -&gt; json.dumps(rows, ensure_ascii=False).re…    (method or call on an expression)
+        -&gt; self.currency_symbol_var.get    (attribute of self (inherited or set at run time))
+        -&gt; template.replace    (local variable or parameter)
+        -&gt; template.replace(&#x27;__DATA__&#x27;, data).repl…    (method or call on an expression)
+    _id()    832
+        -&gt; ObjectId    (from bson import ObjectId)
+        -&gt; str    (builtin)
+    _import_image()    476
+        -&gt; self._media_dir    (this class, line 451)
+        -&gt; self._next_media    (this class, line 461)
+        -&gt; self._register_image    (this class, line 481)
+        -&gt; shutil.copy2    (import shutil)
+    _insert()    804
+        -&gt; insert_row    (from cpc_treeviews import insert_row)
+        -&gt; tr.insert    (local variable or parameter)
+    _int()    823
+        -&gt; int    (builtin)
+        -&gt; max    (builtin)
+        -&gt; min    (builtin)
+    _load_config()    260
+        -&gt; isinstance    (builtin)
+        -&gt; json.loads    (import json)
+        -&gt; self.config.update    (attribute of self (inherited or set at run time))
+        -&gt; self.config_path.is_file    (attribute of self (inherited or set at run time))
+        -&gt; self.config_path.read_text    (attribute of self (inherited or set at run time))
+    _load_editor()    432
+        -&gt; d.get    (local variable or parameter)    x2
+        -&gt; self._preview    (this class, line 511)
+        -&gt; self._refresh_publish    (this class, line 543)
+        -&gt; self._set    (this class, line 439)
+        -&gt; str    (builtin)
+    _media_dir()    451
+        -&gt; messagebox.showinfo    (from tkinter import messagebox)
+        -&gt; p.mkdir    (local variable or parameter)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.media_directory_var.get().strip    (method or call on an expression)
+    _move_field()    686
+        -&gt; enumerate    (builtin)
+        -&gt; len    (builtin)
+        -&gt; next    (builtin)
+        -&gt; self._ordered    (this class, line 812)
+        -&gt; self._rebuild_form    (this class, line 369)
+        -&gt; self._rebuild_list    (this class, line 334)
+        -&gt; self._refresh_fields    (this class, line 696)
+        -&gt; self._renumber    (this class, line 813)
+        -&gt; self.refresh_records    (this class, line 755)
+        -&gt; self.save_config    (this class, line 267)
+        -&gt; tr.item    (local variable or parameter)
+        -&gt; tr.selection    (local variable or parameter)
+    _next_media()    461
+        -&gt; p.exists    (local variable or parameter)    x2
+        -&gt; self._part    (this class, line 456)
+        -&gt; suffix.startswith    (local variable or parameter)
+    _ordered()    812
+        -&gt; isinstance    (builtin)
+        -&gt; self._int    (this class, line 823)
+        -&gt; self.config.get    (attribute of self (inherited or set at run time))
+        -&gt; sorted    (builtin)
+        -&gt; x.get    (local variable or parameter)    x2
+    _part()    456
+        -&gt; re.fullmatch    (import re)
+        -&gt; self._generate_part    (this class, line 817)
+        -&gt; self._get    (this class, line 445)
+        -&gt; self._set    (this class, line 439)
+        -&gt; str    (builtin)
+        -&gt; str(self._get(&#x27;part_number&#x27;) or &#x27;&#x27;).upp…    (method or call on an expression)
+    _poll()    776
+        -&gt; messagebox.showerror    (from tkinter import messagebox)
+        -&gt; messagebox.showinfo    (from tkinter import messagebox)
+        -&gt; old.close    (local variable or parameter)
+        -&gt; self._apply_records    (this class, line 764)
+        -&gt; self.master.after    (attribute of self (inherited or set at run time))
+        -&gt; self.refresh_records    (this class, line 755)    x3
+        -&gt; self.status_var.set    (attribute of self (inherited or set at run time))    x4
+        -&gt; self.ui_queue.get_nowait    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)
+    _preview()    511
+        -&gt; im.thumbnail    (local variable or parameter)
+        -&gt; Image.open    (from PIL import Image)
+        -&gt; ImageTk.PhotoImage    (from PIL import ImageTk)
+        -&gt; p.is_file    (local variable or parameter)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.media_directory_var.get().strip    (method or call on an expression)
+        -&gt; self.preview.configure    (attribute of self (inherited or set at run time))    x3
+    _pub_all()    562
+        -&gt; self._refresh_publish    (this class, line 543)
+        -&gt; self.publish_item_to_id.values    (attribute of self (inherited or set at run time))
+        -&gt; set    (builtin)
+    _pub_clear()    563
+        -&gt; self._refresh_publish    (this class, line 543)
+        -&gt; self.publish_selected_ids.clear    (attribute of self (inherited or set at run time))
+    _pub_highlighted()    557
+        -&gt; self._refresh_publish    (this class, line 543)
+        -&gt; self.publish_item_to_id.get    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_selected_ids.add    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_tree.selection    (attribute of self (inherited or set at run time))
+    _pub_toggle()    550
+        -&gt; self._refresh_publish    (this class, line 543)
+        -&gt; self.publish_item_to_id.get    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_selected_ids.add    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_selected_ids.remove    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_tree.selection    (attribute of self (inherited or set at run time))
+    _publish_worker()    575
+        -&gt; (src / image).is_file    (method or call on an expression)
+        -&gt; assets.mkdir    (local variable or parameter)
+        -&gt; d.get    (local variable or parameter)    x4
+        -&gt; len    (builtin)
+        -&gt; list    (builtin)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; rows.append    (local variable or parameter)
+        -&gt; self._html    (this class, line 590)
+        -&gt; self._id    (this class, line 832)
+        -&gt; self.collection.find    (attribute of self (inherited or set at run time))
+        -&gt; self.collection.find(q).sort    (method or call on an expression)
+        -&gt; self.media_directory_var.get    (attribute of self (inherited or set at run time))    x2
+        -&gt; self.media_directory_var.get().strip    (method or call on an expression)    x2
+        -&gt; shutil.copy2    (import shutil)
+        -&gt; str    (builtin)    x3
+        -&gt; target.parent.mkdir    (local variable or parameter)
+        -&gt; target.with_name    (local variable or parameter)
+        -&gt; target.write_text    (local variable or parameter)
+        -&gt; {&#x27;daily&#x27;: &#x27;daily_price&#x27;, &#x27;three_day&#x27;: &#x27;…    (method or call on an expression)
+    _rebuild_form()    369
+        -&gt; d.get    (local variable or parameter)    x3
+        -&gt; enumerate    (builtin)
+        -&gt; self._int    (this class, line 823)
+        -&gt; self._ordered    (this class, line 812)
+        -&gt; self.form.winfo_children    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)
+        -&gt; tk.BooleanVar    (import tkinter as tk)
+        -&gt; tk.StringVar    (import tkinter as tk)    x2
+        -&gt; tk.Text    (import tkinter as tk)
+        -&gt; ttk.Checkbutton    (from tkinter import ttk)
+        -&gt; ttk.Combobox    (from tkinter import ttk)
+        -&gt; ttk.Entry    (from tkinter import ttk)
+        -&gt; ttk.Label    (from tkinter import ttk)
+        -&gt; ttk.Label(self.form, text=d.get(&#x27;label&#x27;…    (method or call on an expression)
+        -&gt; w.grid    (local variable or parameter)    x4
+        -&gt; x.destroy    (local variable or parameter)
+    _rebuild_list()    334
+        -&gt; self._tree    (this class, line 796)
+        -&gt; self._tree_def    (this class, line 327)
+        -&gt; self.list_holder.winfo_children    (attribute of self (inherited or set at run time))
+        -&gt; x.destroy    (local variable or parameter)
+    _records()    758
+        -&gt; list    (builtin)
+        -&gt; re.escape    (import re)
+        -&gt; self.collection.count_documents    (attribute of self (inherited or set at run time))
+        -&gt; self.collection.find    (attribute of self (inherited or set at run time))
+        -&gt; self.collection.find(q).sort    (method or call on an expression)
+        -&gt; self.collection.find(q).sort(&#x27;part_numb…    (method or call on an expression)
+    _refresh_fields()    696
+        -&gt; getattr    (builtin)    x2
+        -&gt; self._clear    (this class, line 810)
+        -&gt; self._insert    (this class, line 804)
+        -&gt; self._ordered    (this class, line 812)
+        -&gt; x.get    (local variable or parameter)    x11
+    _refresh_publish()    543
+        -&gt; d.get    (local variable or parameter)    x3
+        -&gt; hasattr    (builtin)
+        -&gt; self._clear    (this class, line 810)
+        -&gt; self._insert    (this class, line 804)
+        -&gt; self.page_records.values    (attribute of self (inherited or set at run time))
+        -&gt; sorted    (builtin)
+        -&gt; str    (builtin)    x2
+        -&gt; x.get    (unknown, not imported or defined here)
+    _register_image()    481
+        -&gt; images.append    (local variable or parameter)    x2
+        -&gt; isinstance    (builtin)    x3
+        -&gt; list    (builtin)
+        -&gt; self._get    (this class, line 445)    x2
+        -&gt; self._preview    (this class, line 511)
+        -&gt; self._set    (this class, line 439)
+        -&gt; self.current_record.get    (attribute of self (inherited or set at run time))    x2
+        -&gt; self.status_var.set    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)    x2
+    _remove_field()    678
+        -&gt; self._rebuild_form    (this class, line 369)
+        -&gt; self._rebuild_list    (this class, line 334)
+        -&gt; self._refresh_fields    (this class, line 696)
+        -&gt; self._renumber    (this class, line 813)
+        -&gt; self.refresh_records    (this class, line 755)
+        -&gt; self.save_config    (this class, line 267)
+        -&gt; tr.item    (local variable or parameter)
+        -&gt; tr.selection    (local variable or parameter)
+        -&gt; x.get    (local variable or parameter)
+    _renumber()    813
+        -&gt; enumerate    (builtin)
+        -&gt; self._ordered    (this class, line 812)
+    _search_changed()    338
+        -&gt; self.master.after    (attribute of self (inherited or set at run time))
+        -&gt; self.master.after_cancel    (attribute of self (inherited or set at run time))
+    _select_tab()    309
+        -&gt; nb.select    (local variable or parameter)
+        -&gt; nb.tab    (local variable or parameter)
+        -&gt; nb.tabs    (local variable or parameter)
+        -&gt; ui_state.select_tab_by_text    (import cpc_ui_state as ui_state)
+    _selected()    344
+        -&gt; copy.deepcopy    (import copy)
+        -&gt; self._load_editor    (this class, line 432)
+        -&gt; self.page_records.get    (attribute of self (inherited or set at run time))
+        -&gt; self.record_tree.selection    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+        -&gt; self.tree_item_to_id.get    (attribute of self (inherited or set at run time))
+    _set()    439
+        -&gt; self.editor_types.get    (attribute of self (inherited or set at run time))
+        -&gt; self.editor_widgets.get    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)
+        -&gt; w._v.set    (local variable or parameter)
+        -&gt; w.delete    (local variable or parameter)
+        -&gt; w.insert    (local variable or parameter)
+    _status()    837
+        -&gt; self.status_var.set    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)
+    _tf_selected()    652
+        -&gt; bool    (builtin)    x2
+        -&gt; self.ta.set    (attribute of self (inherited or set at run time))
+        -&gt; self.tf.set    (attribute of self (inherited or set at run time))
+        -&gt; self.ti.set    (attribute of self (inherited or set at run time))
+        -&gt; self.tl.set    (attribute of self (inherited or set at run time))
+        -&gt; self.tree_fields_tree.item    (attribute of self (inherited or set at run time))
+        -&gt; self.tree_fields_tree.selection    (attribute of self (inherited or set at run time))
+        -&gt; self.tu.set    (attribute of self (inherited or set at run time))
+        -&gt; self.tw.set    (attribute of self (inherited or set at run time))
+    _tree()    796
+        -&gt; build_treeview    (from cpc_treeviews import build_treeview)
+        -&gt; enumerate    (builtin)
+        -&gt; tr.bind    (local variable or parameter)
+        -&gt; tr.column    (local variable or parameter)
+        -&gt; tr.configure    (local variable or parameter)
+        -&gt; tr.heading    (local variable or parameter)
+        -&gt; tr.pack    (local variable or parameter)
+        -&gt; ttk.Scrollbar    (from tkinter import ttk)    x2
+        -&gt; ttk.Treeview    (from tkinter import ttk)
+        -&gt; x.pack    (local variable or parameter)
+        -&gt; y.pack    (local variable or parameter)
+    _tree_def()    327
+        -&gt; len    (builtin)    x2
+        -&gt; self._int    (this class, line 823)
+        -&gt; self._ordered    (this class, line 812)
+        -&gt; tuple    (builtin)
+        -&gt; x.get    (local variable or parameter)    x3
+    _ui_applied()    730
+        -&gt; self.save_config    (this class, line 267)
+    _validate()    409
+        -&gt; d.get    (local variable or parameter)
+        -&gt; re.fullmatch    (import re)
+        -&gt; self._id    (this class, line 832)
+        -&gt; self.collection.find_one    (attribute of self (inherited or set at run time))
+        -&gt; str    (builtin)
+        -&gt; str(d.get(&#x27;part_number&#x27;) or &#x27;&#x27;).upper    (method or call on an expression)
+    _worker()    770
+        -&gt; threading.Thread    (import threading)
+        -&gt; threading.Thread(target=run, daemon=Tru…    (method or call on an expression)
+        run()    771
+            -&gt; fn    (unknown, not imported or defined here)
+            -&gt; self.ui_queue.put    (attribute of self (inherited or set at run time))    x2
+            -&gt; str    (builtin)
+    add_record()    418
+        -&gt; d.get    (local variable or parameter)
+        -&gt; messagebox.showerror    (from tkinter import messagebox)
+        -&gt; self._doc    (this class, line 391)
+        -&gt; self._generate_part    (this class, line 817)
+        -&gt; self._set    (this class, line 439)
+        -&gt; self._validate    (this class, line 409)
+        -&gt; self._worker    (this class, line 770)
+        -&gt; self.collection.insert_one    (attribute of self (inherited or set at run time))
+    close()    841
+        -&gt; self.master.destroy    (attribute of self (inherited or set at run time))
+        -&gt; self.mongo_client.close    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+    connect_and_refresh()    745
+        -&gt; messagebox.showerror    (from tkinter import messagebox)
+        -&gt; self._worker    (this class, line 770)
+        -&gt; self.mongo_collection_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.mongo_database_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.mongo_uri_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+    LogAtt()    839
+        -&gt; self._status    (this class, line 837)
+    LogErr()    840
+        -&gt; self._status    (this class, line 837)
+    LogOk()    838
+        -&gt; self._status    (this class, line 837)
+    new_record()    385
+        -&gt; self._generate_part    (this class, line 817)
+        -&gt; self._preview    (this class, line 511)
+        -&gt; self._select_tab    (this class, line 309)
+        -&gt; self._set    (this class, line 439)    x4
+        -&gt; self.status_var.set    (attribute of self (inherited or set at run time))
+    paste_image()    490
+        -&gt; g.convert    (local variable or parameter)
+        -&gt; g.convert(&#x27;RGB&#x27;).save    (method or call on an expression)
+        -&gt; ImageGrab.grabclipboard    (from PIL import ImageGrab)
+        -&gt; isinstance    (builtin)
+        -&gt; messagebox.showerror    (from tkinter import messagebox)    x2
+        -&gt; messagebox.showinfo    (from tkinter import messagebox)
+        -&gt; p.suffix.lower    (local variable or parameter)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; self._import_image    (this class, line 476)
+        -&gt; self._media_dir    (this class, line 451)
+        -&gt; self._next_media    (this class, line 461)
+        -&gt; self._register_image    (this class, line 481)
+        -&gt; str    (builtin)
+    pick_document()    504
+        -&gt; filedialog.askopenfilename    (from tkinter import filedialog)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; self._media_dir    (this class, line 451)
+        -&gt; self._next_media    (this class, line 461)
+        -&gt; self._set    (this class, line 439)
+        -&gt; self.status_var.set    (attribute of self (inherited or set at run time))
+        -&gt; shutil.copy2    (import shutil)
+    pick_image()    472
+        -&gt; filedialog.askopenfilename    (from tkinter import filedialog)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; self._import_image    (this class, line 476)
+    publish()    565
+        -&gt; filedialog.asksaveasfilename    (from tkinter import filedialog)
+        -&gt; list    (builtin)
+        -&gt; messagebox.showinfo    (from tkinter import messagebox)
+        -&gt; Path    (from pathlib import Path)
+        -&gt; self._worker    (this class, line 770)
+        -&gt; self.publish_file_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_file_var.get().strip    (method or call on an expression)
+        -&gt; self.publish_file_var.set    (attribute of self (inherited or set at run time))
+        -&gt; self.save_config    (this class, line 267)
+    refresh_records()    755
+        -&gt; self._int    (this class, line 823)
+        -&gt; self._worker    (this class, line 770)
+        -&gt; self.list_search_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.list_search_var.get().strip    (method or call on an expression)
+        -&gt; self.page_size_var.get    (attribute of self (inherited or set at run time))
+    save_config()    267
+        -&gt; int    (builtin)
+        -&gt; json.dumps    (import json)
+        -&gt; max    (builtin)    x3
+        -&gt; self.config.update    (attribute of self (inherited or set at run time))    x2
+        -&gt; self.config_path.write_text    (attribute of self (inherited or set at run time))
+        -&gt; self.currency_symbol_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.fields_notebook.select    (attribute of self (inherited or set at run time))
+        -&gt; self.fields_notebook.tab    (attribute of self (inherited or set at run time))
+        -&gt; self.master.winfo_height    (attribute of self (inherited or set at run time))
+        -&gt; self.master.winfo_width    (attribute of self (inherited or set at run time))
+        -&gt; self.media_directory_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.media_directory_var.get().strip    (method or call on an expression)
+        -&gt; self.mongo_collection_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.mongo_collection_var.get().strip    (method or call on an expression)
+        -&gt; self.mongo_database_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.mongo_database_var.get().strip    (method or call on an expression)
+        -&gt; self.mongo_uri_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.mongo_uri_var.get().strip    (method or call on an expression)
+        -&gt; self.notebook.select    (attribute of self (inherited or set at run time))
+        -&gt; self.notebook.tab    (attribute of self (inherited or set at run time))
+        -&gt; self.page_size_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_file_var.get    (attribute of self (inherited or set at run time))
+        -&gt; self.publish_file_var.get().strip    (method or call on an expression)
+        -&gt; str    (builtin)
+    update_record()    425
+        -&gt; messagebox.showerror    (from tkinter import messagebox)
+        -&gt; messagebox.showinfo    (from tkinter import messagebox)
+        -&gt; self._doc    (this class, line 391)
+        -&gt; self._id    (this class, line 832)
+        -&gt; self._validate    (this class, line 409)
+        -&gt; self._worker    (this class, line 770)
+        -&gt; self.collection.update_one    (attribute of self (inherited or set at run time))
+(module level)
+    -&gt; copy.deepcopy    (import copy)    x2
+    -&gt; main    (this file, line 852)
+    -&gt; Path    (from pathlib import Path)    x2
+    -&gt; Path(__file__).resolve    (method or call on an expression)
+    -&gt; str    (builtin)    x4
+    -&gt; sys.path.append    (import sys)
+    -&gt; sys.path.insert    (import sys)    x2
+    -&gt; x_path.is_dir    (unknown, not imported or defined here)
+</pre></main><div id="bottom-nav" hidden></div><script></script></body></html>

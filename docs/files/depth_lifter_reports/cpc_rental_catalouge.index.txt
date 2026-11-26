@@ -1,0 +1,87 @@
+source_file = cpc_rental_catalouge.py
+source_modified = 2026-11-22 16:41:32
+name(parameters) -> return  [decorators]    first line   (classes: first-last)
+
+attach(parent, **kwargs)    849
+main()    852
+class RentalCatalog    228-847
+    __init__(self, master, embedded=False, host_context=None)    229
+    _apply_ef(self)    664
+    _apply_field(self, key, field, values)    668
+    _apply_records(self, p)    764
+    _apply_tf(self)    661
+    _apply_theme(self)    285
+    _browse_media(self)    717
+    _browse_publish(self)    720
+    _build_config(self)    706
+    _build_editor(self)    351
+    _build_fields(self)    621
+    _build_gateway(self)    735
+    _build_list(self)    316
+    _build_publish(self)    532
+    _build_ui(self)    296
+    _build_ui_choices(self)    724
+    _clear(tr)  [@staticmethod]    810
+    _connect(uri, db, col)  [@staticmethod]    749
+    _display(v)  [@staticmethod]    828
+    _doc(self)    391
+    _drop(self, e)    524
+    _editor_search(self)    436
+    _ef_selected(self, e=None)    656
+    _enable_drop(self, w)    519
+    _field_panel(self, t, is_tree)    627
+    _generate_part(self)    817
+    _get(self, f)    445
+    _html(self, rows)    590
+    _id(v)  [@staticmethod]    832
+    _import_image(self, s)    476
+    _insert(self, tr, v)    804
+    _int(v, d, lo, hi)  [@staticmethod]    823
+    _load_config(self)    260
+    _load_editor(self, d)    432
+    _media_dir(self)    451
+    _move_field(self, key, d)    686
+    _next_media(self, root, suffix, document=False)    461
+    _ordered(self, key)    812
+    _part(self)    456
+    _poll(self)    776
+    _preview(self, name)    511
+    _pub_all(self)    562
+    _pub_clear(self)    563
+    _pub_highlighted(self)    557
+    _pub_toggle(self, e=None)    550
+    _publish_worker(self, target, ids)    575
+    _rebuild_form(self)    369
+    _rebuild_list(self)    334
+    _records(self, s, limit)    758
+    _refresh_fields(self, key)    696
+    _refresh_publish(self)    543
+    _register_image(self, name)    481
+    _remove_field(self, key)    678
+    _renumber(self, key)    813
+    _search_changed(self, e=None)    338
+    _select_tab(self, nb, text)    309
+    _selected(self, e=None)    344
+    _set(self, f, v)    439
+    _status(self, x)    837
+    _tf_selected(self, e=None)    652
+    _tree(self, parent, d, caller, on_select=None)    796
+    _tree_def(self)    327
+    _ui_applied(self, theme=None, density=None, _config=None)    730
+    _validate(self, d, current=None)    409
+    _worker(self, kind, fn, *args)    770
+        run()    771
+    add_record(self)    418
+    close(self)    841
+    connect_and_refresh(self)    745
+    LogAtt(self, x)    839
+    LogErr(self, x)    840
+    LogOk(self, x)    838
+    new_record(self)    385
+    paste_image(self)    490
+    pick_document(self)    504
+    pick_image(self)    472
+    publish(self, all_items)    565
+    refresh_records(self)    755
+    save_config(self)    267
+    update_record(self)    425

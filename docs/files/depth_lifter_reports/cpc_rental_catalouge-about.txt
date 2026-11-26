@@ -1,0 +1,82 @@
+Python Code Depth Lifter 4.7
+Dissect a python file
+project: Python
+
+Folders in use
+    Settings   \\192.168.1.10\shared\cc_lib\_pub\cpc_depth_lifter\cc_depth_lifter.json
+    Reports    X:\cc_lib\_pub\cpc_rental_catalouge\depth_lifter_reports
+    Backups    \\192.168.1.10\shared\cc_lib\_pub\cpc_depth_lifter\backups
+    Crash log  \\192.168.1.10\shared\cc_lib\_pub\cpc_depth_lifter\depth_lifter.log
+
+File        cpc_rental_catalouge.py
+Modified    2026-11-22 16:41:32
+Encoding    UTF-8
+Line ends   CRLF (Windows)
+
+Cautions
+    Caution 15 of 33 imports do not name the source file at the call: from pathlib import Path, from decimal import Decimal, from decimal import InvalidOperation, from pathlib import Path, from tkinter import filedialog, from tkinter import messagebox ...
+
+Statistics
+    Lines                         859   (code 767, comments 17, blank 75)
+    Classes                       1
+    Functions and methods         82   (module level 2, methods 79, nested 1, async 0)
+    Deepest nesting               2
+    Function length (lines)       average 6.9   median 5.5   shortest 1 (LogAtt)   longest 30 (__init__)
+    Longest functions             __init__ 30, _html 29, _field_panel 24, _poll 18, save_config 17
+    Over 50 lines                 0
+    Parameters per function       average 0.9   most 4 (_tree)
+    With a docstring              0 of 82   (0%)   module docstring: yes
+    With a return type            0 of 82   (0%)
+    Decorated                     5
+    Variables                     module 31, class 0, self attributes 63, in functions 164
+    Call sites                    764   (352 distinct callees)
+
+Imports
+    33 imports: 18 by module or alias, 15 by bare name, 0 star
+    The source file is named at the call for 54% of them
+
+Named by module or alias (good: a call reads os.path.join or np.array, so the source shows)
+    import sys                                     standard library               line 105   used 6x
+    import copy                                    standard library               line 127   used 4x
+    import html                                    standard library               line 127   used 0x
+    import json                                    standard library               line 127   used 5x
+    import os                                      standard library               line 127   used 0x
+    import random                                  standard library               line 127   used 2x
+    import re                                      standard library               line 127   used 3x
+    import shutil                                  standard library               line 127   used 3x
+    import string                                  standard library               line 127   used 2x
+    import sys                                     standard library               line 127   used 6x
+    import threading                               standard library               line 127   used 1x
+    import queue                                   standard library               line 127   used 2x
+    import tkinter as tk                           standard library               line 128   used 32x
+    import tkinterdnd2                             third party or your own file   line 149   used 4x
+    import cpc_ui_theme as ui_theme                third party or your own file   line 153   used 4x
+    import cpc_ui_state as ui_state                third party or your own file   line 157   used 3x
+    import cpc_ui_choices as ui_choices            third party or your own file   line 161   used 3x
+    import gateway_controller                      third party or your own file   line 165   used 2x
+
+Bare names (a call reads Path(...) and does not say it came from pathlib;
+prefer: import pathlib, then pathlib.Path(...), or import pathlib as pl)
+    from pathlib import Path                       standard library               line 104   used 11x
+    from decimal import Decimal                    standard library               line 129   used 1x
+    from decimal import InvalidOperation           standard library               line 129   used 0x
+    from pathlib import Path                       standard library               line 130   used 11x
+    from tkinter import filedialog                 standard library               line 131   used 5x
+    from tkinter import messagebox                 standard library               line 131   used 11x
+    from tkinter import ttk                        standard library               line 131   used 80x
+    from bson import ObjectId                      third party or your own file   line 137   used 2x
+    from pymongo import MongoClient                third party or your own file   line 141   used 2x
+    from pymongo import ASCENDING                  third party or your own file   line 141   used 1x
+    from PIL import Image                          third party or your own file   line 145   used 3x
+    from PIL import ImageGrab                      third party or your own file   line 145   used 2x
+    from PIL import ImageTk                        third party or your own file   line 145   used 2x
+    from cpc_treeviews import build_treeview       third party or your own file   line 169   used 2x
+    from cpc_treeviews import insert_row           third party or your own file   line 169   used 2x
+
+Star imports (names cannot be traced to a file)
+    none
+
+Imported but never used (may be re-exported)
+    import html    line 127
+    import os    line 127
+    from decimal import InvalidOperation    line 129

@@ -1,0 +1,96 @@
+source_file = cpc_rental_catalouge.py
+source_modified = 2026-11-22 16:41:32
+import   origin   line;  indented: external name   xN calls   called by (def paths)
+
+from pathlib import Path    standard library    line 104    CAUTION: source file not named at the call
+        Path    x11    called by (module level), RentalCatalog.__init__, RentalCatalog._drop, RentalCatalog._media_dir, RentalCatalog._preview, RentalCatalog._publish_worker, RentalCatalog.paste_image, RentalCatalog.pick_document, RentalCatalog.pick_image, RentalCatalog.publish
+import sys    standard library    line 105
+        sys.path.append    x1    called by (module level)
+        sys.path.insert    x2    called by (module level)
+import copy    standard library    line 127
+        copy.deepcopy    x4    called by (module level), RentalCatalog.__init__, RentalCatalog._selected
+import html    standard library    line 127
+        (no calls through this import)
+import json    standard library    line 127
+        json.dumps    x4    called by RentalCatalog._display, RentalCatalog._html, RentalCatalog.save_config
+        json.loads    x1    called by RentalCatalog._load_config
+import os    standard library    line 127
+        (no calls through this import)
+import random    standard library    line 127
+        random.choices    x2    called by RentalCatalog._generate_part
+import re    standard library    line 127
+        re.escape    x1    called by RentalCatalog._records
+        re.fullmatch    x2    called by RentalCatalog._part, RentalCatalog._validate
+import shutil    standard library    line 127
+        shutil.copy2    x3    called by RentalCatalog._import_image, RentalCatalog._publish_worker, RentalCatalog.pick_document
+import string    standard library    line 127
+        (no calls through this import)
+import sys    standard library    line 127
+        sys.path.append    x1    called by (module level)
+        sys.path.insert    x2    called by (module level)
+import threading    standard library    line 127
+        threading.Thread    x1    called by RentalCatalog._worker
+import queue    standard library    line 127
+        queue.Queue    x1    called by RentalCatalog.__init__
+import tkinter as tk    standard library    line 128
+        tk.BooleanVar    x5    called by RentalCatalog.__init__, RentalCatalog._rebuild_form
+        tk.StringVar    x22    called by RentalCatalog.__init__, RentalCatalog._rebuild_form
+        tk.Text    x1    called by RentalCatalog._rebuild_form
+        tk.Tk    x2    called by main
+from decimal import Decimal    standard library    line 129    CAUTION: source file not named at the call
+        Decimal    x1    called by RentalCatalog._doc
+from decimal import InvalidOperation    standard library    line 129    CAUTION: source file not named at the call
+        (no calls through this import)
+from pathlib import Path    standard library    line 130    CAUTION: source file not named at the call
+        Path    x11    called by (module level), RentalCatalog.__init__, RentalCatalog._drop, RentalCatalog._media_dir, RentalCatalog._preview, RentalCatalog._publish_worker, RentalCatalog.paste_image, RentalCatalog.pick_document, RentalCatalog.pick_image, RentalCatalog.publish
+from tkinter import filedialog    standard library    line 131    CAUTION: source file not named at the call
+        filedialog.askdirectory    x1    called by RentalCatalog._browse_media
+        filedialog.askopenfilename    x2    called by RentalCatalog.pick_document, RentalCatalog.pick_image
+        filedialog.asksaveasfilename    x2    called by RentalCatalog._browse_publish, RentalCatalog.publish
+from tkinter import messagebox    standard library    line 131    CAUTION: source file not named at the call
+        messagebox.showerror    x6    called by RentalCatalog._poll, RentalCatalog.add_record, RentalCatalog.connect_and_refresh, RentalCatalog.paste_image, RentalCatalog.update_record
+        messagebox.showinfo    x5    called by RentalCatalog._media_dir, RentalCatalog._poll, RentalCatalog.paste_image, RentalCatalog.publish, RentalCatalog.update_record
+from tkinter import ttk    standard library    line 131    CAUTION: source file not named at the call
+        ttk.Button    x19    called by RentalCatalog._build_config, RentalCatalog._build_editor, RentalCatalog._build_list, RentalCatalog._build_publish, RentalCatalog._field_panel
+        ttk.Checkbutton    x5    called by RentalCatalog._field_panel, RentalCatalog._rebuild_form
+        ttk.Combobox    x3    called by RentalCatalog._field_panel, RentalCatalog._rebuild_form
+        ttk.Entry    x9    called by RentalCatalog._build_config, RentalCatalog._build_editor, RentalCatalog._build_list, RentalCatalog._field_panel, RentalCatalog._rebuild_form
+        ttk.Frame    x20    called by RentalCatalog._build_config, RentalCatalog._build_editor, RentalCatalog._build_fields, RentalCatalog._build_gateway, RentalCatalog._build_list, RentalCatalog._build_publish, RentalCatalog._build_ui, RentalCatalog._field_panel
+        ttk.Label    x18    called by RentalCatalog._build_config, RentalCatalog._build_editor, RentalCatalog._build_gateway, RentalCatalog._build_list, RentalCatalog._build_publish, RentalCatalog._build_ui_choices, RentalCatalog._field_panel, RentalCatalog._rebuild_form
+        ttk.LabelFrame    x1    called by RentalCatalog._build_editor
+        ttk.Notebook    x2    called by RentalCatalog._build_fields, RentalCatalog._build_ui
+        ttk.Scrollbar    x2    called by RentalCatalog._tree
+        ttk.Treeview    x1    called by RentalCatalog._tree
+from bson import ObjectId    third party or your own file    line 137    CAUTION: source file not named at the call
+        ObjectId    x1    called by RentalCatalog._id
+from pymongo import MongoClient    third party or your own file    line 141    CAUTION: source file not named at the call
+        MongoClient    x1    called by RentalCatalog._connect
+from pymongo import ASCENDING    third party or your own file    line 141    CAUTION: source file not named at the call
+        (no calls through this import)
+from PIL import Image    third party or your own file    line 145    CAUTION: source file not named at the call
+        Image.open    x1    called by RentalCatalog._preview
+from PIL import ImageGrab    third party or your own file    line 145    CAUTION: source file not named at the call
+        ImageGrab.grabclipboard    x1    called by RentalCatalog.paste_image
+from PIL import ImageTk    third party or your own file    line 145    CAUTION: source file not named at the call
+        ImageTk.PhotoImage    x1    called by RentalCatalog._preview
+import tkinterdnd2    third party or your own file    line 149
+        tkinterdnd2.TkinterDnD.Tk    x1    called by main
+import cpc_ui_theme as ui_theme    third party or your own file    line 153
+        ui_theme.apply_app_icon    x1    called by RentalCatalog._apply_theme
+        ui_theme.apply_theme    x1    called by RentalCatalog._apply_theme
+import cpc_ui_state as ui_state    third party or your own file    line 157
+        ui_state.select_tab_by_text    x1    called by RentalCatalog._select_tab
+import cpc_ui_choices as ui_choices    third party or your own file    line 161
+        ui_choices.attach    x1    called by RentalCatalog._build_ui_choices
+import gateway_controller    third party or your own file    line 165
+        (no calls through this import)
+from cpc_treeviews import build_treeview    third party or your own file    line 169    CAUTION: source file not named at the call
+        build_treeview    x1    called by RentalCatalog._tree
+from cpc_treeviews import insert_row    third party or your own file    line 169    CAUTION: source file not named at the call
+        insert_row    x1    called by RentalCatalog._insert
+
+Unknown source (not imported or defined in this file)
+    unknown, not imported or defined here
+        fn    x1    called by RentalCatalog._worker.run
+        x.get    x1    called by RentalCatalog._refresh_publish
+        x_path.is_dir    x1    called by (module level)
